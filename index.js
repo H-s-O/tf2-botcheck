@@ -83,15 +83,9 @@ for (const botDefinition of BOT_LIST) {
 if (foundBots.length === 0) {
     // No bots found, exit
     console.info('No bots found, exiting')
-    // robot.typeString('p');
-    // sleep.msleep(10);
-    // sendkeys.sync('Bot check - No bots found');
-    // sleep.msleep(10);
-    // robot.keyTap('enter');
     process.exit(0);
 }
 
-// const message = `[Bot check] Found named bots: ${foundBots.map(({ name }) => name).join(', ')}`;
 const message = `Bot check - Found named bot${foundBots.length > 1 ? 's' : ''} ${foundBots.map(({ name }) => name).join(', ')}`;
 console.info('Message to send:', message);
 
@@ -104,13 +98,6 @@ sleep.msleep(10);
 sendkeys.sync(message);
 sleep.msleep(10);
 robot.keyTap('enter');
-// robot.typeString(CONSOLE_KEY);
-// sleep.msleep(10);
-// sendkeys.sync(`say ${message}`);
-// sleep.msleep(10);
-// robot.keyTap('enter');
-// sleep.msleep(10);
-// robot.keyTap('escape');
 
 // @TODO auto call kick vote
 
