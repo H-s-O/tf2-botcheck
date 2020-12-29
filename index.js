@@ -86,13 +86,16 @@ if (foundBots.length === 0) {
     process.exit(0);
 }
 
-const message = `Bot check - Found named bot${foundBots.length > 1 ? 's' : ''} ${foundBots.map(({ name }) => name).join(', ')}`;
+// Create and format message for sendkeys module to properly "type" it
+const message = `BOT CHECK - Found ${foundBots.length} named bot${foundBots.length > 1 ? 's' : ''}: ${foundBots.map(({ name }) => name).join(', ')}`
+    .replace(/\(/g, '{(}')
+    .replace(/\)/g, '{)}');
 console.info('Message to send:', message);
 
 sleep.msleep(100);
 
 // Open TF2 console, output found bots message and close console
-console.info('Sending TF2 console keystrokes')
+console.info('Sending TF2 chat keystrokes')
 robot.typeString('y');
 sleep.msleep(10);
 sendkeys.sync(message);
