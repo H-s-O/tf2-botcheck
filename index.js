@@ -80,27 +80,57 @@ for (const botDefinition of BOT_LIST) {
         }
     }
 }
-if (foundBots.length === 0) {
-    // No bots found, exit
-    console.info('No bots found, exiting')
+// Loop the player list and check for duplicates
+const playerCounts = {};
+for (const player of players) {
+    if (!(player.name in playerCounts)) {
+        playerCounts[player.name] = 0;
+    }
+    playerCounts[player.name]++;
+}
+const foundDuplicates = Object.entries(playerCounts)
+    .filter(([, count]) => count > 1)
+    .map(([name]) => name);
+if (foundBots.length === 0 && foundDuplicates.length === 0) {
+    // Nothing suspicious found, exit
+    console.info('No bots or duplicates found, exiting')
     process.exit(0);
 }
 
-// Create and format message for sendkeys module to properly "type" it
-const message = `BOT CHECK - Found ${foundBots.length} named bot${foundBots.length > 1 ? 's' : ''}: ${foundBots.map(({ name }) => name).join(', ')}`
-    .replace(/\(/g, '{(}')
-    .replace(/\)/g, '{)}');
-console.info('Message to send:', message);
+// Create and format messages for sendkeys module to properly "type" it
+let message1 = null, message2 = null;
+if (foundBots.length > 0) {
+    message1 = `BOT CHECK - Found ${foundBots.length} named bot${foundBots.length > 1 ? 's' : ''}: ${foundBots.map(({ name }) => name).join(', ')}`
+        .replace(/\(/g, '{(}')
+        .replace(/\)/g, '{)}');
+    console.info('Message to send:', message1);
+}
+if (foundDuplicates.length > 0) {
+    message2 = `BOT CHECK - Found ${foundDuplicates.length} player duplicate${foundDuplicates.length > 1 ? 's' : ''} (hijacking): ${foundDuplicates.join(', ')}`
+        .replace(/\(/g, '{(}')
+        .replace(/\)/g, '{)}');
+    console.info('Message to send:', message2);
+}
 
 sleep.msleep(100);
 
 // Open TF2 console, output found bots message and close console
 console.info('Sending TF2 chat keystrokes')
-robot.typeString('y');
-sleep.msleep(10);
-sendkeys.sync(message);
-sleep.msleep(10);
-robot.keyTap('enter');
+if (message1) {
+    robot.typeString('y');
+    sleep.msleep(10);
+    sendkeys.sync(message1);
+    sleep.msleep(10);
+    robot.keyTap('enter');
+}
+if (message2) {
+    sleep.msleep(10);
+    robot.typeString('y');
+    sleep.msleep(10);
+    sendkeys.sync(message2);
+    sleep.msleep(10);
+    robot.keyTap('enter');
+}
 
 // @TODO auto call kick vote
 
