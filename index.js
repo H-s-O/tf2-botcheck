@@ -31,7 +31,7 @@ robot.keyTap('escape');
 // Read log file
 console.info('Opening TF2 log file');
 const logPath = 'C:\\Program Files (x86)\\Steam\\steamapps\\common\\Team Fortress 2\\tf\\console.log';
-const logContent = fs.readFileSync(logPath, { encoding: 'ascii' });
+const logContent = fs.readFileSync(logPath, { encoding: 'utf8' });
 
 // Find last occurence of start and end markers
 const startMarkerPos = logContent.indexOf(START_MARKER);
@@ -61,7 +61,10 @@ console.info(statusContent);
 const players = [];
 let matches;
 while ((matches = STATUS_LINE_REGEXP.exec(statusContent)) !== null) {
-    players.push({ userid: matches[1], name: matches[2] });
+    players.push({
+        userid: matches[1],
+        name: matches[2].replace(/[^\u0020-\u007E\u00A0-\u02AD]/g, ''), // remove invisible characters possibly added by hijacking bots
+    });
 }
 if (players.length === 0) {
     // Empty players list, exit
@@ -106,7 +109,7 @@ if (foundBots.length > 0) {
     console.info('Message to send:', message1);
 }
 if (foundDuplicates.length > 0) {
-    message2 = `BOT CHECK - Found ${foundDuplicates.length} player duplicate${foundDuplicates.length > 1 ? 's' : ''} (hijacking): ${foundDuplicates.join(', ')}`
+    message2 = `BOT CHECK - Found ${foundDuplicates.length} duplicate name${foundDuplicates.length > 1 ? 's' : ''} (hijacking bot): ${foundDuplicates.join(', ')}`
         .replace(/\(/g, '{(}')
         .replace(/\)/g, '{)}');
     console.info('Message to send:', message2);
