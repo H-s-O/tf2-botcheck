@@ -86,7 +86,7 @@ while ((lobbyMatches = LOBBY_LINE_REGEXP.exec(statusContent)) !== null) {
     });
 }
 
-if (lobby.length !== players.length) {
+if (lobby.length < players.length) {
     // Mismatch between players status count and lobby debug info count, abort
     console.error('Status and lobby debug mismatch, aborting');
     process.exit(1);
