@@ -12,20 +12,25 @@ const LOBBY_LINE_REGEXP = /^  Member\[\d+\] \[(U:.+?)\]  team = (\w+)/gm;
 const STATUS_LINE_REGEXP = /^#\s+(\d+)\s+"(.+?)"\s+\[(U:.+?)\]/gm;
 const BOT_CHECK_REGEXP_TEMPLATE = (name) => RegExp(`^(\\(\\d+\\))*${name.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')}$`); // escape the name which may contain regexp control characters
 const CONSOLE_KEY = '/';
+const TEAM_LABELS = {
+    TF_GC_TEAM_DEFENDERS: 'Red',
+    TF_GC_TEAM_INVADERS: 'Blu',
+};
 
 robot.setKeyboardDelay(0);
 
 // Open TF2 console, log current status and close console
 console.info('Sending TF2 console keystrokes');
 robot.typeString(CONSOLE_KEY);
-sleep.msleep(10);
+sleep.msleep(50);
 robot.typeString(`echo ${START_MARKER};name;tf_lobby_debug;status;`);
-sleep.msleep(10);
+sleep.msleep(50);
 robot.keyTap('enter');
 sleep.msleep(250);
 robot.typeString(`echo ${END_MARKER};`);
-sleep.msleep(10);
+sleep.msleep(50);
 robot.keyTap('enter');
+sleep.msleep(50);
 robot.keyTap('escape');
 
 // Read log file
@@ -126,7 +131,7 @@ for (const player of players) {
 }
 const foundDuplicates = Object.entries(playerCounts)
     .filter(([, count]) => count > 1)
-    .map(([name]) => name);
+    .map(([name]) => players.find(({ cleanName }) => name === cleanName));
 if (foundBots.length === 0 && foundDuplicates.length === 0) {
     // Nothing suspicious found, exit
     console.info('No bots or duplicates found, exiting')
@@ -136,11 +141,11 @@ if (foundBots.length === 0 && foundDuplicates.length === 0) {
 // Create and format messages for sendkeys module to properly "type" it
 let message1 = null, message2 = null;
 if (foundBots.length > 0) {
-    message1 = `[BOT CHECK] Found ${foundBots.length} known named bot${foundBots.length > 1 ? 's' : ''}: ${foundBots.map(({ name }) => name).join(', ')}`;
+    message1 = `[BOT CHECK] Found ${foundBots.length} known named bot${foundBots.length > 1 ? 's' : ''}: ${foundBots.map(({ name, team }) => `${name} (team ${TEAM_LABELS[team]})`).join(', ')}`;
     console.info('Message to send:', message1);
 }
 if (foundDuplicates.length > 0) {
-    message2 = `[BOT CHECK] Found ${foundDuplicates.length} duplicate player${foundDuplicates.length > 1 ? 's' : ''} (name-stealing bot${foundDuplicates.length > 1 ? 's' : ''}): ${foundDuplicates.join(', ')}`;
+    message2 = `[BOT CHECK] Found ${foundDuplicates.length} name-stealing bot${foundDuplicates.length > 1 ? 's' : ''}: ${foundDuplicates.map(({ name, team }) => `${name} (team ${TEAM_LABELS[team]})`).join(', ')}`;
     console.info('Message to send:', message2);
 }
 
@@ -150,17 +155,17 @@ sleep.msleep(100);
 console.info('Sending TF2 chat keystrokes')
 if (message1) {
     robot.typeString('y');
-    sleep.msleep(10);
+    sleep.msleep(50);
     robot.typeString(message1);
-    sleep.msleep(10);
+    sleep.msleep(50);
     robot.keyTap('enter');
 }
 if (message2) {
     sleep.msleep(50);
     robot.typeString('y');
-    sleep.msleep(10);
+    sleep.msleep(50);
     robot.typeString(message2);
-    sleep.msleep(10);
+    sleep.msleep(50);
     robot.keyTap('enter');
 }
 
