@@ -1,7 +1,10 @@
 {
+  "scripts": {
+    "postinstall": "patch-package && npm rebuild"
+  },
   "dependencies": {
+    "patch-package": "^6.2.2",
     "robotjs": "^0.6.0",
-    "sendkeys": "^1.1.1",
     "sleep": "^6.3.0"
   }
 }

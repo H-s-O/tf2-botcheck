@@ -1,7 +1,6 @@
 const fs = require('fs');
 const robot = require('robotjs');
 const sleep = require('sleep');
-const sendkeys = require('sendkeys');
 
 const BOT_LIST = require('./data/bots.json');
 
@@ -20,14 +19,13 @@ robot.setKeyboardDelay(0);
 console.info('Sending TF2 console keystrokes');
 robot.typeString(CONSOLE_KEY);
 sleep.msleep(10);
-sendkeys.sync(`echo ${START_MARKER};name;tf_lobby_debug;status;`);
+robot.typeString(`echo ${START_MARKER};name;tf_lobby_debug;status;`);
 sleep.msleep(10);
 robot.keyTap('enter');
 sleep.msleep(250);
-sendkeys.sync(`echo ${END_MARKER};`);
+robot.typeString(`echo ${END_MARKER};`);
 sleep.msleep(10);
 robot.keyTap('enter');
-sleep.msleep(10);
 robot.keyTap('escape');
 
 // Read log file
@@ -138,26 +136,22 @@ if (foundBots.length === 0 && foundDuplicates.length === 0) {
 // Create and format messages for sendkeys module to properly "type" it
 let message1 = null, message2 = null;
 if (foundBots.length > 0) {
-    message1 = `BOT CHECK - Found ${foundBots.length} known named bot${foundBots.length > 1 ? 's' : ''}: ${foundBots.map(({ name }) => name).join(', ')}`
-        .replace(/\(/g, '{(}')
-        .replace(/\)/g, '{)}');
+    message1 = `[[[BOT CHECK]]] Found ${foundBots.length} known named bot${foundBots.length > 1 ? 's' : ''}: ${foundBots.map(({ name }) => name).join(', ')}`;
     console.info('Message to send:', message1);
 }
 if (foundDuplicates.length > 0) {
-    message2 = `BOT CHECK - Found ${foundDuplicates.length} duplicate player${foundDuplicates.length > 1 ? 's' : ''} (name-stealing bot${foundDuplicates.length > 1 ? 's' : ''}): ${foundDuplicates.join(', ')}`
-        .replace(/\(/g, '{(}')
-        .replace(/\)/g, '{)}');
+    message2 = `[[[BOT CHECK]]] Found ${foundDuplicates.length} duplicate player${foundDuplicates.length > 1 ? 's' : ''} (name-stealing bot${foundDuplicates.length > 1 ? 's' : ''}): ${foundDuplicates.join(', ')}`;
     console.info('Message to send:', message2);
 }
 
 sleep.msleep(100);
 
-// Open TF2 console, output found bots message and close console
+// Send found bots and duplicates chat messages
 console.info('Sending TF2 chat keystrokes')
 if (message1) {
     robot.typeString('y');
     sleep.msleep(10);
-    sendkeys.sync(message1);
+    robot.typeString(message1);
     sleep.msleep(10);
     robot.keyTap('enter');
 }
@@ -165,7 +159,7 @@ if (message2) {
     sleep.msleep(10);
     robot.typeString('y');
     sleep.msleep(10);
-    sendkeys.sync(message2);
+    robot.typeString(message2);
     sleep.msleep(10);
     robot.keyTap('enter');
 }
