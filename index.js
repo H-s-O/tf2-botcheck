@@ -13,8 +13,8 @@ const STATUS_LINE_REGEXP = /^#\s+(\d+)\s+"(.+?)"\s+\[(U:.+?)\]/gm;
 const BOT_CHECK_REGEXP_TEMPLATE = (name) => RegExp(`^(\\(\\d+\\))*${name.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')}$`); // escape the name which may contain regexp control characters
 const CONSOLE_KEY = '/';
 const TEAM_LABELS = {
-    TF_GC_TEAM_DEFENDERS: 'Red',
-    TF_GC_TEAM_INVADERS: 'Blu',
+    TF_GC_TEAM_DEFENDERS: 'RED',
+    TF_GC_TEAM_INVADERS: 'BLU',
 };
 
 robot.setKeyboardDelay(0);
