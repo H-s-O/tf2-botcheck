@@ -11,7 +11,7 @@ const END_MARKER = `-/bc.${HASH}-`;
 const NAME_LINE_REGEXP = /^"name" = "(.+?)"/g;
 const LOBBY_LINE_REGEXP = /^  Member\[\d+\] \[(U:.+?)\]  team = (\w+)/gm;
 const STATUS_LINE_REGEXP = /^#\s+(\d+)\s+"(.+?)"\s+\[(U:.+?)\]/gm;
-const BOT_CHECK_REGEXP_TEMPLATE = (name) => RegExp(`^(\\(\\d+\\))*${name}$`);
+const BOT_CHECK_REGEXP_TEMPLATE = (name) => RegExp(`^(\\(\\d+\\))*${name.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')}$`); // escape the name which may contain regexp control characters
 const CONSOLE_KEY = '/';
 
 robot.setKeyboardDelay(0);
