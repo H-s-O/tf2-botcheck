@@ -43,7 +43,7 @@ if (startMarkerPos === -1) {
 const endMarkerPos = logContent.lastIndexOf(END_MARKER);
 if (endMarkerPos === -1) {
     // End marker not found, abort
-    console.error('Could not find end, aborting');
+    console.error('Could not find end marker, aborting');
     process.exit(1);
 }
 
@@ -136,11 +136,11 @@ if (foundBots.length === 0 && foundDuplicates.length === 0) {
 // Create and format messages for sendkeys module to properly "type" it
 let message1 = null, message2 = null;
 if (foundBots.length > 0) {
-    message1 = `[[[BOT CHECK]]] Found ${foundBots.length} known named bot${foundBots.length > 1 ? 's' : ''}: ${foundBots.map(({ name }) => name).join(', ')}`;
+    message1 = `[BOT CHECK] Found ${foundBots.length} known named bot${foundBots.length > 1 ? 's' : ''}: ${foundBots.map(({ name }) => name).join(', ')}`;
     console.info('Message to send:', message1);
 }
 if (foundDuplicates.length > 0) {
-    message2 = `[[[BOT CHECK]]] Found ${foundDuplicates.length} duplicate player${foundDuplicates.length > 1 ? 's' : ''} (name-stealing bot${foundDuplicates.length > 1 ? 's' : ''}): ${foundDuplicates.join(', ')}`;
+    message2 = `[BOT CHECK] Found ${foundDuplicates.length} duplicate player${foundDuplicates.length > 1 ? 's' : ''} (name-stealing bot${foundDuplicates.length > 1 ? 's' : ''}): ${foundDuplicates.join(', ')}`;
     console.info('Message to send:', message2);
 }
 
@@ -156,7 +156,7 @@ if (message1) {
     robot.keyTap('enter');
 }
 if (message2) {
-    sleep.msleep(10);
+    sleep.msleep(50);
     robot.typeString('y');
     sleep.msleep(10);
     robot.typeString(message2);

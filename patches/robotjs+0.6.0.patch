@@ -1,5 +1,5 @@
 diff --git a/node_modules/robotjs/src/keypress.c b/node_modules/robotjs/src/keypress.c
-index 2bbdccd..2517963 100644
+index 2bbdccd..4904e64 100644
 --- a/node_modules/robotjs/src/keypress.c
 +++ b/node_modules/robotjs/src/keypress.c
 @@ -16,7 +16,7 @@
@@ -7,7 +7,15 @@ index 2bbdccd..2517963 100644
  #if defined(IS_WINDOWS)
  	#define WIN32_KEY_EVENT_WAIT(key, flags) \
 -		(win32KeyEvent(key, flags), Sleep(DEADBEEF_RANDRANGE(63, 125)))
-+		(win32KeyEvent(key, flags))
++		(win32KeyEvent(key, flags), Sleep(DEADBEEF_RANDRANGE(0, 1)))
  #elif defined(USE_X11)
  	#define X_KEY_EVENT(display, key, is_press) \
  		(XTestFakeKeyEvent(display, \
+@@ -319,6 +319,6 @@ void typeStringDelayed(const char *str, const unsigned cpm)
+ 
+ 	while (*str != '\0') {
+ 		tapUniKey(*str++);
+-		microsleep(mspc + (DEADBEEF_UNIFORM(0.0, 62.5)));
++		microsleep(mspc + (DEADBEEF_UNIFORM(0.0, 5.0)));
+ 	}
+ }
