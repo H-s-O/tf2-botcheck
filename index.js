@@ -145,11 +145,11 @@ if (foundBots.length > 0) {
     console.info('Message to send:', message1);
 }
 if (foundDuplicates.length > 0) {
-    message2 = `[BOT CHECK] Found ${foundDuplicates.length} name-stealing bot${foundDuplicates.length > 1 ? 's' : ''}: ${foundDuplicates.map(({ name, team }) => `${name} (team ${TEAM_LABELS[team]})`).join(', ')}`;
+    message2 = `[BOT CHECK] Found ${foundDuplicates.length} name-stealing bot${foundDuplicates.length > 1 ? 's' : ''}: ${foundDuplicates.map(({ cleanName, team }) => `${cleanName} (team ${TEAM_LABELS[team]})`).join(', ')}`;
     console.info('Message to send:', message2);
 }
 
-sleep.msleep(100);
+sleep.msleep(250);
 
 // Send found bots and duplicates chat messages
 console.info('Sending TF2 chat keystrokes')
