@@ -20,6 +20,10 @@
         "type": "bot"
     },
     {
+        "name": "shoppy.gg/@d3fc0n6",
+        "type": "bot"
+    },
+    {
         "name": "[VALVE] Niggerkiller",
         "type": "bot"
     },
@@ -129,6 +133,22 @@
     },
     {
         "name": "Friendly Bot :]",
+        "type": "bot"
+    },
+    {
+        "name": "OneTrick @LITHIUM",
+        "type": "aimboter"
+    },
+    {
+        "name": "Single Dad",
+        "type": "bot"
+    },
+    {
+        "name": "palaric8",
+        "type": "bot"
+    },
+    {
+        "name": "Lyra.child",
         "type": "bot"
     }
 ]
