@@ -150,5 +150,14 @@
     {
         "name": "Lyra.child",
         "type": "bot"
+    },
+    {
+        "name": "WAMO",
+        "type": "bot"
+    },
+    {
+        "name": "braaaap \\d+",
+        "type": "bot",
+        "regexp": true
     }
 ]

@@ -10,7 +10,7 @@ const END_MARKER = `-/bc.${HASH}-`;
 const NAME_LINE_REGEXP = /^"name" = "(.+?)"/g;
 const LOBBY_LINE_REGEXP = /^  Member\[\d+\] \[(U:.+?)\]  team = (\w+)/gm;
 const STATUS_LINE_REGEXP = /^#\s+(\d+)\s+"(.+?)"\s+\[(U:.+?)\]/gm;
-const BOT_CHECK_REGEXP_TEMPLATE = (name) => RegExp(`^(\\(\\d+\\))*${name.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')}$`); // escape the name which may contain regexp control characters
+const BOT_CHECK_REGEXP_TEMPLATE = (name, escape = true) => RegExp(`^(\\(\\d+\\))*${escape ? name.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') : name}$`); // escape the name which may contain regexp control characters
 const CONSOLE_KEY = '/';
 const TEAM_LABELS = {
     TF_GC_TEAM_DEFENDERS: 'RED',
@@ -114,7 +114,7 @@ console.info('Current player name:', currentPlayerName, 'uniqueid:', currentPlay
 const foundBots = [];
 for (const botDefinition of BOT_LIST) {
     for (const player of players) {
-        const botRegExp = BOT_CHECK_REGEXP_TEMPLATE(botDefinition.name);
+        const botRegExp = BOT_CHECK_REGEXP_TEMPLATE(botDefinition.name, botDefinition.regexp !== true);
         if (botRegExp.test(player.cleanName)) {
             console.info('Found bot:', player.name);
             foundBots.push(player);
