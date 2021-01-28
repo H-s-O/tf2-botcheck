@@ -156,8 +156,20 @@
         "type": "bot"
     },
     {
+        "name": "WAMO x Twilight Sparkle",
+        "type": "bot"
+    },
+    {
         "name": "braaaap \\d+",
         "type": "bot",
         "regexp": true
+    },
+    {
+        "name": "Gabe Newell",
+        "type": "bot"
+    },
+    {
+        "name": "DustBowl Nigger Slayer",
+        "type": "bot"
     }
 ]
