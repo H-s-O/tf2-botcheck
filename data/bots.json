@@ -36,99 +36,7 @@
         "type": "bot"
     },
     {
-        "name": "luetic",
-        "type": "bot"
-    },
-    {
-        "name": "ichthyolite",
-        "type": "bot"
-    },
-    {
-        "name": "alexandraalexandre",
-        "type": "bot"
-    },
-    {
-        "name": "_--28--_",
-        "type": "bot"
-    },
-    {
-        "name": "antifreeze",
-        "type": "bot"
-    },
-    {
-        "name": "ellingston",
-        "type": "bot"
-    },
-    {
-        "name": "marty",
-        "type": "bot"
-    },
-    {
-        "name": "archipenko",
-        "type": "bot"
-    },
-    {
-        "name": "RM_2007",
-        "type": "bot"
-    },
-    {
-        "name": "ty",
-        "type": "bot"
-    },
-    {
         "name": "hl2 engine glitch",
-        "type": "bot"
-    },
-    {
-        "name": "inenarrable",
-        "type": "bot"
-    },
-    {
-        "name": "MEDIC!",
-        "type": "bot"
-    },
-    {
-        "name": "gamely",
-        "type": "bot"
-    },
-    {
-        "name": "iambic",
-        "type": "bot"
-    },
-    {
-        "name": "hoppy boi",
-        "type": "bot"
-    },
-    {
-        "name": "sterilant",
-        "type": "bot"
-    },
-    {
-        "name": "Braam the lessbian",
-        "type": "bot"
-    },
-    {
-        "name": "anonym",
-        "type": "bot"
-    },
-    {
-        "name": "[F2P]Milena",
-        "type": "bot"
-    },
-    {
-        "name": "grope",
-        "type": "bot"
-    },
-    {
-        "name": "kingofthebutts",
-        "type": "bot"
-    },
-    {
-        "name": "-Ghast_Krion- ‬| trade.tf",
-        "type": "bot"
-    },
-    {
-        "name": "spleen104",
         "type": "bot"
     },
     {
@@ -140,11 +48,7 @@
         "type": "aimboter"
     },
     {
-        "name": "Single Dad",
-        "type": "bot"
-    },
-    {
-        "name": "palaric8",
+        "name": "Lyra",
         "type": "bot"
     },
     {
@@ -160,6 +64,10 @@
         "type": "bot"
     },
     {
+        "name": "Twilight Sparkle x WAMO",
+        "type": "bot"
+    },
+    {
         "name": "braaaap \\d+",
         "type": "bot",
         "regexp": true
@@ -170,6 +78,14 @@
     },
     {
         "name": "DustBowl Nigger Slayer",
+        "type": "bot"
+    },
+    {
+        "name": "Zesty Jesus",
+        "type": "bot"
+    },
+    {
+        "name": "/id/therealn3u",
         "type": "bot"
     }
 ]
