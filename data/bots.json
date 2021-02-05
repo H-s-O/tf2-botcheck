@@ -95,5 +95,14 @@
     {
         "name": "/profiles/[U:1:1107715125]",
         "type": "bot"
+    },
+    {
+        "name": "Rank2\\.me #\\d+",
+        "type": "bot",
+        "regexp": true
+    },
+    {
+        "name": "Engineer Gaming",
+        "type": "bot"
     }
 ]
