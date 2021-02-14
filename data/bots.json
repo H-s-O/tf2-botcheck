@@ -160,5 +160,9 @@
     {
         "name": "Jazminnette",
         "type": "bot"
+    },
+    {
+        "name": "[VAC]WesMen",
+        "type": "bot"
     }
 ]
