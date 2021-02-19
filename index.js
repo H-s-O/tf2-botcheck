@@ -177,11 +177,11 @@ if (foundBots.length === 0 && foundDuplicates.length === 0) {
 // Create and format messages for sendkeys module to properly "type" it
 let message1 = null, message2 = null;
 if (foundBots.length > 0) {
-    message1 = `[BOT CHECK] Found ${foundBots.length} known named bot${foundBots.length > 1 ? 's' : ''}: ${foundBots.map(({ name, team }) => `${name} (team ${TEAM_LABELS[team]})`).join(', ')}`;
+    message1 = `[BOT CHECK] Found ${foundBots.length} known named bot${foundBots.length > 1 ? 's' : ''}: ${foundBots.map(({ name }) => name).join(', ')}`;
     console.info('Message to send:', message1);
 }
 if (foundDuplicates.length > 0) {
-    message2 = `[BOT CHECK] Found ${foundDuplicates.length} name-stealing bot${foundDuplicates.length > 1 ? 's' : ''}: ${foundDuplicates.map(({ cleanName, team }) => `${cleanName} (team ${TEAM_LABELS[team]})`).join(', ')}`;
+    message2 = `[BOT CHECK] Found ${foundDuplicates.length} name-stealing bot${foundDuplicates.length > 1 ? 's' : ''}: ${foundDuplicates.map(({ cleanName }) => cleanName).join(', ')}`;
     console.info('Message to send:', message2);
 }
 
