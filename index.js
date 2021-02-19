@@ -1,10 +1,12 @@
 const fs = require('fs');
 const robot = require('robotjs');
 const sleep = require('sleep');
+const yargs = require('yargs');
 
+const SIMULATE = yargs.argv.s === true;
 const BOT_LIST = require('./data/bots.json');
 
-const HASH = Date.now().toString(36);
+const HASH = typeof yargs.argv.h !== 'undefined' ? yargs.argv.h : Date.now().toString(36);
 const START_MARKER = `-bc.${HASH}-`;
 const END_MARKER = `-/bc.${HASH}-`;
 const NAME_LINE_REGEXP = /^"name" = "(.+?)"/g;
@@ -16,22 +18,28 @@ const TEAM_LABELS = {
     TF_GC_TEAM_DEFENDERS: 'RED',
     TF_GC_TEAM_INVADERS: 'BLU',
 };
+const OPPOSITE_TEAM = {
+    TF_GC_TEAM_DEFENDERS: 'TF_GC_TEAM_INVADERS',
+    TF_GC_TEAM_INVADERS: 'TF_GC_TEAM_DEFENDERS',
+};
 
 robot.setKeyboardDelay(0);
 
-// Open TF2 console, log current status and close console
-console.info('Sending TF2 console keystrokes');
-robot.typeString(CONSOLE_KEY);
-sleep.msleep(50);
-robot.typeString(`echo ${START_MARKER};name;tf_lobby_debug;status;`);
-sleep.msleep(50);
-robot.keyTap('enter');
-sleep.msleep(250);
-robot.typeString(`echo ${END_MARKER};`);
-sleep.msleep(50);
-robot.keyTap('enter');
-sleep.msleep(50);
-robot.keyTap('escape');
+if (!SIMULATE) {
+    // Open TF2 console, log current status and close console
+    console.info('Sending TF2 console keystrokes');
+    robot.typeString(CONSOLE_KEY);
+    sleep.msleep(50);
+    robot.typeString(`echo ${START_MARKER};name;tf_lobby_debug;status;`);
+    sleep.msleep(50);
+    robot.keyTap('enter');
+    sleep.msleep(250);
+    robot.typeString(`echo ${END_MARKER};`);
+    sleep.msleep(50);
+    robot.keyTap('enter');
+    sleep.msleep(50);
+    robot.keyTap('escape');
+}
 
 // Read log file
 console.info('Reading TF2 console log file');
@@ -149,24 +157,28 @@ if (foundDuplicates.length > 0) {
     console.info('Message to send:', message2);
 }
 
-sleep.msleep(250);
+if (!SIMULATE) {
+    sleep.msleep(250);
 
-// Send found bots and duplicates chat messages
-console.info('Sending TF2 chat keystrokes')
-if (message1) {
-    robot.typeString('y');
-    sleep.msleep(50);
-    robot.typeString(message1);
-    sleep.msleep(50);
-    robot.keyTap('enter');
-}
-if (message2) {
-    sleep.msleep(50);
-    robot.typeString('y');
-    sleep.msleep(50);
-    robot.typeString(message2);
-    sleep.msleep(50);
-    robot.keyTap('enter');
+    // Send found bots and duplicates chat messages
+    console.info('Sending TF2 chat keystrokes')
+    if (message1) {
+        robot.typeString('y');
+        sleep.msleep(50);
+        robot.typeString(message1);
+        sleep.msleep(50);
+        robot.keyTap('enter');
+    }
+    if (message1 && message2) {
+        sleep.msleep(1000);
+    }
+    if (message2) {
+        robot.typeString('y');
+        sleep.msleep(50);
+        robot.typeString(message2);
+        sleep.msleep(50);
+        robot.keyTap('enter');
+    }
 }
 
 // @TODO auto call kick vote
