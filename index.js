@@ -11,7 +11,7 @@ const START_MARKER = `-bc.${HASH}-`;
 const END_MARKER = `-/bc.${HASH}-`;
 const NAME_LINE_REGEXP = /^"name" = "(.+?)"/g;
 const LOBBY_LINE_REGEXP = /^  Member\[\d+\] \[(U:.+?)\]  team = (\w+)/gm;
-const STATUS_LINE_REGEXP = /^#\s+(\d+)\s+"(.+?)"\s+\[(U:.+?)\]/gm;
+const STATUS_LINE_REGEXP = /^#\s+(\d+)\s+"(.+?)"\s+\[(U:.+?)\]\s+([\d:]+)/gm;
 const BOT_CHECK_REGEXP_TEMPLATE = (name, escape = true) => RegExp(`^(\\(\\d+\\))*${escape ? name.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') : name}$`); // escape the name which may contain regexp control characters
 const CONSOLE_KEY = '/';
 const TEAM_LABELS = {
@@ -21,6 +21,23 @@ const TEAM_LABELS = {
 const OPPOSITE_TEAM = {
     TF_GC_TEAM_DEFENDERS: 'TF_GC_TEAM_INVADERS',
     TF_GC_TEAM_INVADERS: 'TF_GC_TEAM_DEFENDERS',
+};
+const PARSE_CONNECTED_TIME = (time) => {
+    const arr = time.split(':').reverse();
+    let seconds = 0;
+    // Seconds
+    seconds += parseInt(arr[0]);
+    // Minutes
+    seconds += parseInt(arr[1]) * 60;
+    if (arr.length === 3) {
+        // Hours
+        seconds += parseInt(arr[2]) * 3600;
+    }
+    if (arr.length === 4) {
+        // Days (?!)
+        seconds += parseInt(arr[3]) * 86400;
+    }
+    return seconds;
 };
 
 robot.setKeyboardDelay(0);
@@ -79,6 +96,7 @@ while ((playerMatches = STATUS_LINE_REGEXP.exec(statusContent)) !== null) {
         name: playerMatches[2],
         cleanName: playerMatches[2].replace(/[^\u0020-\u007E\u00A0-\u02AD]/g, ''), // remove invisible characters possibly added by hijacking bots
         uniqueid: playerMatches[3],
+        connected: PARSE_CONNECTED_TIME(playerMatches[4]),
     });
 }
 if (players.length === 0) {
@@ -118,28 +136,38 @@ const currentPlayerName = nameMatches[1];
 const currentPlayerInfo = players.find(({ name }) => name === currentPlayerName);
 console.info('Current player name:', currentPlayerName, 'uniqueid:', currentPlayerInfo.uniqueid, 'team:', currentPlayerInfo.team);
 
-// Loop each bot name and check against each player name
-const foundBots = [];
+// Find named bots first; loop each known bot name and check against each player name
 for (const botDefinition of BOT_LIST) {
     for (const player of players) {
         const botRegExp = BOT_CHECK_REGEXP_TEMPLATE(botDefinition.name, botDefinition.regexp !== true);
         if (botRegExp.test(player.cleanName)) {
             console.info('Found bot:', player.name);
-            foundBots.push(player);
+            player.flag = 'namedbot';
         }
     }
 }
-// Loop the player list and check for duplicates
-const playerCounts = {};
-for (const player of players) {
-    if (!(player.cleanName in playerCounts)) {
-        playerCounts[player.cleanName] = 0;
+
+// Then, find hijacking bots; loop each player against all other players and compare names and connected time
+for (const player1 of players) {
+    for (const player2 of players) {
+        if (player1.userid === player2.userid) {
+            // Do not compare a player against itself, skip
+            continue;
+        }
+        if (player1.cleanName === player2.cleanName) {
+            if (player1.connected < player2.connected && !player1.flag) {
+                player1.flag = 'hijackerbot';
+            } else if (player2.connected < player1.connected && !player2.flag) {
+                player2.flag = 'hijackerbot';
+            } else {
+                // Connected times are the same for both players, so ignore since we can't determine which one is the bot
+            }
+        }
     }
-    playerCounts[player.cleanName]++;
 }
-const foundDuplicates = Object.entries(playerCounts)
-    .filter(([, count]) => count > 1)
-    .map(([name]) => players.find(({ cleanName }) => name === cleanName));
+
+const foundBots = players.filter(({ flag }) => flag === 'namedbot');
+const foundDuplicates = players.filter(({ flag }) => flag === 'hijackerbot');
 if (foundBots.length === 0 && foundDuplicates.length === 0) {
     // Nothing suspicious found, exit
     console.info('No bots or duplicates found, exiting')
