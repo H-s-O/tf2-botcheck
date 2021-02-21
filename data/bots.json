@@ -138,10 +138,6 @@
         "type": "bot"
     },
     {
-        "name": "Le John Madden",
-        "type": "bot"
-    },
-    {
         "name": "fish emporer",
         "type": "bot"
     },
@@ -179,6 +175,18 @@
     },
     {
         "name": "gyoza lizard",
+        "type": "bot"
+    },
+    {
+        "name": "Keyeri",
+        "type": "bot"
+    },
+    {
+        "name": "Forumet",
+        "type": "bot"
+    },
+    {
+        "name": "quit smoking",
         "type": "bot"
     }
 ]
