@@ -102,10 +102,6 @@
         "regexp": true
     },
     {
-        "name": "Engineer Gaming",
-        "type": "bot"
-    },
-    {
         "name": "AbsoluteBananas",
         "type": "bot"
     },
@@ -134,26 +130,6 @@
         "type": "bot"
     },
     {
-        "name": "Siphylis",
-        "type": "bot"
-    },
-    {
-        "name": "fish emporer",
-        "type": "bot"
-    },
-    {
-        "name": "thisdyingbreath",
-        "type": "bot"
-    },
-    {
-        "name": "fish",
-        "type": "bot"
-    },
-    {
-        "name": "Cypher_J",
-        "type": "bot"
-    },
-    {
         "name": "Jazminnette",
         "type": "bot"
     },
@@ -162,31 +138,15 @@
         "type": "bot"
     },
     {
-        "name": "pREDa fo^rE-veЯ",
+        "name": "twitch.tv/d3fc0n6",
         "type": "bot"
     },
     {
-        "name": "4mealla",
+        "name": "youtube.com/watch?v=TsSKzV",
         "type": "bot"
     },
     {
-        "name": "brodybet‬ty1",
-        "type": "bot"
-    },
-    {
-        "name": "gyoza lizard",
-        "type": "bot"
-    },
-    {
-        "name": "Keyeri",
-        "type": "bot"
-    },
-    {
-        "name": "Forumet",
-        "type": "bot"
-    },
-    {
-        "name": "quit smoking",
+        "name": "youtu.be/TsSKzVarV94" ,
         "type": "bot"
     }
 ]
