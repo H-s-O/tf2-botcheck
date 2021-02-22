@@ -181,7 +181,7 @@ if (foundBots.length > 0) {
     console.info('Message to send:', message1);
 }
 if (foundDuplicates.length > 0) {
-    message2 = `[BOT CHECK] Found ${foundDuplicates.length} name-stealing bot${foundDuplicates.length > 1 ? 's' : ''}: ${foundDuplicates.map(({ cleanName }) => cleanName).join(', ')}`;
+    message2 = `[BOT CHECK] Found ${foundDuplicates.length} clone bot${foundDuplicates.length > 1 ? 's' : ''}: ${foundDuplicates.map(({ cleanName }) => cleanName).join(', ')}`;
     console.info('Message to send:', message2);
 }
 
