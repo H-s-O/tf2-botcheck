@@ -132,6 +132,11 @@ for (const player of players) {
 
 // Parsing current player name
 const nameMatches = NAME_LINE_REGEXP.exec(statusContent);
+// Guard
+if (!nameMatches) {
+    console.error('Cannot find name of current player, aborting');
+    process.exit(1);
+}
 const currentPlayerName = nameMatches[1];
 const currentPlayerInfo = players.find(({ name }) => name === currentPlayerName);
 console.info('Current player name:', currentPlayerName, 'uniqueid:', currentPlayerInfo.uniqueid, 'team:', currentPlayerInfo.team);
