@@ -1,4 +1,6 @@
 {
+  "name": "tf2-botcheck",
+  "private": true,
   "scripts": {
     "postinstall": "patch-package && npm rebuild",
     "copy-addons": "node scripts/copy-addons.js",
