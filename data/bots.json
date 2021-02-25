@@ -176,5 +176,21 @@
     {
         "name": "scout gaming",
         "type": "bot"
+    },
+    {
+        "name": "Soldier Gaming (Not A Bot)",
+        ",type": "bot"
+    },
+    {
+        "name": "real Spy Gaming",
+        "type": "bot"
+    },
+    {
+        "name": "pyro gaming (not a bot)",
+        "type": "bot"
+    },
+    {
+        "name": "Engineer Real Gaming",
+        "type": "bot"
     }
 ]
