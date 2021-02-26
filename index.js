@@ -41,6 +41,13 @@ const PARSE_CONNECTED_TIME = (time) => {
     }
     return seconds;
 };
+const MESSAGE_CHECKSUM = (message) => {
+    let checksum = message.charCodeAt(0);
+    for (let i = 0; i < message.length; i++) {
+        checksum ^= message.charCodeAt(i);
+    }
+    return checksum;
+}
 
 robot.setKeyboardDelay(0);
 
@@ -189,15 +196,19 @@ if (foundBots.length === 0 && foundDuplicates.length === 0) {
 // Create messages
 let message1 = null, message2 = null;
 if (foundBots.length > 0) {
-    message1 = `[BOT CHECK] Found ${foundBots.length} known named bot${foundBots.length > 1 ? 's' : ''}: ${foundBots.map(({ cleanName, state }) => {
+    const content1 = `Found ${foundBots.length} known named bot${foundBots.length > 1 ? 's' : ''}: ${foundBots.map(({ cleanName, state }) => {
         return `${cleanName}${state === STATE_SPAWNING ? ' [still connecting]' : ''}`
     }).join(', ')}`;
+    const checksum1 = MESSAGE_CHECKSUM(content1);
+    message1 = `[BOT CHECK |${checksum1.toString(36).toUpperCase().padStart(2, '0')}] ${content1}`;
     console.info('Message to send:', message1);
 }
 if (foundDuplicates.length > 0) {
-    message2 = `[BOT CHECK] Found ${foundDuplicates.length} clone bot${foundDuplicates.length > 1 ? 's' : ''}: ${foundDuplicates.map(({ cleanName, state }) => {
+    const content2 = `Found ${foundDuplicates.length} clone bot${foundDuplicates.length > 1 ? 's' : ''}: ${foundDuplicates.map(({ cleanName, state }) => {
         return `${cleanName}${state === STATE_SPAWNING ? ' [still connecting]' : ''}`
     }).join(', ')}`;
+    const checksum2 = MESSAGE_CHECKSUM(content2);
+    message2 = `[BOT CHECK |${checksum2.toString(36).toUpperCase().padStart(2, '0')}] ${content2}`;
     console.info('Message to send:', message2);
 }
 
