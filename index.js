@@ -11,7 +11,7 @@ const START_MARKER = `-bc.${HASH}-`;
 const END_MARKER = `-/bc.${HASH}-`;
 const NAME_LINE_REGEXP = /^"name" = "(.+?)"/g;
 const LOBBY_LINE_REGEXP = /^  Member\[\d+\] \[(U:.+?)\]  team = (\w+)/gm;
-const STATUS_LINE_REGEXP = /^#\s+(\d+)\s+"(.+?)"\s+\[(U:.+?)\]\s+([\d:]+)/gm;
+const STATUS_LINE_REGEXP = /^#\s+(\d+)\s+"(.+?)"\s+\[(U:.+?)\]\s+([\d:]+)\s+(\d+)\s+(\d+)\s+(\w+)/gm;
 const BOT_CHECK_REGEXP_TEMPLATE = (name, escape = true) => RegExp(`^(\\(\\d+\\))*${escape ? name.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') : name}$`); // escape the name which may contain regexp control characters
 const CONSOLE_KEY = '/';
 const TEAM_LABELS = {
@@ -22,6 +22,8 @@ const OPPOSITE_TEAM = {
     TF_GC_TEAM_DEFENDERS: 'TF_GC_TEAM_INVADERS',
     TF_GC_TEAM_INVADERS: 'TF_GC_TEAM_DEFENDERS',
 };
+const STATE_ACTIVE = 'active';
+const STATE_SPAWNING = 'spawning';
 const PARSE_CONNECTED_TIME = (time) => {
     const arr = time.split(':').reverse();
     let seconds = 0;
@@ -97,6 +99,9 @@ while ((playerMatches = STATUS_LINE_REGEXP.exec(statusContent)) !== null) {
         cleanName: playerMatches[2].replace(/[\u0000-\u001F\u007F-\u009F\u200B-\u200F\u2028-\u202E\u2066-\u206F]/g, ''), // remove invisible characters possibly added by hijacking bots
         uniqueid: playerMatches[3],
         connected: PARSE_CONNECTED_TIME(playerMatches[4]),
+        ping: parseInt(playerMatches[5]),
+        loss: parseInt(playerMatches[6]),
+        state: playerMatches[7],
     });
 }
 if (players.length === 0) {
@@ -146,7 +151,7 @@ for (const botDefinition of BOT_LIST) {
     for (const player of players) {
         const botRegExp = BOT_CHECK_REGEXP_TEMPLATE(botDefinition.name, botDefinition.regexp !== true);
         if (botRegExp.test(player.cleanName)) {
-            console.info('Found bot:', player.name);
+            console.info('Found named bot:', player.name);
             player.flag = 'namedbot';
         }
     }
@@ -161,8 +166,10 @@ for (const player1 of players) {
         }
         if (player1.cleanName === player2.cleanName) {
             if (player1.connected < player2.connected && !player1.flag) {
+                console.info('Found clone bot:', player1.name);
                 player1.flag = 'hijackerbot';
             } else if (player2.connected < player1.connected && !player2.flag) {
+                console.info('Found clone bot:', player2.name);
                 player2.flag = 'hijackerbot';
             } else {
                 // Connected times are the same for both players, so ignore since we can't determine which one is the bot
@@ -179,21 +186,25 @@ if (foundBots.length === 0 && foundDuplicates.length === 0) {
     process.exit(0);
 }
 
-// Create and format messages for sendkeys module to properly "type" it
+// Create messages
 let message1 = null, message2 = null;
 if (foundBots.length > 0) {
-    message1 = `[BOT CHECK] Found ${foundBots.length} known named bot${foundBots.length > 1 ? 's' : ''}: ${foundBots.map(({ cleanName }) => cleanName).join(', ')}`;
+    message1 = `[BOT CHECK] Found ${foundBots.length} known named bot${foundBots.length > 1 ? 's' : ''}: ${foundBots.map(({ cleanName, state }) => {
+        return `${cleanName}${state === STATE_SPAWNING ? ' [still connecting]' : ''}`
+    }).join(', ')}`;
     console.info('Message to send:', message1);
 }
 if (foundDuplicates.length > 0) {
-    message2 = `[BOT CHECK] Found ${foundDuplicates.length} clone bot${foundDuplicates.length > 1 ? 's' : ''}: ${foundDuplicates.map(({ cleanName }) => cleanName).join(', ')}`;
+    message2 = `[BOT CHECK] Found ${foundDuplicates.length} clone bot${foundDuplicates.length > 1 ? 's' : ''}: ${foundDuplicates.map(({ cleanName, state }) => {
+        return `${cleanName}${state === STATE_SPAWNING ? ' [still connecting]' : ''}`
+    }).join(', ')}`;
     console.info('Message to send:', message2);
 }
 
 if (!SIMULATE) {
     sleep.msleep(250);
 
-    // Send found bots and duplicates chat messages
+    // Send chat messages
     console.info('Sending TF2 chat keystrokes')
     if (message1) {
         robot.typeString('y');
