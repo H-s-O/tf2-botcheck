@@ -5,8 +5,10 @@ const yargs = require('yargs');
 
 const SIMULATE = yargs.argv.s === true;
 const BOT_LIST = require('./data/bots.json');
+const INITIAL_DELAY = typeof yargs.argv.i !== 'undefined' ? yargs.argv.i : null;
+const CUSTOM_HASH = typeof yargs.argv.h !== 'undefined' ? yargs.argv.h : null;
 
-const HASH = typeof yargs.argv.h !== 'undefined' ? yargs.argv.h : Date.now().toString(36);
+const HASH = CUSTOM_HASH ? CUSTOM_HASH : Date.now().toString(36);
 const START_MARKER = `-bc.${HASH}-`;
 const END_MARKER = `-/bc.${HASH}-`;
 const NAME_LINE_REGEXP = /^"name" = "(.+?)"/g;
@@ -51,7 +53,11 @@ const MESSAGE_CHECKSUM = (message) => {
 
 robot.setKeyboardDelay(0);
 
-if (!SIMULATE) {
+if (INITIAL_DELAY) {
+    sleep.msleep(INITIAL_DELAY);
+}
+
+if (!SIMULATE && !CUSTOM_HASH) {
     // Open TF2 console, log current status and close console
     console.info('Sending TF2 console keystrokes');
     robot.typeString(CONSOLE_KEY);
