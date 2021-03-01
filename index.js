@@ -49,6 +49,12 @@ const MESSAGE_CHECKSUM = (message) => {
         checksum ^= message.charCodeAt(i);
     }
     return checksum;
+};
+const CENSOR_MESSAGE = (message) => {
+    return message.replace(/(b)o(t)/gi, '$1*$2');
+};
+const CENSOR_NAME = (name) => {
+    return CENSOR_MESSAGE(name.replace(/[aeiouy]/i, '*'));
 }
 
 robot.setKeyboardDelay(0);
@@ -166,6 +172,7 @@ for (const botDefinition of BOT_LIST) {
         if (botRegExp.test(player.cleanName)) {
             console.info('Found named bot:', player.name);
             player.flag = 'namedbot';
+            player.censor = botDefinition.censor === true;
         }
     }
 }
@@ -202,19 +209,31 @@ if (foundBots.length === 0 && foundDuplicates.length === 0) {
 // Create messages
 let message1 = null, message2 = null;
 if (foundBots.length > 0) {
-    const content1 = `Found ${foundBots.length} known named bot${foundBots.length > 1 ? 's' : ''}: ${foundBots.map(({ cleanName, state }) => {
-        return `${cleanName}${state === STATE_SPAWNING ? ' [still connecting]' : ''}`
-    }).join(', ')}`;
-    const checksum1 = MESSAGE_CHECKSUM(content1);
-    message1 = `[BOT CHECK |${checksum1.toString(36).toUpperCase().padStart(2, '0')}] ${content1}`;
+    let needsCensor = false;
+    const list1 = foundBots.map(({ cleanName, state, censor }) => {
+        if (censor) {
+            needsCensor = true;
+        }
+        return `${censor ? CENSOR_NAME(cleanName) : cleanName}${state === STATE_SPAWNING ? ' [still connecting]' : ''}`
+    }).join(', ')
+    let content1 = `Found ${foundBots.length} known bot${foundBots.length > 1 ? 's' : ''}`;
+    if (needsCensor) {
+        content1 = CENSOR_MESSAGE(content1);
+    }
+    const checksum1 = MESSAGE_CHECKSUM(content1).toString(36).toUpperCase().padStart(2, '0');
+    let heading1 = `[BOT CHECK |${checksum1}]`;
+    if (needsCensor) {
+        heading1 = CENSOR_MESSAGE(heading1);
+    }
+    message1 = `${heading1} ${content1}: ${list1}`;
     console.info('Message to send:', message1);
 }
 if (foundDuplicates.length > 0) {
     const content2 = `Found ${foundDuplicates.length} clone bot${foundDuplicates.length > 1 ? 's' : ''}: ${foundDuplicates.map(({ cleanName, state }) => {
         return `${cleanName}${state === STATE_SPAWNING ? ' [still connecting]' : ''}`
     }).join(', ')}`;
-    const checksum2 = MESSAGE_CHECKSUM(content2);
-    message2 = `[BOT CHECK |${checksum2.toString(36).toUpperCase().padStart(2, '0')}] ${content2}`;
+    const checksum2 = MESSAGE_CHECKSUM(content2).toString(36).toUpperCase().padStart(2, '0');
+    message2 = `[BOT CHECK |${checksum2}] ${content2}`;
     console.info('Message to send:', message2);
 }
 
@@ -224,6 +243,7 @@ if (!SIMULATE) {
     // Send chat messages
     console.info('Sending TF2 chat keystrokes')
     if (message1) {
+        console.info('Sending message 1');
         robot.typeString('y');
         sleep.msleep(50);
         robot.typeString(message1);
@@ -234,6 +254,7 @@ if (!SIMULATE) {
         sleep.msleep(1000);
     }
     if (message2) {
+        console.info('Sending message 2');
         robot.typeString('y');
         sleep.msleep(50);
         robot.typeString(message2);
