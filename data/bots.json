@@ -221,5 +221,17 @@
     {
         "name": "Displacement bot",
         "type": "bot"
+    },
+    {
+        "name": "Sugarfree Níggerkiller",
+        "type": "bot"
+    },
+    {
+        "name": "Fish",
+        "type": "bot"
+    },
+    {
+        "name": "Empty",
+        "type": "bot"
     }
 ]
