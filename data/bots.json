@@ -233,5 +233,9 @@
     {
         "name": "Empty",
         "type": "bot"
+    },
+    {
+        "name": "Plant-based Níggerkiller",
+        "type": "bot"
     }
 ]
