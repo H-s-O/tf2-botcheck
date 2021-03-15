@@ -45,7 +45,7 @@ const PARSE_CONNECTED_TIME = (time) => {
 };
 const MESSAGE_CHECKSUM = (message) => {
     let checksum = message.charCodeAt(0);
-    for (let i = 0; i < message.length; i++) {
+    for (let i = 1; i < message.length; i++) {
         checksum ^= message.charCodeAt(i);
     }
     return checksum;
