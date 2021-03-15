@@ -54,7 +54,7 @@ const CENSOR_MESSAGE = (message) => {
     return message.replace(/(b)o(t)/gi, '$1*$2');
 };
 const CENSOR_NAME = (name) => {
-    return CENSOR_MESSAGE(name.replace(/[aeiouy]/i, '*'));
+    return CENSOR_MESSAGE(name.replace(/[aeiouy]/gi, '*'));
 }
 
 robot.setKeyboardDelay(0);
