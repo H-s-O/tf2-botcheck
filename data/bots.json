@@ -289,5 +289,22 @@
     {
         "name": "[VALVE] Nⅈggerkiller",
         "type": "bot"
+    },
+    {
+        "name": "paste.ee/p/Pkj2K -n3u",
+        "type": "bot"
+    },
+    {
+        "name": "Cookie",
+        "type": "bot"
+    },
+    {
+        "name": "spycrab by n3u",
+        "type": "bot"
+    },
+    {
+        "name": "OMูEGATRONIC",
+        "type": "bot",
+        "censor": true
     }
 ]
