@@ -306,5 +306,13 @@
         "name": "OMูEGATRONIC",
         "type": "bot",
         "censor": true
+    },
+    {
+        "name": "n3u has had enough",
+        "type": "bot"
+    },
+    {
+        "name": "raizo.dev",
+        "type": "bot"
     }
 ]
