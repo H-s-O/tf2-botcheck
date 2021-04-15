@@ -227,10 +227,6 @@
         "type": "bot"
     },
     {
-        "name": "Fish",
-        "type": "bot"
-    },
-    {
         "name": "Empty",
         "type": "bot"
     },
@@ -309,6 +305,21 @@
     },
     {
         "name": "OMัEGATRONIC",
+        "type": "bot",
+        "censor": true
+    },
+    {
+        "name": "OMํEGATRONIC",
+        "type": "bot",
+        "censor": true
+    },
+    {
+        "name": "OMEGATRONIC้",
+        "type": "bot",
+        "censor": true
+    },
+    {
+        "name": "OME๊GATRONIC",
         "type": "bot",
         "censor": true
     },
