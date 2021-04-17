@@ -73,10 +73,6 @@
         "regexp": true
     },
     {
-        "name": "Gabe Newell",
-        "type": "bot"
-    },
-    {
         "name": "DustBowl Nigger Slayer",
         "type": "bot"
     },
@@ -299,69 +295,9 @@
         "type": "bot"
     },
     {
-        "name": "OMูEGATRONIC",
+        "name": ".*O.*M.*E.*G.*A.*T.*R.*O.*N.*I.*C.*",
         "type": "bot",
-        "censor": true
-    },
-    {
-        "name": "OMัEGATRONIC",
-        "type": "bot",
-        "censor": true
-    },
-    {
-        "name": "OMํEGATRONIC",
-        "type": "bot",
-        "censor": true
-    },
-    {
-        "name": "OMEGATRONIC้",
-        "type": "bot",
-        "censor": true
-    },
-    {
-        "name": "OME๊GATRONIC",
-        "type": "bot",
-        "censor": true
-    },
-    {
-        "name": "OM๎EGATRONIC",
-        "type": "bot",
-        "censor": true
-    },
-    {
-        "name": "OMEG๊ATRONIC",
-        "type": "bot",
-        "censor": true
-    },
-    {
-        "name": "OME์GATRONIC",
-        "type": "bot",
-        "censor": true
-    },
-    {
-        "name": "OMEฺGATRONIC",
-        "type": "bot",
-        "censor": true
-    },
-    {
-        "name": "OMEGAT็RONIC",
-        "type": "bot",
-        "censor": true
-    },
-    {
-        "name": "OMEGA๎TRONIC",
-        "type": "bot",
-        "censor": true
-    },
-    {
-        "name": "OMEGัATRONIC",
-        "type": "bot",
-        "censor": true
-    },
-    {
-        "name": "OMEGAํTRONIC",
-        "type": "bot",
-        "censor": true
+        "regexp": true
     },
     {
         "name": "n3u has had enough",
@@ -385,6 +321,10 @@
     },
     {
         "name": "discord.gg/9Ukuw9V",
+        "type": "bot"
+    },
+    {
+        "name": "haunted.church",
         "type": "bot"
     }
 ]
