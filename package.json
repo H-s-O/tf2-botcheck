@@ -10,6 +10,7 @@
   "dependencies": {
     "robotjs": "^0.6.0",
     "sleep": "^6.3.0",
+    "srcds-rcon": "^2.2.1",
     "yargs": "^16.2.0"
   },
   "devDependencies": {
