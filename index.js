@@ -4,6 +4,8 @@ const sleep = require('sleep');
 const yargs = require('yargs');
 const os = require('os');
 
+robot.setKeyboardDelay(0);
+
 const SIMULATE = yargs.argv.s === true;
 const BOT_LIST = require('./data/bots.json');
 const INITIAL_DELAY = typeof yargs.argv.i !== 'undefined' ? yargs.argv.i : null;
@@ -61,8 +63,12 @@ const CENSOR_MESSAGE = (message) => {
 const CENSOR_NAME = (name) => {
     return CENSOR_MESSAGE(name.replace(/[aeiouy]/gi, '*'));
 }
-
-robot.setKeyboardDelay(0);
+const DO_EXIT = (code = 0, escape = true) => {
+    if (escape && !SIMULATE) {
+        robot.keyTap('escape');
+    }
+    process.exit(code)
+}
 
 if (INITIAL_DELAY) {
     sleep.msleep(INITIAL_DELAY);
@@ -81,7 +87,11 @@ if (!SIMULATE && !CUSTOM_HASH) {
     sleep.msleep(50);
     robot.keyTap('enter');
     sleep.msleep(50);
-    robot.keyTap('escape');
+} else if (!SIMULATE && CUSTOM_HASH) {
+    // Open TF2 console for future inputs
+    console.info('Opening TF2 console');
+    robot.typeString(CONSOLE_KEY);
+    sleep.msleep(50);
 }
 
 // Read log file
@@ -94,13 +104,13 @@ const startMarkerPos = logContent.lastIndexOf(START_MARKER_LOOKUP);
 if (startMarkerPos === -1) {
     // Start marker not found, abort
     console.error('Could not find start marker, aborting');
-    process.exit(1);
+    DO_EXIT(1);
 }
 const endMarkerPos = logContent.lastIndexOf(END_MARKER_LOOKUP);
 if (endMarkerPos === -1) {
     // End marker not found, abort
     console.error('Could not find end marker, aborting');
-    process.exit(1);
+    DO_EXIT(1);
 }
 
 // Extracting status
@@ -108,7 +118,7 @@ const statusContent = logContent.substring(startMarkerPos + START_MARKER.length,
 if (statusContent.length === 0) {
     // Status content empty, abort
     console.info('No status content, aborting')
-    process.exit(1);
+    DO_EXIT(1);
 }
 console.info('Status:')
 console.info(statusContent);
@@ -139,7 +149,7 @@ while ((playerMatches = STATUS_LINE_REGEXP.exec(statusContent)) !== null) {
 if (players.length === 0) {
     // Empty players list, exit
     console.info('No players found, exiting')
-    process.exit(0);
+    DO_EXIT(0);
 }
 
 // Parsing lobby debug info
@@ -156,7 +166,7 @@ while ((lobbyMatches = LOBBY_LINE_REGEXP.exec(statusContent)) !== null) {
 if (lobby.length < players.length) {
     // Mismatch between players status count and lobby debug info count, abort
     console.error('Status and lobby debug mismatch, aborting');
-    process.exit(1);
+    DO_EXIT(1);
 }
 
 // Merge lobby debug info into player info
@@ -174,7 +184,7 @@ const nameMatches = NAME_LINE_REGEXP.exec(statusContent);
 // Guard
 if (!nameMatches) {
     console.error('Cannot find name of current player, aborting');
-    process.exit(1);
+    DO_EXIT(1);
 }
 const currentPlayerName = nameMatches[1];
 const currentPlayerInfo = players.find(({ name }) => name === currentPlayerName);
@@ -227,7 +237,7 @@ const foundDuplicates = players.filter(({ flag }) => flag === 'hijackerbot');
 if (foundBots.length === 0 && foundDuplicates.length === 0) {
     // Nothing suspicious found, exit
     console.info('No bots or duplicates found, exiting')
-    process.exit(0);
+    DO_EXIT(0);
 }
 
 const foundBotsOnSameTeam = foundBots.filter(({ team }) => team === currentPlayerInfo.team);
@@ -240,13 +250,9 @@ if (foundBotsOnSameTeam.length > 0) {
 
         // Send auto-kick command
         console.info('Sending TF2 console keystrokes');
-        robot.typeString(CONSOLE_KEY);
-        sleep.msleep(50);
-        robot.typeString(`callvote kick ${foundBotsOnSameTeam[0].userid}`);
+        robot.typeString(`callvote kick ${foundBotsOnSameTeam[0].userid} cheating`);
         sleep.msleep(50);
         robot.keyTap('enter');
-        sleep.msleep(50);
-        robot.keyTap('escape');
     }
 } else if (foundDuplicatesOnSameTeam.length > 0) {
     console.info('Attempting to auto-kick hijacking bot', foundDuplicatesOnSameTeam[0].cleanName);
@@ -256,26 +262,22 @@ if (foundBotsOnSameTeam.length > 0) {
 
         // Send auto-kick command
         console.info('Sending TF2 console keystrokes');
-        robot.typeString(CONSOLE_KEY);
-        sleep.msleep(50);
-        robot.typeString(`callvote kick ${foundDuplicatesOnSameTeam[0].userid}`);
+        robot.typeString(`callvote kick ${foundDuplicatesOnSameTeam[0].userid} cheating`);
         sleep.msleep(50);
         robot.keyTap('enter');
-        sleep.msleep(50);
-        robot.keyTap('escape');
     }
 }
 
 
 // Create messages
 let message1 = null, message2 = null;
+let needsCensor = false;
 if (foundBots.length > 0) {
-    let needsCensor = false;
     const list1 = foundBots.map(({ cleanName, state, realTeam, censor }) => {
         if (censor) {
             needsCensor = true;
         }
-        return `${censor ? CENSOR_NAME(cleanName) : cleanName}${state === STATE_SPAWNING ? ' [still connecting]' : ''}${realTeam ? ` [team ${TEAM_LABELS[realTeam]}]` : ''}`;
+        return `${censor ? CENSOR_NAME(cleanName) : cleanName}${state === STATE_SPAWNING ? ' [connecting...]' : ''}${realTeam ? ` [${TEAM_LABELS[realTeam]}]` : ''}`;
     }).join(', ')
     let content1 = `Found ${foundBots.length} known bot${foundBots.length > 1 ? 's' : ''}`;
     if (needsCensor) {
@@ -290,11 +292,19 @@ if (foundBots.length > 0) {
     console.info('Message to send:', message1);
 }
 if (foundDuplicates.length > 0) {
-    const content2 = `Found ${foundDuplicates.length} clone bot${foundDuplicates.length > 1 ? 's' : ''}: ${foundDuplicates.map(({ cleanName, state, realTeam, }) => {
-        return `${cleanName}${state === STATE_SPAWNING ? ' [still connecting]' : ''}${realTeam ? ` [team ${TEAM_LABELS[realTeam]}]` : ''}`;
-    }).join(', ')}`;
+    const list2 = foundDuplicates.map(({ cleanName, state, realTeam, }) => {
+        return `${cleanName}${state === STATE_SPAWNING ? ' [connecting...]' : ''}${realTeam ? ` [${TEAM_LABELS[realTeam]}]` : ''}`;
+    }).join(', ')
+    let content2 = `Found ${foundDuplicates.length} name-stealing bot${foundDuplicates.length > 1 ? 's' : ''}`;
+    if (needsCensor) {
+        content2 = CENSOR_MESSAGE(content2);
+    }
     const checksum2 = MESSAGE_CHECKSUM(content2).toString(36).toUpperCase().padStart(2, '0');
-    message2 = `[BOT CHECK |${checksum2}] ${content2}`;
+    let heading2 = `[BOT CHECK |${checksum2}]`;
+    if (needsCensor) {
+        heading2 = CENSOR_MESSAGE(heading2);
+    }
+    message2 = `${heading2} ${content2}: ${list2}`;
     console.info('Message to send:', message2);
 }
 
@@ -305,9 +315,7 @@ if (!SIMULATE) {
     console.info('Sending TF2 chat keystrokes')
     if (message1) {
         console.info('Sending message 1');
-        robot.typeString('y');
-        sleep.msleep(50);
-        robot.typeString(message1);
+        robot.typeString(`say ${message1}`);
         sleep.msleep(50);
         robot.keyTap('enter');
     }
@@ -316,13 +324,11 @@ if (!SIMULATE) {
     }
     if (message2) {
         console.info('Sending message 2');
-        robot.typeString('y');
-        sleep.msleep(50);
-        robot.typeString(message2);
+        robot.typeString(`say ${message2}`);
         sleep.msleep(50);
         robot.keyTap('enter');
     }
 }
 
 console.info('Completed');
-process.exit(0);
+DO_EXIT(0);
