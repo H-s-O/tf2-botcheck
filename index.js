@@ -284,21 +284,18 @@ if (foundBotsOnSameTeam.length > 0) {
 
 // Create messages
 let message1 = null, message2 = null;
-let needsCensor = false;
+let needsGlobalCensor = foundBots.some(({ censor, state }) => censor && state === STATE_ACTIVE);
 if (foundBots.length > 0) {
     const list1 = foundBots.map(({ cleanName, state, realTeam, censor }) => {
-        if (censor) {
-            needsCensor = true;
-        }
-        return `${censor ? CENSOR_NAME(cleanName) : cleanName}${BOT_INFO_STRING(state, realTeam)}`;
+        return `${censor && (state === STATE_ACTIVE || needsGlobalCensor) ? CENSOR_NAME(cleanName) : cleanName}${BOT_INFO_STRING(state, realTeam)}`;
     }).join(', ')
     let content1 = `Found ${foundBots.length} known bot${foundBots.length > 1 ? 's' : ''}`;
-    if (needsCensor) {
+    if (needsGlobalCensor) {
         content1 = CENSOR_MESSAGE(content1);
     }
     const checksum1 = MESSAGE_CHECKSUM(content1).toString(36).toUpperCase().padStart(2, '0');
     let heading1 = `[BOT CHECK |${checksum1}]`;
-    if (needsCensor) {
+    if (needsGlobalCensor) {
         heading1 = CENSOR_MESSAGE(heading1);
     }
     message1 = `${heading1} ${content1}: ${list1}`;
@@ -309,12 +306,12 @@ if (foundDuplicates.length > 0) {
         return `${cleanName}${BOT_INFO_STRING(state, realTeam)}`;
     }).join(', ')
     let content2 = `Found ${foundDuplicates.length} name-stealing bot${foundDuplicates.length > 1 ? 's' : ''}`;
-    if (needsCensor) {
+    if (needsGlobalCensor) {
         content2 = CENSOR_MESSAGE(content2);
     }
     const checksum2 = MESSAGE_CHECKSUM(content2).toString(36).toUpperCase().padStart(2, '0');
     let heading2 = `[BOT CHECK |${checksum2}]`;
-    if (needsCensor) {
+    if (needsGlobalCensor) {
         heading2 = CENSOR_MESSAGE(heading2);
     }
     message2 = `${heading2} ${content2}: ${list2}`;
