@@ -63,12 +63,26 @@ const CENSOR_MESSAGE = (message) => {
 const CENSOR_NAME = (name) => {
     return CENSOR_MESSAGE(name.replace(/[aeiouy]/gi, '*'));
 }
+const BOT_INFO_STRING = (state, realTeam) => {
+    if (realTeam) {
+        if (state === STATE_SPAWNING) {
+            return ` [joining ${TEAM_LABELS[realTeam]}...]`;
+        } else {
+            return ` [${TEAM_LABELS[realTeam]}]`;
+        }
+    } else {
+        if (state === STATE_SPAWNING) {
+            return ' [connecting...]';
+        }
+    }
+    return '';
+};
 const DO_EXIT = (code = 0, escape = true) => {
     if (escape && !SIMULATE) {
         robot.keyTap('escape');
     }
-    process.exit(code)
-}
+    process.exit(code);
+};
 
 if (INITIAL_DELAY) {
     sleep.msleep(INITIAL_DELAY);
@@ -268,7 +282,6 @@ if (foundBotsOnSameTeam.length > 0) {
     }
 }
 
-
 // Create messages
 let message1 = null, message2 = null;
 let needsCensor = false;
@@ -277,7 +290,7 @@ if (foundBots.length > 0) {
         if (censor) {
             needsCensor = true;
         }
-        return `${censor ? CENSOR_NAME(cleanName) : cleanName}${state === STATE_SPAWNING ? ' [connecting...]' : ''}${realTeam ? ` [${TEAM_LABELS[realTeam]}]` : ''}`;
+        return `${censor ? CENSOR_NAME(cleanName) : cleanName}${BOT_INFO_STRING(state, realTeam)}`;
     }).join(', ')
     let content1 = `Found ${foundBots.length} known bot${foundBots.length > 1 ? 's' : ''}`;
     if (needsCensor) {
@@ -292,8 +305,8 @@ if (foundBots.length > 0) {
     console.info('Message to send:', message1);
 }
 if (foundDuplicates.length > 0) {
-    const list2 = foundDuplicates.map(({ cleanName, state, realTeam, }) => {
-        return `${cleanName}${state === STATE_SPAWNING ? ' [connecting...]' : ''}${realTeam ? ` [${TEAM_LABELS[realTeam]}]` : ''}`;
+    const list2 = foundDuplicates.map(({ cleanName, state, realTeam }) => {
+        return `${cleanName}${BOT_INFO_STRING(state, realTeam)}`;
     }).join(', ')
     let content2 = `Found ${foundDuplicates.length} name-stealing bot${foundDuplicates.length > 1 ? 's' : ''}`;
     if (needsCensor) {
@@ -330,5 +343,5 @@ if (!SIMULATE) {
     }
 }
 
-console.info('Completed');
+console.info('Done!');
 DO_EXIT(0);
