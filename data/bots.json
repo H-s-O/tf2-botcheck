@@ -135,6 +135,10 @@
         "type": "bot"
     },
     {
+        "name": "[VAC] OneTrick",
+        "type": "bot"
+    },
+    {
         "name": "twitch.tv/d3fc0n6",
         "type": "bot"
     },
@@ -325,6 +329,10 @@
     },
     {
         "name": "haunted.church",
+        "type": "bot"
+    },
+    {
+        "name": "Richard Stallman",
         "type": "bot"
     }
 ]
