@@ -334,5 +334,17 @@
     {
         "name": "Richard Stallman",
         "type": "bot"
+    },
+    {
+        "name": "sniper gaming",
+        "type": "bot"
+    },
+    {
+        "name": "engineer gaming",
+        "type": "bot"
+    },
+    {
+        "name": "demo gaming",
+        "type": "bot"
     }
 ]
