@@ -301,7 +301,8 @@
     {
         "name": ".*O.*M.*E.*G.*A.*T.*R.*O.*N.*I.*C.*",
         "type": "bot",
-        "regexp": true
+        "regexp": true,
+        "censor": true
     },
     {
         "name": "n3u has had enough",
