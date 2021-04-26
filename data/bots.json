@@ -347,5 +347,9 @@
     {
         "name": "demo gaming",
         "type": "bot"
+    },
+    {
+        "name": "t.me/joinchat/TM4YGGnhABTUh0sa",
+        "type": "bot"
     }
 ]
