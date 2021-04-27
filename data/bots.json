@@ -12,10 +12,6 @@
         "type": "bot"
     },
     {
-        "name": "Tom Cruise",
-        "type": "bot"
-    },
-    {
         "name": "irc.mygot.gg:6667#mygot",
         "type": "bot"
     },
@@ -30,22 +26,6 @@
     {
         "name": "[VALVE]Níggerkiller",
         "type": "bot"
-    },
-    {
-        "name": "Frank",
-        "type": "bot"
-    },
-    {
-        "name": "hl2 engine glitch",
-        "type": "bot"
-    },
-    {
-        "name": "Friendly Bot :]",
-        "type": "bot"
-    },
-    {
-        "name": "OneTrick @LITHIUM",
-        "type": "aimboter"
     },
     {
         "name": "Lyra",
@@ -98,30 +78,6 @@
         "regexp": true
     },
     {
-        "name": "AbsoluteBananas",
-        "type": "bot"
-    },
-    {
-        "name": "Trash Panda",
-        "type": "bot"
-    },
-    {
-        "name": "DEUS VULT",
-        "type": "bot"
-    },
-    {
-        "name": "raz",
-        "type": "bot"
-    },
-    {
-        "name": "King of Waifus",
-        "type": "bot"
-    },
-    {
-        "name": "longdongmonger",
-        "type": "bot"
-    },
-    {
         "name": "Waffen-SS",
         "type": "bot",
         "censor": true
@@ -147,15 +103,11 @@
         "type": "bot"
     },
     {
-        "name": "youtu.be/TsSKzVarV94" ,
+        "name": "youtu.be/TsSKzVarV94",
         "type": "bot"
     },
     {
         "name": "Soldier gaming (Not a bot)",
-        "type": "bot"
-    },
-    {
-        "name": "snake :/",
         "type": "bot"
     },
     {
@@ -207,27 +159,7 @@
         "type": "bot"
     },
     {
-        "name": "RainbowThunder‬Infinite[MLF2]",
-        "type": "bot"
-    },
-    {
-        "name": "Watermelon Fly",
-        "type": "bot"
-    },
-    {
-        "name": "Mr krab",
-        "type": "bot"
-    },
-    {
-        "name": "Displacement bot",
-        "type": "bot"
-    },
-    {
         "name": "Sugarfree Níggerkiller",
-        "type": "bot"
-    },
-    {
-        "name": "Empty",
         "type": "bot"
     },
     {
@@ -291,10 +223,6 @@
         "type": "bot"
     },
     {
-        "name": "Cookie",
-        "type": "bot"
-    },
-    {
         "name": "spycrab by n3u",
         "type": "bot"
     },
@@ -314,10 +242,6 @@
     },
     {
         "name": "DISCO MOU‏SE",
-        "type": "bot"
-    },
-    {
-        "name": "Dog Loli",
         "type": "bot"
     },
     {
@@ -350,6 +274,14 @@
     },
     {
         "name": "t.me/joinchat/TM4YGGnhABTUh0sa",
+        "type": "bot"
+    },
+    {
+        "name": "ASSIT - NEW CASUAL MATCHMAKING",
+        "type": "bot"
+    },
+    {
+        "name": "ASSIT TF2",
         "type": "bot"
     }
 ]
