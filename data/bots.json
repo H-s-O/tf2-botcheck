@@ -283,5 +283,9 @@
     {
         "name": "ASSIT TF2",
         "type": "bot"
+    },
+    {
+        "name": "assit:ru-matrix.org",
+        "type": "bot"
     }
 ]
