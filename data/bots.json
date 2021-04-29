@@ -287,5 +287,9 @@
     {
         "name": "assit:ru-matrix.org",
         "type": "bot"
+    },
+    {
+        "name": "ASSIT: ALL NEW MATCHMAKING",
+        "type": "bot"
     }
 ]
