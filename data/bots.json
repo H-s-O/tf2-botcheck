@@ -291,5 +291,17 @@
     {
         "name": "ASSIT: ALL NEW MATCHMAKING",
         "type": "bot"
+    },
+    {
+        "name": "NEW ASSIT TF2",
+        "type": "bot"
+    },
+    {
+        "name": "NO CHEATERS - ASSIT",
+        "type": "bot"
+    },
+    {
+        "name": "dlive.tv/GhostPolitics",
+        "type": "bot"
     }
 ]
