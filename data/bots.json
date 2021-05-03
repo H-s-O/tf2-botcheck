@@ -301,7 +301,19 @@
         "type": "bot"
     },
     {
+        "name": "JOIN ASSIT TF2 TODAY",
+        "type": "bot"
+    },
+    {
+        "name": "PICK ASSIT MATCHMAKING TODAY",
+        "type": "bot"
+    },
+    {
         "name": "dlive.tv/GhostPolitics",
+        "type": "bot"
+    },
+    {
+        "name": "WWW.LMAOBOX.NET",
         "type": "bot"
     }
 ]
