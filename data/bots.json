@@ -315,5 +315,9 @@
     {
         "name": "WWW.LMAOBOX.NET",
         "type": "bot"
+    },
+    {
+        "name": "twitter.com/CoastCapitalist",
+        "type": "bot"
     }
 ]
