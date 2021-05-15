@@ -48,6 +48,10 @@
         "type": "bot"
     },
     {
+        "name": "ELDER GOD WAMO",
+        "type": "bot"
+    },
+    {
         "name": "braaaap \\d+",
         "type": "bot",
         "regexp": true
@@ -229,8 +233,7 @@
     {
         "name": ".*O.*M.*E.*G.*A.*T.*R.*O.*N.*I.*C.*",
         "type": "bot",
-        "regexp": true,
-        "censor": true
+        "regexp": true
     },
     {
         "name": "n3u has had enough",
@@ -353,11 +356,55 @@
         "type": "bot"
     },
     {
+        "name": "vilmabreitenberg609",
+        "type": "bot"
+    },
+    {
+        "name": "clairebode477",
+        "type": "bot"
+    },
+    {
+        "name": "hailieparisian971",
+        "type": "bot"
+    },
+    {
+        "name": "keeleyrice131",
+        "type": "bot"
+    },
+    {
+        "name": "rosalindhomenick996",
+        "type": "bot"
+    },
+    {
+        "name": "olafcorkery733",
+        "type": "bot"
+    },
+    {
+        "name": "garrickaltenwerth951",
+        "type": "bot"
+    },
+    {
+        "name": "fionastehr666",
+        "type": "bot"
+    },
+    {
+        "name": "bertharodriguez928",
+        "type": "bot"
+    },
+    {
+        "name": "dorthygulgowski780",
+        "type": "bot"
+    },
+    {
         "name": "Phil Johnson",
         "type": "bot"
     },
     {
         "name": "Lobas Thick Thighs",
+        "type": "bot"
+    },
+    {
+        "name": "Happy",
         "type": "bot"
     }
 ]
