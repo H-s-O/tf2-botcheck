@@ -299,7 +299,8 @@ if (foundBots.length > 0) {
         heading1 = CENSOR_MESSAGE(heading1);
     }
     message1 = `${heading1} ${content1}: ${list1}`;
-    console.info('Message to send:', message1);
+    console.info('Known bots message to send:');
+    console.info(message1);
 }
 if (foundDuplicates.length > 0) {
     const list2 = foundDuplicates.map(({ cleanName, state, realTeam }) => {
@@ -315,17 +316,17 @@ if (foundDuplicates.length > 0) {
         heading2 = CENSOR_MESSAGE(heading2);
     }
     message2 = `${heading2} ${content2}: ${list2}`;
-    console.info('Message to send:', message2);
+    console.info('Hijacking bots message to send:');
+    console.info(message2);
 }
 
 if (!SIMULATE) {
     sleep.msleep(250);
 
     // Send chat messages
-    console.info('Sending TF2 chat keystrokes')
     if (message1) {
-        console.info('Sending message 1');
-        robot.typeString(`say ${message1}`);
+        console.info('Sending known bots message');
+        robot.typeString(`say "${message1}"`);
         sleep.msleep(50);
         robot.keyTap('enter');
     }
@@ -333,8 +334,8 @@ if (!SIMULATE) {
         sleep.msleep(1000);
     }
     if (message2) {
-        console.info('Sending message 2');
-        robot.typeString(`say ${message2}`);
+        console.info('Sending hijacking bots message');
+        robot.typeString(`say "${message2}"`);
         sleep.msleep(50);
         robot.keyTap('enter');
     }
