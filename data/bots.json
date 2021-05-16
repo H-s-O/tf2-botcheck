@@ -316,7 +316,8 @@
         "type": "bot"
     },
     {
-        "name": "dlive‏.tv/ghostpolitics",
+        "name": ".*d.*l.*i.*v.*e.*\\..*t.*v.*/.*g.*h.*o.*s.*t.*p.*o.*l.*i.*t.*i.*c.*s.*",
+        "regexp": true,
         "type": "bot"
     },
     {
