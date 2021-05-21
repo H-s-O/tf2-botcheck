@@ -549,5 +549,58 @@
     {
         "name": "Synectol",
         "type": "bot"
+    },
+    {
+        "name": "Dezert",
+        "type": "bot"
+    },
+    {
+        "name": "Gibbythebutler",
+        "type": "bot"
+    },
+    {
+        "name": "TheNeonSpark1",
+        "type": "bot"
+    },
+    {
+        "name": "What the fuck",
+        "type": "bot"
+    },
+    {
+        "name": "MVP | Scathach Gaming",
+        "type": "bot"
+    },
+    {
+        "name": "i smoke mary jane",
+        "type": "bot"
+    },
+    {
+        "name": "Titkos mikkenytyű",
+        "type": "bot"
+    },
+    {
+        "name": "Gigos",
+        "type": "bot"
+    },
+    {
+        "name": "Silverhand",
+        "type": "bot"
+    },
+    {
+        "name": "crispymemes12",
+        "type": "bot"
+    },
+    {
+        "name": "Sorinwolf",
+        "type": "bot"
+    },
+    {
+        "name": "\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/‬\\/\\/\\/",
+        "type": "bot"
+    },
+    {
+        "name": ".*g.*e.*n.*e.*r.*a.*l.*h.*a.*p.*p.*y.*m.*a.*n.*",
+        "type": "bot",
+        "regexp": true
     }
 ]
