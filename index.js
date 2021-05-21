@@ -6,11 +6,14 @@ const os = require('os');
 
 robot.setKeyboardDelay(0);
 
-const SIMULATE = yargs.argv.s === true;
 const BOT_LIST = require('./data/bots.json');
+
+const SIMULATE = yargs.argv.s === true;
 const INITIAL_DELAY = typeof yargs.argv.i !== 'undefined' ? yargs.argv.i : null;
 const CUSTOM_HASH = typeof yargs.argv.h !== 'undefined' ? yargs.argv.h : null;
+const CUSTOM_LOG_FILE = typeof yargs.argv.f !== 'undefined' ? yargs.argv.f : null;
 
+const LOG_FILE = CUSTOM_LOG_FILE ? CUSTOM_LOG_FILE : 'C:\\Program Files (x86)\\Steam\\steamapps\\common\\Team Fortress 2\\tf\\console.log';
 const HASH = CUSTOM_HASH ? CUSTOM_HASH : Date.now().toString(36);
 const START_MARKER = `-bc.${HASH}-`;
 const END_MARKER = `-/bc.${HASH}-`;
@@ -109,9 +112,14 @@ if (!SIMULATE && !CUSTOM_HASH) {
 }
 
 // Read log file
-console.info('Reading TF2 console log file');
-const logPath = 'C:\\Program Files (x86)\\Steam\\steamapps\\common\\Team Fortress 2\\tf\\console.log';
-const logContent = fs.readFileSync(logPath, { encoding: 'utf8' });
+console.info('Reading TF2 console log file at', LOG_FILE);
+let logContent;
+try {
+    logContent = fs.readFileSync(LOG_FILE, { encoding: 'utf8' });
+} catch (e) {
+    console.error('Could not read log file, aborting');
+    DO_EXIT(1);
+}
 
 // Find last occurence of start and end markers
 const startMarkerPos = logContent.lastIndexOf(START_MARKER_LOOKUP);

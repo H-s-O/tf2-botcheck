@@ -1,0 +1,40 @@
+Team Fortress
+
+-bc.00000001- 
+"name" = "H-s-O" ( def. "unnamed" )
+  Member[0] [U:1:000000001]  team = TF_GC_TEAM_DEFENDERS  type = MATCH_PLAYER
+  Member[1] [U:1:000000002]  team = TF_GC_TEAM_DEFENDERS  type = MATCH_PLAYER
+  Member[2] [U:1:000000003]  team = TF_GC_TEAM_INVADERS  type = MATCH_PLAYER
+  Member[3] [U:1:000000004]  team = TF_GC_TEAM_INVADERS  type = MATCH_PLAYER
+# userid name                uniqueid            connected ping loss state
+#    001 "H-s-O"             [U:1:000000001]     07:51      102    0 active
+#    002 "LegitPlayer1"      [U:1:000000002]     05:23       55    0 active
+#    003 "LegitPlayer2"      [U:1:000000003]     01:58      134    0 active
+#    004 "LegitPlayer3"      [U:1:000000004]     08:11       48    0 active
+-/bc.00000001- 
+
+-bc.00000002- 
+"name" = "H-s-O" ( def. "unnamed" )
+  Member[0] [U:1:000000001]  team = TF_GC_TEAM_DEFENDERS  type = MATCH_PLAYER
+  Member[1] [U:1:000000002]  team = TF_GC_TEAM_DEFENDERS  type = MATCH_PLAYER
+  Member[2] [U:1:000000003]  team = TF_GC_TEAM_INVADERS  type = MATCH_PLAYER
+  Member[3] [U:1:000000004]  team = TF_GC_TEAM_INVADERS  type = MATCH_PLAYER
+# userid name                uniqueid            connected ping loss state
+#    001 "H-s-O"             [U:1:000000001]     07:51      102    0 active
+#    002 "H-s-O"             [U:1:000000002]     05:23       55    0 active
+#    003 "LegitPlayer2"      [U:1:000000003]     01:58      134    0 active
+#    004 "LegitPlayer3"      [U:1:000000004]     08:11       48    0 active
+-/bc.00000002- 
+
+-bc.00000003- 
+"name" = "H-s-O" ( def. "unnamed" )
+  Member[0] [U:1:000000001]  team = TF_GC_TEAM_DEFENDERS  type = MATCH_PLAYER
+  Member[1] [U:1:000000002]  team = TF_GC_TEAM_DEFENDERS  type = MATCH_PLAYER
+  Member[2] [U:1:000000003]  team = TF_GC_TEAM_INVADERS  type = MATCH_PLAYER
+  Member[3] [U:1:000000004]  team = TF_GC_TEAM_INVADERS  type = MATCH_PLAYER
+# userid name                uniqueid            connected ping loss state
+#    001 "H-s-O"             [U:1:000000001]     07:51      102    0 active
+#    002 "LegitPlayer1"      [U:1:000000002]     05:23       55    0 active
+#    003 "H-s-O"             [U:1:000000003]     01:58      134    0 active
+#    004 "LegitPlayer3"      [U:1:000000004]     08:11       48    0 active
+-/bc.00000003- 

@@ -5,6 +5,7 @@
     "postinstall": "patch-package && npm rebuild",
     "copy-addons": "node scripts/copy-addons.js",
     "create-launch-script": "node scripts/create-launch-script.js",
+    "test": "jest test/all.test.js",
     "build": "rimraf build/* && npm run copy-addons && nexe index.js -t 12.13.0 -o build/tf2-botcheck.exe -r data/bots.json && npm run create-launch-script"
   },
   "dependencies": {
@@ -14,6 +15,7 @@
   },
   "devDependencies": {
     "cpy": "^8.1.1",
+    "jest": "^26.6.3",
     "nexe": "^3.3.7",
     "patch-package": "^6.2.2",
     "rimraf": "^3.0.2"
