@@ -619,12 +619,32 @@
         "type": "bot"
     },
     {
+        "name": "GOFUND.ME/15b3a067",
+        "type": "bot"
+    },
+    {
         "name": "\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/‬\\/\\/\\/",
+        "type": "bot"
+    },
+    {
+        "name": "\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\‬/‬\\",
+        "type": "bot"
+    },
+    {
+        "name": "\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\‬/\\/\\/\\/",
         "type": "bot"
     },
     {
         "name": ".*g.*e.*n.*e.*r.*a.*l.*h.*a.*p.*p.*y.*m.*a.*n.*",
         "type": "bot",
         "regexp": true
+    },
+    {
+        "name": "INNER CIRCLE GAMING",
+        "type": "bot"
+    },
+    {
+        "name": "JMONEY9629 IS A PEDOPHILE",
+        "type": "bot"
     }
 ]
