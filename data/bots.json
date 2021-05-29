@@ -662,5 +662,41 @@
     {
         "name": "Verify me www.botpolice.eu",
         "type": "bot"
+    },
+    {
+        "name": "OneTrick",
+        "type": "bot"
+    },
+    {
+        "name": "Skunkler",
+        "type": "bot"
+    },
+    {
+        "name": "WingsOfGhostsSon",
+        "type": "bot"
+    },
+    {
+        "name": "MAGA Brony",
+        "type": "bot"
+    },
+    {
+        "name": "Chicago Cowboy",
+        "type": "bot"
+    },
+    {
+        "name": "Peppermint Swirl",
+        "type": "bot"
+    },
+    {
+        "name": "Miss Maxine",
+        "type": "bot"
+    },
+    {
+        "name": "Asriel",
+        "type": "bot"
+    },
+    {
+        "name": "Hitch Trailblazer",
+        "type": "bot"
     }
 ]
