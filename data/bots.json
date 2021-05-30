@@ -664,6 +664,10 @@
         "type": "bot"
     },
     {
+        "name": "Verify me www.botpolice.cf",
+        "type": "bot"
+    },
+    {
         "name": "OneTrick",
         "type": "bot"
     },
@@ -697,6 +701,10 @@
     },
     {
         "name": "Hitch Trailblazer",
+        "type": "bot"
+    },
+    {
+        "name": "DadPilled",
         "type": "bot"
     }
 ]
