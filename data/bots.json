@@ -28,14 +28,6 @@
         "type": "bot"
     },
     {
-        "name": "Lyra",
-        "type": "bot"
-    },
-    {
-        "name": "Lyra.child",
-        "type": "bot"
-    },
-    {
         "name": "WAMO",
         "type": "bot"
     },
@@ -705,6 +697,18 @@
     },
     {
         "name": "DadPilled",
+        "type": "bot"
+    },
+    {
+        "name": "suckermouth catfish",
+        "type": "bot"
+    },
+    {
+        "name": "plecolover",
+        "type": "bot"
+    },
+    {
+        "name": "bots are full of it v2",
         "type": "bot"
     }
 ]
