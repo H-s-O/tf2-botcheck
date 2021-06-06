@@ -660,6 +660,10 @@
         "type": "bot"
     },
     {
+        "name": "botpolice.cf",
+        "type": "bot"
+    },
+    {
         "name": "OneTrick",
         "type": "bot"
     },
@@ -733,6 +737,26 @@
     },
     {
         "name": "Intel COREI7",
+        "type": "bot"
+    },
+    {
+        "name": "truck",
+        "type": "bot"
+    },
+    {
+        "name": "BOT PROBLEM? CALL (425)889-9642",
+        "type": "bot"
+    },
+    {
+        "name": "DISCO MOUSE",
+        "type": "bot"
+    },
+    {
+        "name": "sex haver",
+        "type": "bot"
+    },
+    {
+        "name": "t.me/cyrexlinuz",
         "type": "bot"
     }
 ]
