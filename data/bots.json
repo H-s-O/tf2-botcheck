@@ -749,7 +749,8 @@
     },
     {
         "name": "DISCO MOUSE",
-        "type": "bot"
+        "type": "bot",
+        "censor": true
     },
     {
         "name": "sex haver",
