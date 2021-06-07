@@ -36,6 +36,8 @@ const OPPOSITE_TEAM = {
 };
 const STATE_ACTIVE = 'active';
 const STATE_SPAWNING = 'spawning';
+const STALLED_WARN_MIN_TIME = 30;
+const STALLED_EXCLUDE_TIME_LIMIT = 60;
 const PARSE_CONNECTED_TIME = (time) => {
     const arr = time.split(':').reverse();
     let seconds = 0;
@@ -66,16 +68,20 @@ const CENSOR_MESSAGE = (message) => {
 const CENSOR_NAME = (name) => {
     return CENSOR_MESSAGE(name.replace(/[aeiouy]/gi, '*'));
 }
-const BOT_INFO_STRING = (state, realTeam) => {
+const BOT_INFO_STRING = (state, connected, realTeam) => {
     if (realTeam) {
-        if (state === STATE_SPAWNING) {
+        if (state === STATE_SPAWNING && connected < STALLED_WARN_MIN_TIME) {
             return ` [joining ${TEAM_LABELS[realTeam]}...]`;
+        } else if (state === STATE_SPAWNING && connected >= STALLED_WARN_MIN_TIME) {
+            return ` [stalled in ${TEAM_LABELS[realTeam]}...]`;
         } else {
             return ` [${TEAM_LABELS[realTeam]}]`;
         }
     } else {
-        if (state === STATE_SPAWNING) {
+        if (state === STATE_SPAWNING && connected < STALLED_WARN_MIN_TIME) {
             return ' [connecting...]';
+        } else if (state === STATE_SPAWNING && connected >= STALLED_WARN_MIN_TIME) {
+            return ' [stalled...]';
         }
     }
     return '';
@@ -254,8 +260,12 @@ for (const player1 of players) {
     }
 }
 
-const foundBots = players.filter(({ flag }) => flag === 'namedbot');
-const foundDuplicates = players.filter(({ flag }) => flag === 'hijackerbot');
+const foundBots = players.filter(({ flag, connected, state }) =>
+    flag === 'namedbot'
+    && (state === STATE_ACTIVE || (state === STATE_SPAWNING && connected < STALLED_EXCLUDE_TIME_LIMIT)));
+const foundDuplicates = players.filter(({ flag, connected, state }) =>
+    flag === 'hijackerbot'
+    && (state === STATE_ACTIVE || (state === STATE_SPAWNING && connected < STALLED_EXCLUDE_TIME_LIMIT)));
 if (foundBots.length === 0 && foundDuplicates.length === 0) {
     // Nothing suspicious found, exit
     console.info('No bots or duplicates found, exiting')
@@ -294,8 +304,12 @@ if (foundBotsOnSameTeam.length > 0) {
 let message1 = null, message2 = null;
 let needsGlobalCensor = foundBots.some(({ censor, state }) => censor && state === STATE_ACTIVE);
 if (foundBots.length > 0) {
-    const list1 = foundBots.map(({ cleanName, state, realTeam, censor }) => {
-        return `${censor && (state === STATE_ACTIVE || needsGlobalCensor) ? CENSOR_NAME(cleanName) : cleanName}${BOT_INFO_STRING(state, realTeam)}`;
+    const list1 = foundBots.map(({ cleanName, state, connected, realTeam, censor }) => {
+        return `${censor && (state === STATE_ACTIVE || needsGlobalCensor)
+            ? CENSOR_NAME(cleanName)
+            : needsGlobalCensor
+                ? CENSOR_MESSAGE(cleanName)
+                : cleanName}${BOT_INFO_STRING(state, connected, realTeam)}`;
     }).join(', ')
     let content1 = `Found ${foundBots.length} known bot${foundBots.length > 1 ? 's' : ''}`;
     if (needsGlobalCensor) {
@@ -311,8 +325,8 @@ if (foundBots.length > 0) {
     console.info(message1);
 }
 if (foundDuplicates.length > 0) {
-    const list2 = foundDuplicates.map(({ cleanName, state, realTeam }) => {
-        return `${cleanName}${BOT_INFO_STRING(state, realTeam)}`;
+    const list2 = foundDuplicates.map(({ cleanName, state, connected, realTeam }) => {
+        return `${needsGlobalCensor ? CENSOR_MESSAGE(cleanName) : cleanName}${BOT_INFO_STRING(state, connected, realTeam)}`;
     }).join(', ')
     let content2 = `Found ${foundDuplicates.length} name-stealing bot${foundDuplicates.length > 1 ? 's' : ''}`;
     if (needsGlobalCensor) {
