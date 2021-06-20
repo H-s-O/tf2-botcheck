@@ -1,9 +1,5 @@
 [
     {
-        "name": "Sydney",
-        "type": "bot"
-    },
-    {
         "name": "Festive Hitman",
         "type": "bot"
     },
@@ -753,6 +749,11 @@
     },
     {
         "name": "DISCO MOUSE",
+        "type": "bot",
+        "censor": true
+    },
+    {
+        "name": "DISCO MOUSE IN DA HOUSE",
         "type": "bot",
         "censor": true
     },
