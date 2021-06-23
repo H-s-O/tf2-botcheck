@@ -9,6 +9,7 @@ robot.setKeyboardDelay(0);
 const BOT_LIST = require('./data/bots.json');
 
 const SIMULATE = yargs.argv.s === true;
+const QUIET = yargs.argv.q === true;
 const INITIAL_DELAY = typeof yargs.argv.i !== 'undefined' ? yargs.argv.i : null;
 const CUSTOM_HASH = typeof yargs.argv.h !== 'undefined' ? yargs.argv.h : null;
 const CUSTOM_LOG_FILE = typeof yargs.argv.f !== 'undefined' ? yargs.argv.f : null;
@@ -300,66 +301,68 @@ if (foundBotsOnSameTeam.length > 0) {
     }
 }
 
-// Create messages
-let message1 = null, message2 = null;
-let needsGlobalCensor = foundBots.some(({ censor, state }) => censor && state === STATE_ACTIVE);
-if (foundBots.length > 0) {
-    const list1 = foundBots.map(({ cleanName, state, connected, realTeam, censor }) => {
-        return `${censor && (state === STATE_ACTIVE || needsGlobalCensor)
-            ? CENSOR_NAME(cleanName)
-            : needsGlobalCensor
-                ? CENSOR_MESSAGE(cleanName)
-                : cleanName}${BOT_INFO_STRING(state, connected, realTeam)}`;
-    }).join(', ')
-    let content1 = `Found ${foundBots.length} known bot${foundBots.length > 1 ? 's' : ''}`;
-    if (needsGlobalCensor) {
-        content1 = CENSOR_MESSAGE(content1);
+if (!QUIET) {
+    // Create messages
+    let message1 = null, message2 = null;
+    let needsGlobalCensor = foundBots.some(({ censor, state }) => censor && state === STATE_ACTIVE);
+    if (foundBots.length > 0) {
+        const list1 = foundBots.map(({ cleanName, state, connected, realTeam, censor }) => {
+            return `${censor && (state === STATE_ACTIVE || needsGlobalCensor)
+                ? CENSOR_NAME(cleanName)
+                : needsGlobalCensor
+                    ? CENSOR_MESSAGE(cleanName)
+                    : cleanName}${BOT_INFO_STRING(state, connected, realTeam)}`;
+        }).join(', ')
+        let content1 = `Found ${foundBots.length} known bot${foundBots.length > 1 ? 's' : ''}`;
+        if (needsGlobalCensor) {
+            content1 = CENSOR_MESSAGE(content1);
+        }
+        const checksum1 = MESSAGE_CHECKSUM(content1).toString(36).toUpperCase().padStart(2, '0');
+        let heading1 = `[BOT CHECK |${checksum1}]`;
+        if (needsGlobalCensor) {
+            heading1 = CENSOR_MESSAGE(heading1);
+        }
+        message1 = `${heading1} ${content1}: ${list1}`;
+        console.info('Known bots message to send:');
+        console.info(message1);
     }
-    const checksum1 = MESSAGE_CHECKSUM(content1).toString(36).toUpperCase().padStart(2, '0');
-    let heading1 = `[BOT CHECK |${checksum1}]`;
-    if (needsGlobalCensor) {
-        heading1 = CENSOR_MESSAGE(heading1);
+    if (foundDuplicates.length > 0) {
+        const list2 = foundDuplicates.map(({ cleanName, state, connected, realTeam }) => {
+            return `${needsGlobalCensor ? CENSOR_MESSAGE(cleanName) : cleanName}${BOT_INFO_STRING(state, connected, realTeam)}`;
+        }).join(', ')
+        let content2 = `Found ${foundDuplicates.length} name-stealing bot${foundDuplicates.length > 1 ? 's' : ''}`;
+        if (needsGlobalCensor) {
+            content2 = CENSOR_MESSAGE(content2);
+        }
+        const checksum2 = MESSAGE_CHECKSUM(content2).toString(36).toUpperCase().padStart(2, '0');
+        let heading2 = `[BOT CHECK |${checksum2}]`;
+        if (needsGlobalCensor) {
+            heading2 = CENSOR_MESSAGE(heading2);
+        }
+        message2 = `${heading2} ${content2}: ${list2}`;
+        console.info('Hijacking bots message to send:');
+        console.info(message2);
     }
-    message1 = `${heading1} ${content1}: ${list1}`;
-    console.info('Known bots message to send:');
-    console.info(message1);
-}
-if (foundDuplicates.length > 0) {
-    const list2 = foundDuplicates.map(({ cleanName, state, connected, realTeam }) => {
-        return `${needsGlobalCensor ? CENSOR_MESSAGE(cleanName) : cleanName}${BOT_INFO_STRING(state, connected, realTeam)}`;
-    }).join(', ')
-    let content2 = `Found ${foundDuplicates.length} name-stealing bot${foundDuplicates.length > 1 ? 's' : ''}`;
-    if (needsGlobalCensor) {
-        content2 = CENSOR_MESSAGE(content2);
-    }
-    const checksum2 = MESSAGE_CHECKSUM(content2).toString(36).toUpperCase().padStart(2, '0');
-    let heading2 = `[BOT CHECK |${checksum2}]`;
-    if (needsGlobalCensor) {
-        heading2 = CENSOR_MESSAGE(heading2);
-    }
-    message2 = `${heading2} ${content2}: ${list2}`;
-    console.info('Hijacking bots message to send:');
-    console.info(message2);
-}
 
-if (!SIMULATE) {
-    sleep.msleep(250);
+    if (!SIMULATE) {
+        sleep.msleep(250);
 
-    // Send chat messages
-    if (message1) {
-        console.info('Sending known bots message');
-        robot.typeString(`say "${message1}"`);
-        sleep.msleep(50);
-        robot.keyTap('enter');
-    }
-    if (message1 && message2) {
-        sleep.msleep(1000);
-    }
-    if (message2) {
-        console.info('Sending hijacking bots message');
-        robot.typeString(`say "${message2}"`);
-        sleep.msleep(50);
-        robot.keyTap('enter');
+        // Send chat messages
+        if (message1) {
+            console.info('Sending known bots message');
+            robot.typeString(`say "${message1}"`);
+            sleep.msleep(50);
+            robot.keyTap('enter');
+        }
+        if (message1 && message2) {
+            sleep.msleep(1000);
+        }
+        if (message2) {
+            console.info('Sending hijacking bots message');
+            robot.typeString(`say "${message2}"`);
+            sleep.msleep(50);
+            robot.keyTap('enter');
+        }
     }
 }
 
