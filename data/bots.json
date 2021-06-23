@@ -769,5 +769,9 @@
         "name": "CAN YOU QUACK",
         "type": "bot",
         "censor": true
+    },
+    {
+        "name": "royalhack.net B0T",
+        "type": "bot"
     }
 ]
