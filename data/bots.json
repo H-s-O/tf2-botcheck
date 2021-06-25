@@ -777,5 +777,17 @@
     {
         "name": "royalhack.net B0T",
         "type": "bot"
+    },
+    {
+        "name": "yt/WorsherTF2",
+        "type": "bot"
+    },
+    {
+        "name": "Serbian Wizard",
+        "type": "bot"
+    },
+    {
+        "name": "cat",
+        "type": "bot"
     }
 ]
