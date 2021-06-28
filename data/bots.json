@@ -40,6 +40,14 @@
         "type": "bot"
     },
     {
+        "name": "WAMOBOX",
+        "type": "bot"
+    },
+    {
+        "name": "WAMOWARE",
+        "type": "bot"
+    },
+    {
         "name": "braaaap \\d+",
         "type": "bot",
         "regexp": true
