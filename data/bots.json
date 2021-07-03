@@ -801,5 +801,10 @@
     {
         "name": "cat",
         "type": "bot"
+    },
+    {
+        "name": "MaximilianMus",
+        "type": "bot",
+        "regexp": true
     }
 ]
