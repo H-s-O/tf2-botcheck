@@ -814,5 +814,15 @@
     {
         "name": "www.t.me/voidworks",
         "type": "bot"
+    },
+    {
+        "name": "TWITCH.TV/ICEMANWEST",
+        "type": "bot",
+        "regexp": true
+    },
+    {
+        "name": "shroom \\d+",
+        "type": "bot",
+        "regexp": true
     }
 ]
