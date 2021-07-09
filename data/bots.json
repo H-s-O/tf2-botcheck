@@ -816,7 +816,7 @@
         "type": "bot"
     },
     {
-        "name": "TWITCH.TV/ICEMANWEST",
+        "name": "TWITCH\\.TV/ICEMANWEST",
         "type": "bot",
         "regexp": true
     },
