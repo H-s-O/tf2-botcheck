@@ -218,7 +218,7 @@ if (!nameMatches) {
 const currentPlayerName = nameMatches[1];
 const currentPlayerInfo = players.find(({ name }) => name === currentPlayerName);
 console.info('Current player:');
-console.info('  name:', currentPlayerName);
+console.info('  name:', currentPlayerInfo.name);
 console.info('  userid:', currentPlayerInfo.userid);
 console.info('  uniqueid:', currentPlayerInfo.uniqueid);
 console.info('  connected:', currentPlayerInfo.connected);
@@ -252,9 +252,11 @@ for (const player1 of players) {
             if (player1.connected < player2.connected && !player1.flag) {
                 console.info('Found clone bot:', player1.name);
                 player1.flag = 'hijackerbot';
+                player1.priority = player1.cleanName === currentPlayerInfo.name ? 1 : 0;
             } else if (player2.connected < player1.connected && !player2.flag) {
                 console.info('Found clone bot:', player2.name);
                 player2.flag = 'hijackerbot';
+                player2.priority = player2.cleanName === currentPlayerInfo.name ? 1 : 0;
             } else {
                 // Connected times are the same for both players, so ignore since we can't determine which one is the bot
             }
@@ -277,7 +279,9 @@ if (foundBots.length === 0 && foundDuplicates.length === 0) {
 const foundBotsOnSameTeam = foundBots
     .filter(({ team }) => team === currentPlayerInfo.team)
     .sort((a, b) => (b.priority || 0) - (a.priority || 0));
-const foundDuplicatesOnSameTeam = foundDuplicates.filter(({ team }) => team === currentPlayerInfo.team);
+const foundDuplicatesOnSameTeam = foundDuplicates
+    .filter(({ team }) => team === currentPlayerInfo.team)
+    .sort((a, b) => (b.priority || 0) - (a.priority || 0));
 if (foundBotsOnSameTeam.length > 0) {
     console.info('Attempting to auto-kick named bot', foundBotsOnSameTeam[0].cleanName, `(userid ${foundBotsOnSameTeam[0].userid})`);
 
