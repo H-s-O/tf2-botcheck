@@ -1,828 +1,629 @@
 [
     {
-        "name": "Festive Hitman",
-        "type": "bot"
+        "name": "Festive Hitman"
     },
     {
-        "name": "MERRY WHITE CHRISTMAS!",
-        "type": "bot"
+        "name": "MERRY WHITE CHRISTMAS!"
     },
     {
-        "name": "irc.mygot.gg:6667#mygot",
-        "type": "bot"
+        "name": "irc.mygot.gg:6667#mygot"
     },
     {
-        "name": "shoppy.gg/@d3fc0n6",
-        "type": "bot"
+        "name": "shoppy.gg/@d3fc0n6"
     },
     {
-        "name": "[VALVE] Niggerkiller",
-        "type": "bot"
+        "name": "[VALVE] Niggerkiller"
     },
     {
-        "name": "[VALVE]Níggerkiller",
-        "type": "bot"
+        "name": "[VALVE]Níggerkiller"
     },
     {
-        "name": "[VALVE]NIgerkiller",
-        "type": "bot"
+        "name": "[VALVE]NIgerkiller"
     },
     {
-        "name": "WAMO",
-        "type": "bot"
+        "name": "WAMO"
     },
     {
-        "name": "WAMO x Twilight Sparkle",
-        "type": "bot"
+        "name": "WAMO x Twilight Sparkle"
     },
     {
-        "name": "Twilight Sparkle x WAMO",
-        "type": "bot"
+        "name": "Twilight Sparkle x WAMO"
     },
     {
-        "name": "ELDER GOD WAMO",
-        "type": "bot"
+        "name": "ELDER GOD WAMO"
     },
     {
-        "name": "WAMOBOX",
-        "type": "bot"
+        "name": "WAMOBOX"
     },
     {
-        "name": "WAMOWARE",
-        "type": "bot"
+        "name": "WAMOWARE"
     },
     {
         "name": "braaaap \\d+",
-        "type": "bot",
         "regexp": true
     },
     {
-        "name": "DustBowl Nigger Slayer",
-        "type": "bot"
+        "name": "DustBowl Nigger Slayer"
     },
     {
-        "name": "Zesty Jesus",
-        "type": "bot"
+        "name": "Zesty Jesus"
     },
     {
-        "name": "/id/therealn3u",
-        "type": "bot"
+        "name": "/id/therealn3u"
     },
     {
-        "name": "76561199067980853",
-        "type": "bot"
+        "name": "76561199067980853"
     },
     {
-        "name": "/profiles/[U:1:1107715125]",
-        "type": "bot"
+        "name": "/profiles/[U:1:1107715125]"
     },
     {
         "name": "Rank2\\.me #\\d+",
-        "type": "bot",
         "regexp": true
     },
     {
         "name": "Waffen-SS",
-        "type": "bot",
         "censor": true
     },
     {
-        "name": "Jazminnette",
-        "type": "bot"
+        "name": "Jazminnette"
     },
     {
-        "name": "[VAC]WesMen",
-        "type": "bot"
+        "name": "[VAC]WesMen"
     },
     {
-        "name": "[VAC] OneTrick",
-        "type": "bot"
+        "name": "[VAC] OneTrick"
     },
     {
-        "name": "twitch.tv/d3fc0n6",
-        "type": "bot"
+        "name": "twitch.tv/d3fc0n6"
     },
     {
-        "name": "youtube.com/watch?v=TsSKzV",
-        "type": "bot"
+        "name": "youtube.com/watch?v=TsSKzV"
     },
     {
-        "name": "youtu.be/TsSKzVarV94",
-        "type": "bot"
+        "name": "youtu.be/TsSKzVarV94"
     },
     {
-        "name": "Soldier gaming (Not a bot)",
-        "type": "bot"
+        "name": "Soldier gaming (Not a bot)"
     },
     {
-        "name": "Engineer gaming",
-        "type": "bot"
+        "name": "Engineer gaming"
     },
     {
-        "name": "real Sniper Gaming",
-        "type": "bot"
+        "name": "real Sniper Gaming"
     },
     {
-        "name": "REAL Soldier Gaming",
-        "type": "bot"
+        "name": "REAL Soldier Gaming"
     },
     {
-        "name": "REAL Pyro Gaming",
-        "type": "bot"
+        "name": "REAL Pyro Gaming"
     },
     {
-        "name": "scout gaming",
-        "type": "bot"
+        "name": "scout gaming"
     },
     {
         "name": "Soldier Gaming (Not A Bot)",
         ",type": "bot"
     },
     {
-        "name": "real Spy Gaming",
-        "type": "bot"
+        "name": "real Spy Gaming"
     },
     {
-        "name": "pyro gaming (not a bot)",
-        "type": "bot"
+        "name": "pyro gaming (not a bot)"
     },
     {
-        "name": "Engineer Real Gaming",
-        "type": "bot"
+        "name": "Engineer Real Gaming"
     },
     {
-        "name": "Spicy Engineer Gaming",
-        "type": "bot"
+        "name": "Spicy Engineer Gaming"
     },
     {
-        "name": "Baaaa‏aaaah",
-        "type": "bot"
+        "name": "Baaaa‏aaaah"
     },
     {
-        "name": "t.tv/R_Williams_Gaming",
-        "type": "bot"
+        "name": "t.tv/R_Williams_Gaming"
     },
     {
-        "name": "Sugarfree Níggerkiller",
-        "type": "bot"
+        "name": "Sugarfree Níggerkiller"
     },
     {
-        "name": "Plant-based Níggerkiller",
-        "type": "bot"
+        "name": "Plant-based Níggerkiller"
     },
     {
-        "name": "Doctor Níggerkiller",
-        "type": "bot"
+        "name": "Doctor Níggerkiller"
     },
     {
-        "name": "Doctor Nⅈggerkiller",
-        "type": "bot"
+        "name": "Doctor Nⅈggerkiller"
     },
     {
-        "name": "[VALVE] Twilight Sparkle",
-        "type": "bot"
+        "name": "[VALVE] Twilight Sparkle"
     },
     {
-        "name": "King Nⅈggerkiller",
-        "type": "bot"
+        "name": "King Nⅈggerkiller"
     },
     {
-        "name": "REAL pyro gaming",
-        "type": "bot"
+        "name": "REAL pyro gaming"
     },
     {
-        "name": "Pyro Gaming (Not a bot)",
-        "type": "bot"
+        "name": "Pyro Gaming (Not a bot)"
     },
     {
-        "name": "REAL spy gaming",
-        "type": "bot"
+        "name": "REAL spy gaming"
     },
     {
-        "name": "medic gaming REAL",
-        "type": "bot"
+        "name": "medic gaming REAL"
     },
     {
-        "name": "pyro gaming",
-        "type": "bot"
+        "name": "pyro gaming"
     },
     {
-        "name": "real Demo Gaming",
-        "type": "bot"
+        "name": "real Demo Gaming"
     },
     {
-        "name": "twitch.tv/501stincel",
-        "type": "bot"
+        "name": "twitch.tv/501stincel"
     },
     {
-        "name": "Extra White Nⅈggerkiller",
-        "type": "bot"
+        "name": "Extra White Nⅈggerkiller"
     },
     {
-        "name": "[VALVE] Nⅈggerkiller",
-        "type": "bot"
+        "name": "[VALVE] Nⅈggerkiller"
     },
     {
-        "name": "paste.ee/p/Pkj2K -n3u",
-        "type": "bot"
+        "name": "paste.ee/p/Pkj2K -n3u"
     },
     {
-        "name": "spycrab by n3u",
-        "type": "bot"
+        "name": "spycrab by n3u"
     },
     {
         "name": ".*O.*M.*E.*G.*A.*T.*R.*O.*N.*I.*C.*",
-        "type": "bot",
         "regexp": true
     },
     {
-        "name": "n3u has had enough",
-        "type": "bot"
+        "name": "n3u has had enough"
     },
     {
-        "name": "raizo.dev",
-        "type": "bot"
+        "name": "raizo.dev"
     },
     {
-        "name": "DISCO MOU‏SE",
-        "type": "bot"
+        "name": "DISCO MOU‏SE"
     },
     {
-        "name": "www.titsassesandicks.com",
-        "type": "bot"
+        "name": "www.titsassesandicks.com"
     },
     {
-        "name": "discord.gg/9Ukuw9V",
-        "type": "bot"
+        "name": "discord.gg/9Ukuw9V"
     },
     {
-        "name": "haunted.church",
-        "type": "bot"
+        "name": "haunted.church"
     },
     {
-        "name": "Richard Stallman",
-        "type": "bot"
+        "name": "Richard Stallman"
     },
     {
-        "name": "sniper gaming",
-        "type": "bot"
+        "name": "sniper gaming"
     },
     {
-        "name": "engineer gaming",
-        "type": "bot"
+        "name": "engineer gaming"
     },
     {
-        "name": "demo gaming",
-        "type": "bot"
+        "name": "demo gaming"
     },
     {
-        "name": "t.me/joinchat/TM4YGGnhABTUh0sa",
-        "type": "bot"
+        "name": "t.me/joinchat/TM4YGGnhABTUh0sa"
     },
     {
-        "name": "ASSIT - NEW CASUAL MATCHMAKING",
-        "type": "bot"
+        "name": "ASSIT - NEW CASUAL MATCHMAKING"
     },
     {
-        "name": "ASSIT TF2",
-        "type": "bot"
+        "name": "ASSIT TF2"
     },
     {
-        "name": "assit:ru-matrix.org",
-        "type": "bot"
+        "name": "assit:ru-matrix.org"
     },
     {
-        "name": "ASSIT: ALL NEW MATCHMAKING",
-        "type": "bot"
+        "name": "ASSIT: ALL NEW MATCHMAKING"
     },
     {
-        "name": "NEW ASSIT TF2",
-        "type": "bot"
+        "name": "NEW ASSIT TF2"
     },
     {
-        "name": "NO CHEATERS - ASSIT",
-        "type": "bot"
+        "name": "NO CHEATERS - ASSIT"
     },
     {
-        "name": "JOIN ASSIT TF2 TODAY",
-        "type": "bot"
+        "name": "JOIN ASSIT TF2 TODAY"
     },
     {
-        "name": "PICK ASSIT MATCHMAKING TODAY",
-        "type": "bot"
+        "name": "PICK ASSIT MATCHMAKING TODAY"
     },
     {
-        "name": "dlive.tv/GhostPolitics",
-        "type": "bot"
+        "name": "dlive.tv/GhostPolitics"
     },
     {
         "name": ".*d.*l.*i.*v.*e.*\\..*t.*v.*/.*g.*h.*o.*s.*t.*p.*o.*l.*i.*t.*i.*c.*s.*",
-        "regexp": true,
-        "type": "bot"
+        "regexp": true
     },
     {
-        "name": "WWW.LMAOBOX.NET",
-        "type": "bot"
+        "name": "WWW.LMAOBOX.NET"
     },
     {
-        "name": "twitter.com/CoastCapitalist",
-        "type": "bot"
+        "name": "twitter.com/CoastCapitalist"
     },
     {
-        "name": "twitter.com/CoastCapitalis1",
-        "type": "bot"
+        "name": "twitter.com/CoastCapitalis1"
     },
     {
-        "name": "twitter.com/CapitalistGhost",
-        "type": "bot"
+        "name": "twitter.com/CapitalistGhost"
     },
     {
-        "name": "Mikas | OPENSKINS.COM",
-        "type": "bot"
+        "name": "Mikas | OPENSKINS.COM"
     },
     {
-        "name": "youtube.com/d3fc0n6",
-        "type": "bot"
+        "name": "youtube.com/d3fc0n6"
     },
     {
-        "name": "JMCCASKEY",
-        "type": "bot"
+        "name": "JMCCASKEY"
     },
     {
-        "name": "tommieschuppe710",
-        "type": "bot"
+        "name": "tommieschuppe710"
     },
     {
-        "name": "hillardnicolas799",
-        "type": "bot"
+        "name": "hillardnicolas799"
     },
     {
-        "name": "gladyskautzer510",
-        "type": "bot"
+        "name": "gladyskautzer510"
     },
     {
-        "name": "vilmabreitenberg609",
-        "type": "bot"
+        "name": "vilmabreitenberg609"
     },
     {
-        "name": "clairebode477",
-        "type": "bot"
+        "name": "clairebode477"
     },
     {
-        "name": "hailieparisian971",
-        "type": "bot"
+        "name": "hailieparisian971"
     },
     {
-        "name": "keeleyrice131",
-        "type": "bot"
+        "name": "keeleyrice131"
     },
     {
-        "name": "rosalindhomenick996",
-        "type": "bot"
+        "name": "rosalindhomenick996"
     },
     {
-        "name": "olafcorkery733",
-        "type": "bot"
+        "name": "olafcorkery733"
     },
     {
-        "name": "garrickaltenwerth951",
-        "type": "bot"
+        "name": "garrickaltenwerth951"
     },
     {
-        "name": "fionastehr666",
-        "type": "bot"
+        "name": "fionastehr666"
     },
     {
-        "name": "bertharodriguez928",
-        "type": "bot"
+        "name": "bertharodriguez928"
     },
     {
-        "name": "dorthygulgowski780",
-        "type": "bot"
+        "name": "dorthygulgowski780"
     },
     {
-        "name": "boyerfordryan572",
-        "type": "bot"
+        "name": "boyerfordryan572"
     },
     {
-        "name": "lessiemills977",
-        "type": "bot"
+        "name": "lessiemills977"
     },
     {
-        "name": "timmykilback819",
-        "type": "bot"
+        "name": "timmykilback819"
     },
     {
-        "name": "tyreekchamplin375",
-        "type": "bot"
+        "name": "tyreekchamplin375"
     },
     {
-        "name": "shaynepurdy923",
-        "type": "bot"
+        "name": "shaynepurdy923"
     },
     {
-        "name": "ladariusfeest634",
-        "type": "bot"
+        "name": "ladariusfeest634"
     },
     {
-        "name": "randomplayer108",
-        "type": "bot"
+        "name": "randomplayer108"
     },
     {
-        "name": "jeraldboyle781",
-        "type": "bot"
+        "name": "jeraldboyle781"
     },
     {
-        "name": "leliakozey877",
-        "type": "bot"
+        "name": "leliakozey877"
     },
     {
-        "name": "georgettelowe610",
-        "type": "bot"
+        "name": "georgettelowe610"
     },
     {
-        "name": "daytonbrakus607",
-        "type": "bot"
+        "name": "daytonbrakus607"
     },
     {
-        "name": "gerardfeeney458",
-        "type": "bot"
+        "name": "gerardfeeney458"
     },
     {
-        "name": "maximodeckow788",
-        "type": "bot"
+        "name": "maximodeckow788"
     },
     {
-        "name": "violethansen122",
-        "type": "bot"
+        "name": "violethansen122"
     },
     {
-        "name": "lesliemetz943",
-        "type": "bot"
+        "name": "lesliemetz943"
     },
     {
-        "name": "brooksheller231",
-        "type": "bot"
+        "name": "brooksheller231"
     },
     {
-        "name": "aricrosenbaum216",
-        "type": "bot"
+        "name": "aricrosenbaum216"
     },
     {
-        "name": "merlewatsica450",
-        "type": "bot"
+        "name": "merlewatsica450"
     },
     {
-        "name": "armandbayer358",
-        "type": "bot"
+        "name": "armandbayer358"
     },
     {
-        "name": "clintonhessel809",
-        "type": "bot"
+        "name": "clintonhessel809"
     },
     {
-        "name": "leadoyle416",
-        "type": "bot"
+        "name": "leadoyle416"
     },
     {
-        "name": "gaylordfeil627",
-        "type": "bot"
+        "name": "gaylordfeil627"
     },
     {
-        "name": "darrylhessel852",
-        "type": "bot"
+        "name": "darrylhessel852"
     },
     {
-        "name": "armandbayer358",
-        "type": "bot"
+        "name": "armandbayer358"
     },
     {
-        "name": "Phil Johnson",
-        "type": "bot"
+        "name": "Phil Johnson"
     },
     {
-        "name": "Lobas Thick Thighs",
-        "type": "bot"
+        "name": "Lobas Thick Thighs"
     },
     {
-        "name": "Happy",
-        "type": "bot"
+        "name": "Happy"
     },
     {
-        "name": "Potato PC",
-        "type": "bot"
+        "name": "Potato PC"
     },
     {
-        "name": "TTVLuigithemedicmain",
-        "type": "bot"
+        "name": "TTVLuigithemedicmain"
     },
     {
-        "name": "Dog Loli",
-        "type": "bot"
+        "name": "Dog Loli"
     },
     {
-        "name": "https://youtu.be/RE60VAyH0Yk",
-        "type": "bot"
+        "name": "https://youtu.be/RE60VAyH0Yk"
     },
     {
-        "name": "Twitter.com/CommunistGhost",
-        "type": "bot"
+        "name": "Twitter.com/CommunistGhost"
     },
     {
-        "name": "BIRD",
-        "type": "bot"
+        "name": "BIRD"
     },
     {
-        "name": "teenteen.harding",
-        "type": "bot"
+        "name": "teenteen.harding"
     },
     {
-        "name": "[ACP] Dashie",
-        "type": "bot"
+        "name": "[ACP] Dashie"
     },
     {
-        "name": "Tristan",
-        "type": "bot"
+        "name": "Tristan"
     },
     {
-        "name": "DavidekCZ.EXE",
-        "type": "bot"
+        "name": "DavidekCZ.EXE"
     },
     {
-        "name": "Arcaniax",
-        "type": "bot"
+        "name": "Arcaniax"
     },
     {
-        "name": "joey4477",
-        "type": "bot"
+        "name": "joey4477"
     },
     {
-        "name": "Friberis",
-        "type": "bot"
+        "name": "Friberis"
     },
     {
-        "name": "Shreddy",
-        "type": "bot"
+        "name": "Shreddy"
     },
     {
         "name": "like phantom lord",
-        "type": "bot",
         "censor": true
     },
     {
         "name": "420",
-        "type": "bot",
         "censor": true
     },
     {
-        "name": "The_Dextroyer",
-        "type": "bot"
+        "name": "The_Dextroyer"
     },
     {
-        "name": "Synectol",
-        "type": "bot"
+        "name": "Synectol"
     },
     {
-        "name": "Dezert",
-        "type": "bot"
+        "name": "Dezert"
     },
     {
-        "name": "Gibbythebutler",
-        "type": "bot"
+        "name": "Gibbythebutler"
     },
     {
-        "name": "TheNeonSpark1",
-        "type": "bot"
+        "name": "TheNeonSpark1"
     },
     {
-        "name": "What the fuck",
-        "type": "bot"
+        "name": "What the fuck"
     },
     {
-        "name": "MVP | Scathach Gaming",
-        "type": "bot"
+        "name": "MVP | Scathach Gaming"
     },
     {
-        "name": "i smoke mary jane",
-        "type": "bot"
+        "name": "i smoke mary jane"
     },
     {
-        "name": "Titkos mikkenytyű",
-        "type": "bot"
+        "name": "Titkos mikkenytyű"
     },
     {
-        "name": "Gigos",
-        "type": "bot"
+        "name": "Gigos"
     },
     {
-        "name": "Silverhand",
-        "type": "bot"
+        "name": "Silverhand"
     },
     {
-        "name": "crispymemes12",
-        "type": "bot"
+        "name": "crispymemes12"
     },
     {
-        "name": "Sorinwolf",
-        "type": "bot"
+        "name": "Sorinwolf"
     },
     {
-        "name": "GOFUND.ME/15b3a067",
-        "type": "bot"
+        "name": "GOFUND.ME/15b3a067"
     },
     {
-        "name": "\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/‬\\/\\/\\/",
-        "type": "bot"
+        "name": "\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/‬\\/\\/\\/"
     },
     {
-        "name": "\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\‬/‬\\",
-        "type": "bot"
+        "name": "\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\‬/‬\\"
     },
     {
-        "name": "\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\‬/\\/\\/\\/",
-        "type": "bot"
+        "name": "\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\‬/\\/\\/\\/"
     },
     {
         "name": ".*g.*e.*n.*e.*r.*a.*l.*h.*a.*p.*p.*y.*m.*a.*n.*",
-        "type": "bot",
         "regexp": true
     },
     {
-        "name": "INNER CIRCLE GAMING",
-        "type": "bot"
+        "name": "INNER CIRCLE GAMING"
     },
     {
-        "name": "JMONEY9629 IS A PEDOPHILE",
-        "type": "bot"
+        "name": "JMONEY9629 IS A PEDOPHILE"
     },
     {
-        "name": "ELMO",
-        "type": "bot"
+        "name": "ELMO"
     },
     {
-        "name": "Verify me www.botpolice.eu",
-        "type": "bot"
+        "name": "Verify me www.botpolice.eu"
     },
     {
-        "name": "Verify me www.botpolice.cf",
-        "type": "bot"
+        "name": "Verify me www.botpolice.cf"
     },
     {
-        "name": "botpolice.cf",
-        "type": "bot"
+        "name": "botpolice.cf"
     },
     {
-        "name": "772|www.botpolice.cf",
-        "type": "bot"
+        "name": "772|www.botpolice.cf"
     },
     {
-        "name": "OneTrick",
-        "type": "bot"
+        "name": "OneTrick"
     },
     {
-        "name": "OneTrick | TF2EASY.COM",
-        "type": "bot"
+        "name": "OneTrick | TF2EASY.COM"
     },
     {
-        "name": "Skunkler",
-        "type": "bot"
+        "name": "Skunkler"
     },
     {
-        "name": "WingsOfGhostsSon",
-        "type": "bot"
+        "name": "WingsOfGhostsSon"
     },
     {
-        "name": "MAGA Brony",
-        "type": "bot"
+        "name": "MAGA Brony"
     },
     {
-        "name": "Chicago Cowboy",
-        "type": "bot"
+        "name": "Chicago Cowboy"
     },
     {
-        "name": "Peppermint Swirl",
-        "type": "bot"
+        "name": "Peppermint Swirl"
     },
     {
-        "name": "Miss Maxine",
-        "type": "bot"
+        "name": "Miss Maxine"
     },
     {
-        "name": "Asriel",
-        "type": "bot"
+        "name": "Asriel"
     },
     {
-        "name": "Hitch Trailblazer",
-        "type": "bot"
+        "name": "Hitch Trailblazer"
     },
     {
-        "name": "DadPilled",
-        "type": "bot"
+        "name": "DadPilled"
     },
     {
-        "name": "suckermouth catfish",
-        "type": "bot"
+        "name": "suckermouth catfish"
     },
     {
-        "name": "plecolover",
-        "type": "bot"
+        "name": "plecolover"
     },
     {
-        "name": "pleco",
-        "type": "bot"
+        "name": "pleco"
     },
     {
-        "name": "bots are full of it v2",
-        "type": "bot"
+        "name": "bots are full of it v2"
     },
     {
-        "name": "bot buyer",
-        "type": "bot"
+        "name": "bot buyer"
     },
     {
-        "name": "Dragon Bot",
-        "type": "bot"
+        "name": "Dragon Bot"
     },
     {
-        "name": "narcissistic bot",
-        "type": "bot"
+        "name": "narcissistic bot"
     },
     {
-        "name": "Winter",
-        "type": "bot"
+        "name": "Winter"
     },
     {
-        "name": "Intel COREI7",
-        "type": "bot"
+        "name": "Intel COREI7"
     },
     {
-        "name": "truck",
-        "type": "bot"
+        "name": "truck"
     },
     {
-        "name": "BOT PROBLEM? CALL (425)889-9642",
-        "type": "bot"
+        "name": "BOT PROBLEM? CALL (425)889-9642"
     },
     {
         "name": "DISCO MOUSE",
-        "type": "bot",
-        "censor": true
+        "censor": true,
+        "priority": 1
     },
     {
         "name": "DISCO MOUSE IN DA HOUSE",
-        "type": "bot",
-        "censor": true
+        "censor": true,
+        "priority": 1
     },
     {
-        "name": "sex haver",
-        "type": "bot"
+        "name": "sex haver"
     },
     {
-        "name": "t.me/cyrexlinuz",
-        "type": "bot"
+        "name": "t.me/cyrexlinuz"
     },
     {
         "name": "CAN YOU QUACK",
-        "type": "bot",
         "censor": true
     },
     {
-        "name": "royalhack.net B0T",
-        "type": "bot"
+        "name": "royalhack.net B0T"
     },
     {
-        "name": "yt/WorsherTF2",
-        "type": "bot"
+        "name": "yt/WorsherTF2"
     },
     {
-        "name": "shoppy.gg/@worsherTF2",
-        "type": "bot"
+        "name": "shoppy.gg/@worsherTF2"
     },
     {
-        "name": "Serbian Wizard",
-        "type": "bot"
+        "name": "Serbian Wizard"
     },
     {
-        "name": "cat",
-        "type": "bot"
+        "name": "cat"
     },
     {
         "name": "MaximilianMus",
-        "type": "bot",
-        "regexp": true
+        "regexp": true,
+        "priority": 1
     },
     {
-        "name": "www.t.me/voidworks",
-        "type": "bot"
+        "name": "www.t.me/voidworks"
     },
     {
         "name": "TWITCH\\.TV/ICEMANWEST",
-        "type": "bot",
         "regexp": true
     },
     {
         "name": "shroom \\d+",
-        "type": "bot",
         "regexp": true
     }
 ]

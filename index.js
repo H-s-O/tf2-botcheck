@@ -236,6 +236,7 @@ for (const botDefinition of BOT_LIST) {
             console.info('Found named bot:', player.name);
             player.flag = 'namedbot';
             player.censor = botDefinition.censor === true;
+            player.priority = botDefinition.priority || 0;
         }
     }
 }
@@ -273,7 +274,9 @@ if (foundBots.length === 0 && foundDuplicates.length === 0) {
     DO_EXIT(0);
 }
 
-const foundBotsOnSameTeam = foundBots.filter(({ team }) => team === currentPlayerInfo.team);
+const foundBotsOnSameTeam = foundBots
+    .filter(({ team }) => team === currentPlayerInfo.team)
+    .sort((a, b) => (b.priority || 0) - (a.priority || 0));
 const foundDuplicatesOnSameTeam = foundDuplicates.filter(({ team }) => team === currentPlayerInfo.team);
 if (foundBotsOnSameTeam.length > 0) {
     console.info('Attempting to auto-kick named bot', foundBotsOnSameTeam[0].cleanName, `(userid ${foundBotsOnSameTeam[0].userid})`);
