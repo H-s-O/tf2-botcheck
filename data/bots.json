@@ -13,7 +13,7 @@
         "name": "twitch.tv/d3fc0n6"
     },
     {
-        "name": "OMEGATRONIC",
+        "name": ".*O.*M.*E.*G.*A.*T.*R.*O.*N.*I.*C.*",
         "regexp": true
     },
     {
@@ -45,9 +45,18 @@
         "name": "Retrowave Sunset"
     },
     {
-        "name": "sniper gaming"
+        "name": "rijin.solutions"
     },
     {
-        "name": "rijin.solutions"
+        "name": "hgrant0511‏"
+    },
+    {
+        "name": "AngreyNeeson52"
+    },
+    {
+        "name": "Bud Toker"
+    },
+    {
+        "name": "Suspectum"
     }
 ]
