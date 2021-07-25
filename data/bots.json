@@ -14,7 +14,8 @@
     },
     {
         "name": ".*O.*M.*E.*G.*A.*T.*R.*O.*N.*I.*C.*",
-        "regexp": true
+        "regexp": true,
+        "priority": 1
     },
     {
         "name": "youtube.com/d3fc0n6"
@@ -73,5 +74,11 @@
     },
     {
         "name": "[U:1:1043251733]"
+    },
+    {
+        "name": "Add me Bye#2528"
+    },
+    {
+        "name": "ittlepenguinp4.capanni"
     }
 ]
