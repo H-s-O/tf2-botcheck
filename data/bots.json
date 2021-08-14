@@ -6,10 +6,6 @@
         "name": "[VALVE]NIgerkiller"
     },
     {
-        "name": "braaaap \\d+",
-        "regexp": true
-    },
-    {
         "name": "twitch.tv/d3fc0n6"
     },
     {
@@ -107,5 +103,8 @@
     },
     {
         "name": "Videogames 3000"
+    },
+    {
+        "name": "Benoit Double-murder Suicide"
     }
 ]
