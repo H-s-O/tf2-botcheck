@@ -9,8 +9,7 @@
         "name": "twitch.tv/d3fc0n6"
     },
     {
-        "name": ".*O.*M.*E.*G.*A.*T.*R.*O.*N.*I.*C.*",
-        "regexp": true,
+        "name": "OMEGATRONIC",
         "priority": 1
     },
     {
@@ -103,7 +102,8 @@
         "priority": 1
     },
     {
-        "name": "Krispin Wah"
+        "name": "Krispin Wah",
+        "priority": 1
     },
     {
         "name": "Videogames 3000"
@@ -143,5 +143,11 @@
     },
     {
         "name": "BE‬NOIT IS BACK"
+    },
+    {
+        "name": "garfild"
+    },
+    {
+        "name": "oergoatw0161.mayer"
     }
 ]
