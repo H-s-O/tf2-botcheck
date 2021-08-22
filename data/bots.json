@@ -152,5 +152,18 @@
     },
     {
         "name": "EndrFX"
+    },
+    {
+        "name": "Xarq0n's Chill B0t"
+    },
+    {
+        "name": "Enderblitz"
+    },
+    {
+        "name": "CuzImElliot"
+    },
+    {
+        "name": "braaaap \\d+",
+        "regexp": true
     }
 ]
