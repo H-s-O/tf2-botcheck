@@ -165,5 +165,8 @@
     {
         "name": "braaaap \\d+",
         "regexp": true
+    },
+    {
+        "name": "linktr.ee/G7D"
     }
 ]
