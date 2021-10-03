@@ -22,6 +22,10 @@
         "regexp": true
     },
     {
+        "name": "spooky braaaap \\d+",
+        "regexp": true
+    },
+    {
         "name": "2ml Gang bit.ly/3BVmR6T"
     },
     {
@@ -32,5 +36,14 @@
     },
     {
         "name": "Schwarze Drache"
+    },
+    {
+        "name": "DMC-bot 0"
+    },
+    {
+        "name": "bongboy42"
+    },
+    {
+        "name": "♥I Love You♥"
     }
 ]
