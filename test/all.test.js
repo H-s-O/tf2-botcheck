@@ -40,3 +40,5 @@ const testRunner = (hash) => {
 test('nothing suspicious', () => testRunner('00000001'));
 test('name-stealing bot on same team', () => testRunner('00000002'));
 test('name-stealing bot on other team', () => testRunner('00000003'));
+test('stalled name-stealing bot on same team', () => testRunner('00000004'));
+test('stalled name-stealing bot on other team', () => testRunner('00000005'));
