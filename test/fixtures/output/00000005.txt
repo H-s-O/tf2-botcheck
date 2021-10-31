@@ -1,0 +1,1 @@
+/say "[BOT CHECK |0R] Found 1 name-stealing bot: H-s-O [stalled in BLU...]"
