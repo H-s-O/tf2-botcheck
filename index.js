@@ -23,7 +23,7 @@ const END_MARKER_LOOKUP = `${END_MARKER} ${os.EOL}`;
 const GAME_JOIN_MARKER_LOOKUP = `Team Fortress${os.EOL}`;
 const TEAMS_SWITCHED_MARKER_LOOKUP = `Teams have been switched.${os.EOL}`;
 const NAME_LINE_REGEXP = /^"name" = "(.+?)"/g;
-const LOBBY_LINE_REGEXP = /^  Member\[\d+\] \[(U:.+?)\]  team = (\w+)/gm;
+const LOBBY_LINE_REGEXP = /^  (Member|Pending)\[\d+\] \[(U:.+?)\]  team = (\w+)/gm;
 const STATUS_LINE_REGEXP = /^#\s+(\d+)\s+"(.+?)"\s+\[(U:.+?)\]\s+([\d:]+)\s+(\d+)\s+(\d+)\s+(\w+)/gm;
 const BOT_CHECK_REGEXP_TEMPLATE = (name, escape = true) => RegExp(`^(\\(\\d+\\))*${escape ? name.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') : name}$`); // escape the name which may contain regexp control characters
 const CONSOLE_KEY = '/';
@@ -35,6 +35,8 @@ const OPPOSITE_TEAM = {
     TF_GC_TEAM_DEFENDERS: 'TF_GC_TEAM_INVADERS',
     TF_GC_TEAM_INVADERS: 'TF_GC_TEAM_DEFENDERS',
 };
+const LOBBY_MEMBER = 'Member';
+const LOBBY_PENDING = 'Pending';
 const STATE_ACTIVE = 'active';
 const STATE_SPAWNING = 'spawning';
 const STALLED_WARN_MIN_TIME = 30;
@@ -186,9 +188,10 @@ const lobby = [];
 let lobbyMatches;
 while ((lobbyMatches = LOBBY_LINE_REGEXP.exec(statusContent)) !== null) {
     lobby.push({
-        uniqueid: lobbyMatches[1],
-        team: lobbyMatches[2],
-        realTeam: teamsSwitchedStatus === true ? OPPOSITE_TEAM[lobbyMatches[2]] : teamsSwitchedStatus === false ? lobbyMatches[2] : null,
+        lobby: lobbyMatches[1],
+        uniqueid: lobbyMatches[2],
+        team: lobbyMatches[3],
+        realTeam: teamsSwitchedStatus === true ? OPPOSITE_TEAM[lobbyMatches[3]] : teamsSwitchedStatus === false ? lobbyMatches[3] : null,
     });
 }
 
