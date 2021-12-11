@@ -3,6 +3,7 @@ const robot = require('robotjs');
 const sleep = require('sleep');
 const yargs = require('yargs');
 const os = require('os');
+const { execSync } = require('child_process')
 
 robot.setKeyboardDelay(0);
 
@@ -13,8 +14,10 @@ const QUIET = yargs.argv.q === true;
 const INITIAL_DELAY = typeof yargs.argv.i !== 'undefined' ? yargs.argv.i : null;
 const CUSTOM_HASH = typeof yargs.argv.h !== 'undefined' ? yargs.argv.h : null;
 const CUSTOM_LOG_FILE = typeof yargs.argv.f !== 'undefined' ? yargs.argv.f : null;
+const CUSTOM_EXEC_FILE = typeof yargs.argv.e !== 'undefined' ? yargs.argv.e : null;
 
 const LOG_FILE = CUSTOM_LOG_FILE ? CUSTOM_LOG_FILE : 'C:\\Program Files (x86)\\Steam\\steamapps\\common\\Team Fortress 2\\tf\\console.log';
+const EXEC_FILE = CUSTOM_EXEC_FILE ? CUSTOM_EXEC_FILE : 'C:\\Program Files (x86)\\Steam\\steamapps\\common\\Team Fortress 2\\hl2.exe';
 const HASH = CUSTOM_HASH ? CUSTOM_HASH : Date.now().toString(36);
 const START_MARKER = `-bc.${HASH}-`;
 const END_MARKER = `-/bc.${HASH}-`;
@@ -100,25 +103,29 @@ if (INITIAL_DELAY) {
     sleep.msleep(INITIAL_DELAY);
 }
 
-if (!SIMULATE && !CUSTOM_HASH) {
-    // Open TF2 console, log current status and close console
-    console.info('Sending TF2 console keystrokes');
-    robot.typeString(CONSOLE_KEY);
-    sleep.msleep(50);
-    robot.typeString(`echo ${START_MARKER};name;tf_lobby_debug;status;`);
-    sleep.msleep(50);
-    robot.keyTap('enter');
-    sleep.msleep(250);
-    robot.typeString(`echo ${END_MARKER}`);
-    sleep.msleep(50);
-    robot.keyTap('enter');
-    sleep.msleep(50);
-} else if (!SIMULATE && CUSTOM_HASH) {
-    // Open TF2 console for future inputs
-    console.info('Opening TF2 console');
-    robot.typeString(CONSOLE_KEY);
-    sleep.msleep(50);
-}
+// Sending commands
+execSync(`"${EXEC_FILE}" -game tf -hijack "+echo ${START_MARKER}" "+name" "+tf_lobby_debug" "+status" "+echo ${END_MARKER}`);
+sleep.msleep(50);
+
+// if (!SIMULATE && !CUSTOM_HASH) {
+//     // Open TF2 console, log current status and close console
+//     console.info('Sending TF2 console keystrokes');
+//     robot.typeString(CONSOLE_KEY);
+//     sleep.msleep(50);
+//     robot.typeString(`echo ${START_MARKER};name;tf_lobby_debug;status;`);
+//     sleep.msleep(50);
+//     robot.keyTap('enter');
+//     sleep.msleep(250);
+//     robot.typeString(`echo ${END_MARKER}`);
+//     sleep.msleep(50);
+//     robot.keyTap('enter');
+//     sleep.msleep(50);
+// } else if (!SIMULATE && CUSTOM_HASH) {
+//     // Open TF2 console for future inputs
+//     console.info('Opening TF2 console');
+//     robot.typeString(CONSOLE_KEY);
+//     sleep.msleep(50);
+// }
 
 // Read log file
 console.info('Reading TF2 console log file at', LOG_FILE);
@@ -278,6 +285,11 @@ if (foundBots.length === 0 && foundDuplicates.length === 0) {
     console.info('No bots or duplicates found, exiting')
     DO_EXIT(0);
 }
+
+// Open TF2 console, log current status and close console
+console.info('Sending TF2 console keystrokes');
+robot.typeString(CONSOLE_KEY);
+sleep.msleep(50);
 
 const foundBotsOnSameTeam = foundBots
     .filter(({ team }) => team === currentPlayerInfo.team)
