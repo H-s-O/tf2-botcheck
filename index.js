@@ -5,7 +5,7 @@ const yargs = require('yargs');
 const os = require('os');
 const { execSync } = require('child_process')
 
-robot.setKeyboardDelay(0);
+// robot.setKeyboardDelay(0);
 
 const BOT_LIST = require('./data/bots.json');
 
@@ -93,19 +93,33 @@ const BOT_INFO_STRING = (state, connected, realTeam) => {
     return '';
 };
 const DO_EXIT = (code = 0, escape = true) => {
-    if (escape && !SIMULATE) {
-        robot.keyTap('escape');
-    }
+    // if (escape && !SIMULATE) {
+    //     robot.keyTap('escape');
+    // }
     process.exit(code);
+};
+const SEND_COMMAND = (command) => {
+    try {
+        execSync(`"${EXEC_FILE}" -game tf -hijack ${command}`);
+        return true;
+    } catch (e) {
+        console.error('Error while sending command:', e);
+        return false;
+    }
 };
 
 if (INITIAL_DELAY) {
     sleep.msleep(INITIAL_DELAY);
 }
 
-// Sending commands
-execSync(`"${EXEC_FILE}" -game tf -hijack "+echo ${START_MARKER}" "+name" "+tf_lobby_debug" "+status" "+echo ${END_MARKER}`);
-sleep.msleep(50);
+if (!SIMULATE && !CUSTOM_HASH) {
+    // Sending initial commands
+    SEND_COMMAND(`"+echo ${START_MARKER}" "+name" "+tf_lobby_debug" "+status"`);
+    // Wait for results to be written to console log file
+    sleep.msleep(250);
+    SEND_COMMAND(`"+echo ${END_MARKER}"`);
+    sleep.msleep(50);
+}
 
 // if (!SIMULATE && !CUSTOM_HASH) {
 //     // Open TF2 console, log current status and close console
@@ -286,11 +300,6 @@ if (foundBots.length === 0 && foundDuplicates.length === 0) {
     DO_EXIT(0);
 }
 
-// Open TF2 console, log current status and close console
-console.info('Sending TF2 console keystrokes');
-robot.typeString(CONSOLE_KEY);
-sleep.msleep(50);
-
 const foundBotsOnSameTeam = foundBots
     .filter(({ team }) => team === currentPlayerInfo.team)
     .sort((a, b) => (b.priority || 0) - (a.priority || 0));
@@ -304,10 +313,8 @@ if (foundBotsOnSameTeam.length > 0) {
         sleep.msleep(250);
 
         // Send auto-kick command
-        console.info('Sending TF2 console keystrokes');
-        robot.typeString(`callvote kick ${foundBotsOnSameTeam[0].userid} cheating`);
+        SEND_COMMAND(`"+callvote kick ${foundBotsOnSameTeam[0].userid} cheating"`);
         sleep.msleep(50);
-        robot.keyTap('enter');
     }
 } else if (foundDuplicatesOnSameTeam.length > 0) {
     console.info('Attempting to auto-kick hijacking bot', foundDuplicatesOnSameTeam[0].cleanName);
@@ -316,10 +323,8 @@ if (foundBotsOnSameTeam.length > 0) {
         sleep.msleep(250);
 
         // Send auto-kick command
-        console.info('Sending TF2 console keystrokes');
-        robot.typeString(`callvote kick ${foundDuplicatesOnSameTeam[0].userid} cheating`);
+        SEND_COMMAND(`"+callvote kick ${foundDuplicatesOnSameTeam[0].userid} cheating"`);
         sleep.msleep(50);
-        robot.keyTap('enter');
     }
 }
 
@@ -372,18 +377,17 @@ if (!QUIET) {
         // Send chat messages
         if (message1) {
             console.info('Sending known bots message');
-            robot.typeString(`say "${message1}"`);
+            SEND_COMMAND(`"+say ${message1}"`);
             sleep.msleep(50);
-            robot.keyTap('enter');
         }
         if (message1 && message2) {
+            // Delay messages as to not be blocked by spam filtering
             sleep.msleep(1000);
         }
         if (message2) {
             console.info('Sending hijacking bots message');
-            robot.typeString(`say "${message2}"`);
+            SEND_COMMAND(`"+say ${message2}"`);
             sleep.msleep(50);
-            robot.keyTap('enter');
         }
     }
 }
