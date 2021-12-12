@@ -296,7 +296,8 @@ const foundDuplicates = players.filter(({ flag, connected, state }) =>
     && (state === STATE_ACTIVE || (state === STATE_SPAWNING && connected < STALLED_EXCLUDE_TIME_LIMIT)));
 if (foundBots.length === 0 && foundDuplicates.length === 0) {
     // Nothing suspicious found, exit
-    console.info('No bots or duplicates found, exiting')
+    SEND_COMMAND('"+playgamesound Player.HitSoundBeepo"');
+    console.info('No bots or duplicates found, exiting');
     DO_EXIT(0);
 }
 
