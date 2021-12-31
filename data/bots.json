@@ -15,6 +15,10 @@
         "name": "Festive Hitman"
     },
     {
-        "name": "OMEGATRONIC"
+        "name": "OMEGATRONIC",
+        "priority": 1
+    },
+    {
+        "name": "irc.myg0t.gg:6667#myg0t"
     }
 ]
