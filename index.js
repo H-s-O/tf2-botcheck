@@ -1,11 +1,8 @@
 const fs = require('fs');
-const robot = require('robotjs');
 const sleep = require('sleep');
 const yargs = require('yargs');
 const os = require('os');
 const { execSync } = require('child_process')
-
-// robot.setKeyboardDelay(0);
 
 const BOT_LIST = require('./data/bots.json');
 
@@ -92,10 +89,7 @@ const BOT_INFO_STRING = (state, connected, realTeam) => {
     }
     return '';
 };
-const DO_EXIT = (code = 0, escape = true) => {
-    // if (escape && !SIMULATE) {
-    //     robot.keyTap('escape');
-    // }
+const DO_EXIT = (code = 0) => {
     process.exit(code);
 };
 const SEND_COMMAND = (command) => {
@@ -120,26 +114,6 @@ if (!SIMULATE && !CUSTOM_HASH) {
     SEND_COMMAND(`"+echo ${END_MARKER}"`);
     sleep.msleep(50);
 }
-
-// if (!SIMULATE && !CUSTOM_HASH) {
-//     // Open TF2 console, log current status and close console
-//     console.info('Sending TF2 console keystrokes');
-//     robot.typeString(CONSOLE_KEY);
-//     sleep.msleep(50);
-//     robot.typeString(`echo ${START_MARKER};name;tf_lobby_debug;status;`);
-//     sleep.msleep(50);
-//     robot.keyTap('enter');
-//     sleep.msleep(250);
-//     robot.typeString(`echo ${END_MARKER}`);
-//     sleep.msleep(50);
-//     robot.keyTap('enter');
-//     sleep.msleep(50);
-// } else if (!SIMULATE && CUSTOM_HASH) {
-//     // Open TF2 console for future inputs
-//     console.info('Opening TF2 console');
-//     robot.typeString(CONSOLE_KEY);
-//     sleep.msleep(50);
-// }
 
 // Read log file
 console.info('Reading TF2 console log file at', LOG_FILE);
