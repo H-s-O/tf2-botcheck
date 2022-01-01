@@ -20,5 +20,12 @@
     },
     {
         "name": "irc.myg0t.gg:6667#myg0t"
+    },
+    {
+        "name": "braaaap \\d+",
+        "regexp": true
+    },
+    {
+        "name": "[ᐯAᒪᐯE] Big Smoke"
     }
 ]
