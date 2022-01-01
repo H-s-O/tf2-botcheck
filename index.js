@@ -70,7 +70,10 @@ const CENSOR_MESSAGE = (message) => {
 };
 const CENSOR_NAME = (name) => {
     return CENSOR_MESSAGE(name.replace(/[aeiouy]/gi, '*'));
-}
+};
+const ESCAPE_MESSAGE = (message) => {
+    return message.replace(/\"/g, '\'\'') // yolo
+};
 const BOT_INFO_STRING = (state, connected, realTeam) => {
     if (realTeam) {
         if (state === STATE_SPAWNING && connected < STALLED_WARN_MIN_TIME) {
@@ -94,7 +97,8 @@ const DO_EXIT = (code = 0) => {
 };
 const SEND_COMMAND = (command) => {
     try {
-        execSync(`"${EXEC_FILE}" -game tf -hijack ${command}`);
+        console.log('Sending command:', command)
+        execSync(`"${EXEC_FILE}" -game tf -hijack ${command}`, { windowsHide: true });
         return true;
     } catch (e) {
         console.error('Error while sending command:', e);
@@ -352,7 +356,7 @@ if (!QUIET) {
         // Send chat messages
         if (message1) {
             console.info('Sending known bots message');
-            SEND_COMMAND(`"+say ${message1}"`);
+            SEND_COMMAND(`"+say ${ESCAPE_MESSAGE(message1)}"`);
             sleep.msleep(50);
         }
         if (message1 && message2) {
@@ -361,7 +365,7 @@ if (!QUIET) {
         }
         if (message2) {
             console.info('Sending hijacking bots message');
-            SEND_COMMAND(`"+say ${message2}"`);
+            SEND_COMMAND(`"+say ${ESCAPE_MESSAGE(message2)}"`);
             sleep.msleep(50);
         }
     }
