@@ -107,11 +107,13 @@ const SEND_COMMAND = (command) => {
 };
 
 if (INITIAL_DELAY) {
+    console.info(`Waiting for initial delay of ${INITIAL_DELAY}ms`)
     sleep.msleep(INITIAL_DELAY);
 }
 
 if (!SIMULATE && !CUSTOM_HASH) {
     // Sending initial commands
+    console.info('Sending initial commands');
     SEND_COMMAND(`"+echo ${START_MARKER}" "+name" "+tf_lobby_debug" "+status"`);
     // Wait for results to be written to console log file
     sleep.msleep(250);
@@ -147,7 +149,7 @@ if (endMarkerPos === -1) {
 const statusContent = logContent.substring(startMarkerPos + START_MARKER.length, endMarkerPos).trim();
 if (statusContent.length === 0) {
     // Status content empty, abort
-    console.info('No status content, aborting')
+    console.error('No status content, aborting')
     DO_EXIT(1);
 }
 console.info('Status:')
@@ -274,7 +276,9 @@ const foundDuplicates = players.filter(({ flag, connected, state }) =>
     && (state === STATE_ACTIVE || (state === STATE_SPAWNING && connected < STALLED_EXCLUDE_TIME_LIMIT)));
 if (foundBots.length === 0 && foundDuplicates.length === 0) {
     // Nothing suspicious found, exit
-    SEND_COMMAND('"+playgamesound Player.HitSoundBeepo"');
+    if (!SIMULATE) {
+        SEND_COMMAND('"+playgamesound Player.HitSoundBeepo"');
+    }
     console.info('No bots or duplicates found, exiting');
     DO_EXIT(0);
 }
