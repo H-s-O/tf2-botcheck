@@ -289,7 +289,17 @@ const foundBotsOnSameTeam = foundBots
 const foundDuplicatesOnSameTeam = foundDuplicates
     .filter(({ team }) => team === currentPlayerInfo.team)
     .sort((a, b) => (b.priority || 0) - (a.priority || 0));
-if (foundBotsOnSameTeam.length > 0) {
+if (foundDuplicatesOnSameTeam.length > 0) {
+    console.info('Attempting to auto-kick name-stealer bot', foundDuplicatesOnSameTeam[0].cleanName);
+
+    if (!SIMULATE) {
+        sleep.msleep(250);
+
+        // Send auto-kick command
+        SEND_COMMAND(`"+callvote kick ${foundDuplicatesOnSameTeam[0].userid} cheating"`);
+        sleep.msleep(50);
+    }
+} else if (foundBotsOnSameTeam.length > 0) {
     console.info('Attempting to auto-kick named bot', foundBotsOnSameTeam[0].cleanName, `(userid ${foundBotsOnSameTeam[0].userid})`);
 
     if (!SIMULATE) {
@@ -297,16 +307,6 @@ if (foundBotsOnSameTeam.length > 0) {
 
         // Send auto-kick command
         SEND_COMMAND(`"+callvote kick ${foundBotsOnSameTeam[0].userid} cheating"`);
-        sleep.msleep(50);
-    }
-} else if (foundDuplicatesOnSameTeam.length > 0) {
-    console.info('Attempting to auto-kick hijacking bot', foundDuplicatesOnSameTeam[0].cleanName);
-
-    if (!SIMULATE) {
-        sleep.msleep(250);
-
-        // Send auto-kick command
-        SEND_COMMAND(`"+callvote kick ${foundDuplicatesOnSameTeam[0].userid} cheating"`);
         sleep.msleep(50);
     }
 }
