@@ -16,5 +16,5 @@ A way of doing this is using a software like
 [WinHotKey](https://directedge.us/content/winhotkey) to have a custom hotkey launch the `botcheck.bat`. If you have a Stream Deck, you can add a [Open](https://help.elgato.com/hc/en-us/articles/360028234471-Elgato-Stream-Deck-System-Actions) action that executes the `botcheck.bat`.
 
 ## ToDo (in no particular order)
-- Settings to configure the TF2 console key & console log file path
-- Auto-update bot list
+- Settings to configure the path of TF2 executable and console log files
+- Auto-update bot list (via this repo or other)
