@@ -1,10 +1,8 @@
 const fs = require('fs');
-const robot = require('robotjs');
 const sleep = require('sleep');
 const yargs = require('yargs');
 const os = require('os');
-
-robot.setKeyboardDelay(0);
+const { execSync } = require('child_process')
 
 const BOT_LIST = require('./data/bots.json');
 
@@ -13,8 +11,10 @@ const QUIET = yargs.argv.q === true;
 const INITIAL_DELAY = typeof yargs.argv.i !== 'undefined' ? yargs.argv.i : null;
 const CUSTOM_HASH = typeof yargs.argv.h !== 'undefined' ? yargs.argv.h : null;
 const CUSTOM_LOG_FILE = typeof yargs.argv.f !== 'undefined' ? yargs.argv.f : null;
+const CUSTOM_EXEC_FILE = typeof yargs.argv.e !== 'undefined' ? yargs.argv.e : null;
 
 const LOG_FILE = CUSTOM_LOG_FILE ? CUSTOM_LOG_FILE : 'C:\\Program Files (x86)\\Steam\\steamapps\\common\\Team Fortress 2\\tf\\console.log';
+const EXEC_FILE = CUSTOM_EXEC_FILE ? CUSTOM_EXEC_FILE : 'C:\\Program Files (x86)\\Steam\\steamapps\\common\\Team Fortress 2\\hl2.exe';
 const HASH = CUSTOM_HASH ? CUSTOM_HASH : Date.now().toString(36);
 const START_MARKER = `-bc.${HASH}-`;
 const END_MARKER = `-/bc.${HASH}-`;
@@ -26,7 +26,6 @@ const NAME_LINE_REGEXP = /^"name" = "(.+?)"/g;
 const LOBBY_LINE_REGEXP = /^  (Member|Pending)\[\d+\] \[(U:.+?)\]  team = (\w+)/gm;
 const STATUS_LINE_REGEXP = /^#\s+(\d+)\s+"(.+?)"\s+\[(U:.+?)\]\s+([\d:]+)\s+(\d+)\s+(\d+)\s+(\w+)/gm;
 const BOT_CHECK_REGEXP_TEMPLATE = (name, escape = true) => RegExp(`^(\\(\\d+\\))*${escape ? name.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') : name}$`); // escape the name which may contain regexp control characters
-const CONSOLE_KEY = '/';
 const TEAM_LABELS = {
     TF_GC_TEAM_DEFENDERS: 'RED',
     TF_GC_TEAM_INVADERS: 'BLU',
@@ -70,7 +69,14 @@ const CENSOR_MESSAGE = (message) => {
 };
 const CENSOR_NAME = (name) => {
     return CENSOR_MESSAGE(name.replace(/[aeiouy]/gi, '*'));
-}
+};
+const CLEAN_NAME = (name) => {
+    // remove invisible characters added by hijacking/duplicating bots
+    return name.replace(/[\u0000-\u001F\u007F-\u009F\u200B-\u200F\u2028-\u202E\u2066-\u206F\u0300-\u036F\u0E31-\u0ECD\uFFF0-\uFFFD]/g, '');
+};
+const ESCAPE_MESSAGE = (message) => {
+    return message.replace(/\"/g, '\'\'') // yolo
+};
 const BOT_INFO_STRING = (state, connected, realTeam) => {
     if (realTeam) {
         if (state === STATE_SPAWNING && connected < STALLED_WARN_MIN_TIME) {
@@ -89,34 +95,32 @@ const BOT_INFO_STRING = (state, connected, realTeam) => {
     }
     return '';
 };
-const DO_EXIT = (code = 0, escape = true) => {
-    if (escape && !SIMULATE) {
-        robot.keyTap('escape');
-    }
+const DO_EXIT = (code = 0) => {
     process.exit(code);
+};
+const SEND_COMMAND = (command) => {
+    try {
+        console.log('Sending command:', command)
+        execSync(`"${EXEC_FILE}" -game tf -hijack ${command}`, { windowsHide: true });
+        return true;
+    } catch (e) {
+        console.error('Error while sending command:', e);
+        return false;
+    }
 };
 
 if (INITIAL_DELAY) {
+    console.info(`Waiting for initial delay of ${INITIAL_DELAY}ms`)
     sleep.msleep(INITIAL_DELAY);
 }
 
 if (!SIMULATE && !CUSTOM_HASH) {
-    // Open TF2 console, log current status and close console
-    console.info('Sending TF2 console keystrokes');
-    robot.typeString(CONSOLE_KEY);
-    sleep.msleep(50);
-    robot.typeString(`echo ${START_MARKER};name;tf_lobby_debug;status;`);
-    sleep.msleep(50);
-    robot.keyTap('enter');
+    // Sending initial commands
+    console.info('Sending initial commands');
+    SEND_COMMAND(`"+echo ${START_MARKER}" "+name" "+tf_lobby_debug" "+status"`);
+    // Wait for results to be written to console log file
     sleep.msleep(250);
-    robot.typeString(`echo ${END_MARKER}`);
-    sleep.msleep(50);
-    robot.keyTap('enter');
-    sleep.msleep(50);
-} else if (!SIMULATE && CUSTOM_HASH) {
-    // Open TF2 console for future inputs
-    console.info('Opening TF2 console');
-    robot.typeString(CONSOLE_KEY);
+    SEND_COMMAND(`"+echo ${END_MARKER}"`);
     sleep.msleep(50);
 }
 
@@ -148,7 +152,7 @@ if (endMarkerPos === -1) {
 const statusContent = logContent.substring(startMarkerPos + START_MARKER.length, endMarkerPos).trim();
 if (statusContent.length === 0) {
     // Status content empty, abort
-    console.info('No status content, aborting')
+    console.error('No status content, aborting')
     DO_EXIT(1);
 }
 console.info('Status:')
@@ -169,7 +173,7 @@ while ((playerMatches = STATUS_LINE_REGEXP.exec(statusContent)) !== null) {
     players.push({
         userid: playerMatches[1],
         name: playerMatches[2],
-        cleanName: playerMatches[2].replace(/[\u0000-\u001F\u007F-\u009F\u200B-\u200F\u2028-\u202E\u2066-\u206F\u0300-\u036F\u0E31-\u0ECD\uFFF0-\uFFFD]/g, ''), // remove invisible characters possibly added by hijacking bots
+        cleanName: CLEAN_NAME(playerMatches[2]),
         uniqueid: playerMatches[3],
         connected: PARSE_CONNECTED_TIME(playerMatches[4]),
         ping: parseInt(playerMatches[5]),
@@ -275,7 +279,10 @@ const foundDuplicates = players.filter(({ flag, connected, state }) =>
     && (state === STATE_ACTIVE || (state === STATE_SPAWNING && connected < STALLED_EXCLUDE_TIME_LIMIT)));
 if (foundBots.length === 0 && foundDuplicates.length === 0) {
     // Nothing suspicious found, exit
-    console.info('No bots or duplicates found, exiting')
+    if (!SIMULATE) {
+        SEND_COMMAND('"+playgamesound Player.HitSoundBeepo"');
+    }
+    console.info('No bots or duplicates found, exiting');
     DO_EXIT(0);
 }
 
@@ -285,29 +292,25 @@ const foundBotsOnSameTeam = foundBots
 const foundDuplicatesOnSameTeam = foundDuplicates
     .filter(({ team }) => team === currentPlayerInfo.team)
     .sort((a, b) => (b.priority || 0) - (a.priority || 0));
-if (foundBotsOnSameTeam.length > 0) {
+if (foundDuplicatesOnSameTeam.length > 0) {
+    console.info('Attempting to auto-kick name-stealer bot', foundDuplicatesOnSameTeam[0].cleanName);
+
+    if (!SIMULATE) {
+        sleep.msleep(250);
+
+        // Send auto-kick command
+        SEND_COMMAND(`"+callvote kick ${foundDuplicatesOnSameTeam[0].userid} cheating"`);
+        sleep.msleep(50);
+    }
+} else if (foundBotsOnSameTeam.length > 0) {
     console.info('Attempting to auto-kick named bot', foundBotsOnSameTeam[0].cleanName, `(userid ${foundBotsOnSameTeam[0].userid})`);
 
     if (!SIMULATE) {
         sleep.msleep(250);
 
         // Send auto-kick command
-        console.info('Sending TF2 console keystrokes');
-        robot.typeString(`callvote kick ${foundBotsOnSameTeam[0].userid} cheating`);
+        SEND_COMMAND(`"+callvote kick ${foundBotsOnSameTeam[0].userid} cheating"`);
         sleep.msleep(50);
-        robot.keyTap('enter');
-    }
-} else if (foundDuplicatesOnSameTeam.length > 0) {
-    console.info('Attempting to auto-kick hijacking bot', foundDuplicatesOnSameTeam[0].cleanName);
-
-    if (!SIMULATE) {
-        sleep.msleep(250);
-
-        // Send auto-kick command
-        console.info('Sending TF2 console keystrokes');
-        robot.typeString(`callvote kick ${foundDuplicatesOnSameTeam[0].userid} cheating`);
-        sleep.msleep(50);
-        robot.keyTap('enter');
     }
 }
 
@@ -360,18 +363,17 @@ if (!QUIET) {
         // Send chat messages
         if (message1) {
             console.info('Sending known bots message');
-            robot.typeString(`say "${message1}"`);
+            SEND_COMMAND(`"+say ${ESCAPE_MESSAGE(message1)}"`);
             sleep.msleep(50);
-            robot.keyTap('enter');
         }
         if (message1 && message2) {
+            // Delay messages as to not be blocked by spam filtering
             sleep.msleep(1000);
         }
         if (message2) {
             console.info('Sending hijacking bots message');
-            robot.typeString(`say "${message2}"`);
+            SEND_COMMAND(`"+say ${ESCAPE_MESSAGE(message2)}"`);
             sleep.msleep(50);
-            robot.keyTap('enter');
         }
     }
 }
