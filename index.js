@@ -26,7 +26,6 @@ const NAME_LINE_REGEXP = /^"name" = "(.+?)"/g;
 const LOBBY_LINE_REGEXP = /^  (Member|Pending)\[\d+\] \[(U:.+?)\]  team = (\w+)/gm;
 const STATUS_LINE_REGEXP = /^#\s+(\d+)\s+"(.+?)"\s+\[(U:.+?)\]\s+([\d:]+)\s+(\d+)\s+(\d+)\s+(\w+)/gm;
 const BOT_CHECK_REGEXP_TEMPLATE = (name, escape = true) => RegExp(`^(\\(\\d+\\))*${escape ? name.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') : name}$`); // escape the name which may contain regexp control characters
-const CONSOLE_KEY = '/';
 const TEAM_LABELS = {
     TF_GC_TEAM_DEFENDERS: 'RED',
     TF_GC_TEAM_INVADERS: 'BLU',
@@ -70,6 +69,10 @@ const CENSOR_MESSAGE = (message) => {
 };
 const CENSOR_NAME = (name) => {
     return CENSOR_MESSAGE(name.replace(/[aeiouy]/gi, '*'));
+};
+const CLEAN_NAME = (name) => {
+    // remove invisible characters added by hijacking/duplicating bots
+    return name.replace(/[\u0000-\u001F\u007F-\u009F\u200B-\u200F\u2028-\u202E\u2066-\u206F\u0300-\u036F\u0E31-\u0ECD\uFFF0-\uFFFD]/g, '');
 };
 const ESCAPE_MESSAGE = (message) => {
     return message.replace(/\"/g, '\'\'') // yolo
@@ -170,7 +173,7 @@ while ((playerMatches = STATUS_LINE_REGEXP.exec(statusContent)) !== null) {
     players.push({
         userid: playerMatches[1],
         name: playerMatches[2],
-        cleanName: playerMatches[2].replace(/[\u0000-\u001F\u007F-\u009F\u200B-\u200F\u2028-\u202E\u2066-\u206F\u0300-\u036F\u0E31-\u0ECD\uFFF0-\uFFFD]/g, ''), // remove invisible characters possibly added by hijacking bots
+        cleanName: CLEAN_NAME(playerMatches[2]),
         uniqueid: playerMatches[3],
         connected: PARSE_CONNECTED_TIME(playerMatches[4]),
         ping: parseInt(playerMatches[5]),
