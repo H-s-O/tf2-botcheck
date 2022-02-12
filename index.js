@@ -24,7 +24,7 @@ const GAME_JOIN_MARKER_LOOKUP = `Team Fortress${os.EOL}`;
 const TEAMS_SWITCHED_MARKER_LOOKUP = `Teams have been switched.${os.EOL}`;
 const NAME_LINE_REGEXP = /^"name" = "(.+?)"/g;
 const LOBBY_LINE_REGEXP = /^  (Member|Pending)\[\d+\] \[(U:.+?)\]  team = (\w+)/gm;
-const STATUS_LINE_REGEXP = /^#\s+(\d+)\s+"(.+?)"\s+\[(U:.+?)\]\s+([\d:]+)\s+(\d+)\s+(\d+)\s+(\w+)/gm;
+const STATUS_LINE_REGEXP = /^#\s+(\d+)\s+"(.+?)"\s+\[(U:.+?)\]\s+([\d:]+)\s+(\d+)\s+(\d+)\s+(\w+)/gms;
 const BOT_CHECK_REGEXP_TEMPLATE = (name, escape = true) => RegExp(`^(\\(\\d+\\))*${escape ? name.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') : name}$`); // escape the name which may contain regexp control characters
 const TEAM_LABELS = {
     TF_GC_TEAM_DEFENDERS: 'RED',
@@ -72,7 +72,7 @@ const CENSOR_NAME = (name) => {
 };
 const CLEAN_NAME = (name) => {
     // remove invisible characters added by hijacking/duplicating bots
-    return name.replace(/[\u0000-\u001F\u007F-\u009F\u200B-\u200F\u2028-\u202E\u2066-\u206F\u0300-\u036F\u0E31-\u0ECD\uFFF0-\uFFFD]/g, '');
+    return name.replace(/[\u0000-\u001F\u007F-\u009F\u200B-\u200F\u2028-\u202E\u2066-\u206F\u0300-\u036F\u0E31-\u0ECD\uFFF0-\uFFFD\u200B-\u200F\u2028-\u202E\u2060-\u206F]/g, '');
 };
 const ESCAPE_MESSAGE = (message) => {
     return message.replace(/\"/g, '\'\'') // yolo
@@ -293,7 +293,7 @@ const foundDuplicatesOnSameTeam = foundDuplicates
     .filter(({ team }) => team === currentPlayerInfo.team)
     .sort((a, b) => (b.priority || 0) - (a.priority || 0));
 if (foundDuplicatesOnSameTeam.length > 0) {
-    console.info('Attempting to auto-kick name-stealer bot', foundDuplicatesOnSameTeam[0].cleanName);
+    console.info(`Attempting to auto-kick name-stealer bot "${foundDuplicatesOnSameTeam[0].cleanName}", id ${foundDuplicatesOnSameTeam[0].userid}`);
 
     if (!SIMULATE) {
         sleep.msleep(250);
@@ -303,7 +303,7 @@ if (foundDuplicatesOnSameTeam.length > 0) {
         sleep.msleep(50);
     }
 } else if (foundBotsOnSameTeam.length > 0) {
-    console.info('Attempting to auto-kick named bot', foundBotsOnSameTeam[0].cleanName, `(userid ${foundBotsOnSameTeam[0].userid})`);
+    console.info(`Attempting to auto-kick named bot "${foundBotsOnSameTeam[0].cleanName}", id ${foundBotsOnSameTeam[0].userid}`);
 
     if (!SIMULATE) {
         sleep.msleep(250);
