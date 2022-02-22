@@ -1,47 +1,7 @@
 [
     {
-        "name": "youtube.com/d3fc0n6"
-    },
-    {
-        "name": "royalhack.net B0T"
-    },
-    {
-        "name": "YINHANGTRADEPARTNERS.CN"
-    },
-    {
-        "name": "YINHANG"
-    },
-    {
-        "name": "shoppy.gg/@d3fc0n6"
-    },
-    {
-        "name": "Festive Hitman"
-    },
-    {
         "name": "OMEGATRONIC",
         "priority": 1
-    },
-    {
-        "name": "irc.myg0t.gg:6667#myg0t"
-    },
-    {
-        "name": "braaaap \\d+",
-        "regexp": true
-    },
-    {
-        "name": "[ᐯAᒪᐯE] Big Smoke"
-    },
-    {
-        "name": "[ᐯAᒪᐯE] Big Smoke RCE"
-    },
-    {
-        "name": "youtube.com/watch?v=7uWMgyqhltg"
-    },
-    {
-        "name": "Hello world!"
-    },
-    {
-        "name": "ginger.neg"
     },
     {
         "name": "www.myg0t.win"
@@ -78,6 +38,9 @@
     },
     {
         "name": "anchor.fm/ghostpolitics"
+    },
+    {
+        "name": "Chill"
     },
     {
         "name": "Memntoiz | #pedorights"
@@ -126,5 +89,23 @@
     },
     {
         "name": "Anime_Chan | #pedorights"
+    },
+    {
+        "name": "Lucy | #pedorights"
+    },
+    {
+        "name": "Papa1337 | #pedorights"
+    },
+    {
+        "name": "Celia Claire | #pedorights"
+    },
+    {
+        "name": "Hamavorera | #pedorights"
+    },
+    {
+        "name": "Zack | #pedorights"
+    },
+    {
+        "name": "Cringe expert | #pedorights"
     }
 ]
