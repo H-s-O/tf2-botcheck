@@ -238,6 +238,9 @@ console.info('  realTeam:', currentPlayerInfo.realTeam);
 // Find named bots first; loop each known bot name and check against each player name
 for (const botDefinition of BOT_LIST) {
     for (const player of players) {
+        if (botDefinition.ignore && botDefinition.ignore.includes(player.uniqueid)) {
+            continue;
+        }
         const botRegExp = BOT_CHECK_REGEXP_TEMPLATE(botDefinition.name, botDefinition.regexp !== true);
         if (botRegExp.test(player.cleanName)) {
             console.info('Found named bot:', player.name);
