@@ -2,7 +2,9 @@
     {
         "name": "OMEGATRONIC",
         "priority": 1,
-        "ignore": ["U:1:962586534"]
+        "ignore": [
+            "U:1:962586534"
+        ]
     },
     {
         "name": "www.myg0t.win"
@@ -186,5 +188,17 @@
     },
     {
         "name": "Fuck Nemo"
+    },
+    {
+        "name": "OG Fuck Nemo"
+    },
+    {
+        "name": "[VOLVO] Big Smoke"
+    },
+    {
+        "name": "Ricky Spanish"
+    },
+    {
+        "name": "Big smoke"
     }
 ]
