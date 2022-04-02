@@ -274,6 +274,14 @@ for (const player1 of players) {
     }
 }
 
+// Additional check for bots with linebreak hack
+for (const player of players) {
+    if (player.flag !== 'hijackerbot' && player.name.charCodeAt(player.name.length - 1) === 13) {
+        console.info('Found linebreak hack bot:', player.name);
+        player.flag = 'namedbot';
+    }
+}
+
 const foundBots = players.filter(({ flag, connected, state }) =>
     flag === 'namedbot'
     && (state === STATE_ACTIVE || (state === STATE_SPAWNING && connected < STALLED_EXCLUDE_TIME_LIMIT)));
