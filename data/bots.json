@@ -82,7 +82,8 @@
         "name": "fateless.future"
     },
     {
-        "name": "m4gic"
+        "name": "m4gic",
+        "priority": 1
     },
     {
         "name": "Main Troll |CAC|"
