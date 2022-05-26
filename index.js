@@ -337,7 +337,7 @@ if (!QUIET) {
                     ? CENSOR_MESSAGE(cleanName)
                     : cleanName}${BOT_INFO_STRING(state, connected, realTeam)}`;
         }).join(', ')
-        let content1 = `Found ${foundBots.length} known bot${foundBots.length > 1 ? 's' : ''}`;
+        let content1 = `Found ${foundBots.length} bot${foundBots.length > 1 ? 's' : ''}`;
         if (needsGlobalCensor) {
             content1 = CENSOR_MESSAGE(content1);
         }
