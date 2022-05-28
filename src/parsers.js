@@ -84,8 +84,8 @@ const mergeStatusAndLobby = (status, lobby) => {
   for (const player of statusClone) {
     for (const info of lobby) {
       if (info.uniqueid === player.uniqueid) {
-        player.team = info.team;
-        player.realTeam = info.realTeam;
+        player.team = info.team
+        player.realTeam = info.realTeam
       }
     }
   }

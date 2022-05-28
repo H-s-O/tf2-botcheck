@@ -2,9 +2,10 @@ const BOT_LIST = require('../data/bots.json')
 
 const getBotCheckRegexp = (name, escape = true) => RegExp(`^(\\(\\d+\\))*${escape ? name.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') : name}$`); // escape the name which may contain regexp control characters
 
-const findBots = (status, currentPlayerInfo) => {
-  const players = status.concat()
+const findBots = (players, currentPlayerInfo) => {
+  const bots = []
 
+  // Find named bots first; loop each known bot name and check against each player name
   for (const botDefinition of BOT_LIST) {
     for (const player of players) {
       if (botDefinition.ignore && botDefinition.ignore.includes(player.uniqueid)) {
@@ -16,6 +17,7 @@ const findBots = (status, currentPlayerInfo) => {
         player.flag = 'namedbot'
         player.censor = botDefinition.censor === true
         player.priority = botDefinition.priority || 0
+        bots.push(player)
       }
     }
   }
@@ -32,12 +34,12 @@ const findBots = (status, currentPlayerInfo) => {
           console.info('Found clone bot:', player1.name)
           player1.flag = 'hijackerbot'
           player1.priority = player1.cleanName === currentPlayerInfo.name ? 1 : 0
+          bots.push(player1)
         } else if (player2.connected < player1.connected && !player2.flag) {
           console.info('Found clone bot:', player2.name)
           player2.flag = 'hijackerbot'
           player2.priority = player2.cleanName === currentPlayerInfo.name ? 1 : 0
-        } else {
-          // Connected times are the same for both players, so ignore since we can't determine which one is the bot
+          bots.push(player2)
         }
       }
     }
@@ -48,10 +50,11 @@ const findBots = (status, currentPlayerInfo) => {
     if (player.flag !== 'hijackerbot' && /\r|\n/g.test(player.name)) {
       console.info('Found linebreak hack bot:', player.name)
       player.flag = 'namedbot'
+      bots.push(player)
     }
   }
 
-  return players
+  return bots
 }
 
 module.exports = {

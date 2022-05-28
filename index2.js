@@ -1,4 +1,4 @@
-const { Observable, share, filter, bufferToggle, debounceTime, merge, tap, delay, map, of, take, exhaustMap, forkJoin, defer, interval } = require('rxjs')
+const { Observable, share, filter, bufferToggle, debounceTime, merge, tap, delay, map, of, take, exhaustMap, forkJoin, defer, interval, switchMap, pipe, startWith, concat, endWith, throttleTime, EMPTY } = require('rxjs')
 const { Tail } = require('tail')
 const { EOL } = require('os')
 
@@ -36,15 +36,18 @@ const interval$ = interval(30000).pipe(
 )
 
 const triggerCheck$ = merge(
-  connected$,
-  lobbyUpdated$,
+  merge(
+    connected$,
+    lobbyUpdated$,
+  ).pipe(debounceTime(1000)),
   interval$
 ).pipe(
-  debounceTime(1000),
+  startWith(true),
+  throttleTime(10000),
   tap(() => console.log('-- trigger check --'))
 )
 
-const doCheck$ = defer(() => {
+const getStatus$ = defer(() => {
   const hash = Date.now().toString(36)
 
   const startMarkerString = getStartMarkerString(hash)
@@ -64,7 +67,6 @@ const doCheck$ = defer(() => {
       tap(() => sendCommand(`"+echo ${startMarkerString}" "+name" "+tf_lobby_debug" "+status"`)),
       delay(250),
       tap(() => sendCommand(`"+echo ${endMarkerString}"`)),
-      take(1)
     ),
     logFile$.pipe(
       bufferToggle(startMarker$, () => endMarker$),
@@ -72,40 +74,42 @@ const doCheck$ = defer(() => {
     )
   ]).pipe(
     map(([first, second]) => second.slice(1, -1).join(EOL)), // join into single string for parsing
-    map((statusContent) => {
-      // console.log('statusContent:\n', statusContent)
-      const result = parseAll(statusContent)
-      // console.log(result.currentPlayer)
-      // console.table(result.lobbyDebug)
-      // console.table(result.status)
-      if (result.currentPlayer && result.lobbyDebug.length > 0 && result.status.length > 0) {
-        const merged = mergeStatusAndLobby(result.status, result.lobbyDebug)
-        //console.table(merged)
-        const bots = findBots(merged, result.currentPlayer)
-        const foundBots = bots.filter(({ flag, connected, state }) =>
-          flag === 'namedbot'
-          && (state === STATE_ACTIVE || (state === STATE_SPAWNING && connected < STALLED_EXCLUDE_TIME_LIMIT)));
-        const foundDuplicates = bots.filter(({ flag, connected, state }) =>
-          flag === 'hijackerbot'
-          && (state === STATE_ACTIVE || (state === STATE_SPAWNING && connected < STALLED_EXCLUDE_TIME_LIMIT)));
-        if (foundBots.length === 0 && foundDuplicates.length === 0) {
-          // Nothing suspicious found, exit
-          // if (!SIMULATE) {
-          //   SEND_COMMAND('"+playgamesound Player.HitSoundBeepo"');
-          // }
-          // console.info('No bots or duplicates found, exiting');
-          sendCommand('+say_party "no bots"')
-        } else {
-          sendCommand('+say_party "some bots found"')
-        }
-      }
-    })
   )
 })
 
+const votesAndMessages = (parsed) => of(parsed).pipe(
+  map((result) => [findBots(mergeStatusAndLobby(result.status, result.lobbyDebug), result.currentPlayer), result.currentPlayer]),
+  map(([bots, currentPlayer]) => {
+    console.table(bots)
+    const foundBots = bots.filter(({ flag, connected, state }) =>
+      flag === 'namedbot'
+      && (state === STATE_ACTIVE || (state === STATE_SPAWNING && connected < STALLED_EXCLUDE_TIME_LIMIT)));
+    const foundDuplicates = bots.filter(({ flag, connected, state }) =>
+      flag === 'hijackerbot'
+      && (state === STATE_ACTIVE || (state === STATE_SPAWNING && connected < STALLED_EXCLUDE_TIME_LIMIT)));
+    if (foundBots.length === 0 && foundDuplicates.length === 0) {
+      // Nothing suspicious found, exit
+      // if (!SIMULATE) {
+      //   SEND_COMMAND('"+playgamesound Player.HitSoundBeepo"');
+      // }
+      // console.info('No bots or duplicates found, exiting');
+      sendCommand('+say_party "no bots"')
+    } else {
+      const str = foundBots.concat(foundDuplicates).map(({ cleanName }) => cleanName).join(',')
+      sendCommand(`+say_party "${str}"`)
+    }
+  })
+)
+
 triggerCheck$.pipe(
-  exhaustMap(() => doCheck$),
-  tap((val) => console.log('val:', val))
+  exhaustMap(() => getStatus$.pipe(
+    map((statusContent) => parseAll(statusContent)),
+    switchMap((result) => (result.currentPlayer && result.lobbyDebug.length > 0 && result.status.length > 0)
+      ? votesAndMessages(result)
+      : EMPTY
+    )
+  )),
+  tap((val) => console.log('end val:', val))
 ).subscribe()
 
 //lobbyUpdated$.subscribe((line) => console.log('line:', line))
