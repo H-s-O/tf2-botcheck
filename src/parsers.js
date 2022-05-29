@@ -1,3 +1,4 @@
+const { OPPOSITE_TEAM } = require('../constants')
 const { cleanName } = require('./utils')
 
 const getNameLineRegexp = () => /^"name" = "(.+?)"/g
@@ -57,6 +58,8 @@ const parseCurrentPlayer = (statusContent, statusTable) => {
   return currentPlayerInfo
 }
 
+const teamsSwitchedStatus = null
+
 const parseLobbyDebug = (statusContent) => {
   const lobbyLineRegexp = getLobbyLineRegexp()
   const lobby = []
@@ -66,7 +69,7 @@ const parseLobbyDebug = (statusContent) => {
       lobby: lobbyMatches[1],
       uniqueid: lobbyMatches[2],
       team: lobbyMatches[3],
-      realTeam: null//teamsSwitchedStatus === true ? OPPOSITE_TEAM[lobbyMatches[3]] : teamsSwitchedStatus === false ? lobbyMatches[3] : null,
+      realTeam: teamsSwitchedStatus === true ? OPPOSITE_TEAM[lobbyMatches[3]] : teamsSwitchedStatus === false ? lobbyMatches[3] : null,
     })
   }
   return lobby

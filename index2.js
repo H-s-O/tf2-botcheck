@@ -1,14 +1,20 @@
-const { Observable, share, filter, bufferToggle, debounceTime, merge, tap, delay, map, of, take, exhaustMap, forkJoin, defer, interval, switchMap, pipe, startWith, concat, endWith, throttleTime, EMPTY } = require('rxjs')
+const { Observable, share, filter, bufferToggle, debounceTime, merge, tap, delay, map, of, take, exhaustMap, forkJoin, defer, interval, switchMap, pipe, startWith, concat, endWith, throttleTime, EMPTY, iif, delayWhen, timer } = require('rxjs')
 const { Tail } = require('tail')
 const { EOL } = require('os')
 
 const { TF2_LOG, STATE_ACTIVE, STATE_SPAWNING, STALLED_EXCLUDE_TIME_LIMIT } = require('./constants')
 const { sendCommand } = require('./src/tf2')
 const { parseAll, mergeStatusAndLobby } = require('./src/parsers')
-const { findBots } = require('./src/bots')
+const { findBots, botInfoString } = require('./src/bots')
+const { censorName, censorMessage, messageChecksum, escapeMessage } = require('./src/utils')
+const test_console = require('./test_console')
 
 const getStartMarkerString = (hash) => `-bc.${hash}-`
 const getEndMarkerString = (hash) => `-/bc.${hash}-`
+
+const log = (...args) => tap(() => console.log(...args))
+const logTap = () => tap((val) => console.log(val))
+const info = (...args) => tap(() => console.info(...args))
 
 const logFile$ = new Observable((observer) => {
   const tail = new Tail(TF2_LOG, { useWatchFile: true })
@@ -23,7 +29,7 @@ const logFile$ = new Observable((observer) => {
 
 const connected$ = logFile$.pipe(
   filter((text) => / connected$/.test(text) || text === 'test '),
-  tap((text) => console.log('-> user connected:', text))
+  tap((text) => console.log('-> new player:', text))
 )
 
 const lobbyUpdated$ = logFile$.pipe(
@@ -43,8 +49,7 @@ const triggerCheck$ = merge(
   interval$
 ).pipe(
   startWith(true),
-  throttleTime(10000),
-  tap(() => console.log('-- trigger check --'))
+  throttleTime(30000),
 )
 
 const getStatus$ = defer(() => {
@@ -76,43 +81,109 @@ const getStatus$ = defer(() => {
     map(([first, second]) => second.slice(1, -1).join(EOL)), // join into single string for parsing
   )
 })
+// const getStatus$ = defer(() => of(test_console))
+
+const sendMessages = (bots, currentPlayerInfo) => of(1).pipe(
+  map(() => {
+    const foundBots = bots.filter(({ flag, connected, state }) =>
+      flag === 'namedbot'
+      && (state === STATE_ACTIVE || (state === STATE_SPAWNING && connected < STALLED_EXCLUDE_TIME_LIMIT)))
+    const foundDuplicates = bots.filter(({ flag, connected, state }) =>
+      flag === 'hijackerbot'
+      && (state === STATE_ACTIVE || (state === STATE_SPAWNING && connected < STALLED_EXCLUDE_TIME_LIMIT)))
+
+    let message1 = null, message2 = null
+    let needsGlobalCensor = foundBots.some(({ censor, state }) => censor && state === STATE_ACTIVE)
+    if (foundBots.length > 0) {
+      const list1 = foundBots.map(({ cleanName, state, connected, realTeam, censor }) => {
+        return `${censor && (state === STATE_ACTIVE || needsGlobalCensor)
+          ? censorName(cleanName)
+          : needsGlobalCensor
+            ? censorMessage(cleanName)
+            : cleanName}${botInfoString(state, connected, realTeam)}`
+      }).join(', ')
+      let content1 = `Found ${foundBots.length} bot${foundBots.length > 1 ? 's' : ''}`
+      if (needsGlobalCensor) {
+        content1 = censorMessage(content1)
+      }
+      const checksum1 = messageChecksum(content1).toString(36).toUpperCase().padStart(2, '0')
+      let heading1 = `[BOT CHECK |${checksum1}]`
+      if (needsGlobalCensor) {
+        heading1 = censorMessage(heading1)
+      }
+      message1 = `${heading1} ${content1}: ${list1}`
+      console.info('Known bots message to send:')
+      console.info(message1)
+    }
+    if (foundDuplicates.length > 0) {
+      const list2 = foundDuplicates.map(({ cleanName, state, connected, realTeam }) => {
+        return `${needsGlobalCensor ? censorMessage(cleanName) : cleanName}${botInfoString(state, connected, realTeam)}`
+      }).join(', ')
+      let content2 = `Found ${foundDuplicates.length} name-stealing bot${foundDuplicates.length > 1 ? 's' : ''}`
+      if (needsGlobalCensor) {
+        content2 = censorMessage(content2)
+      }
+      const checksum2 = messageChecksum(content2).toString(36).toUpperCase().padStart(2, '0')
+      let heading2 = `[BOT CHECK |${checksum2}]`
+      if (needsGlobalCensor) {
+        heading2 = censorMessage(heading2)
+      }
+      message2 = `${heading2} ${content2}: ${list2}`
+      console.info('Hijacking bots message to send:')
+      console.info(message2)
+    }
+
+    return [message1, message2]
+  }),
+  switchMap(([message1, message2]) => iif(
+    () => message1 !== null,
+    of(1).pipe(
+      tap(() => {
+        console.info('Sending known bots message')
+        sendCommand(`"+say ${escapeMessage(message1)}"`)
+      }),
+    ),
+    of(false)
+  ).pipe(
+    delayWhen(() => message1 !== null && message2 !== null ? timer(1000) : of(false)),
+    switchMap(() => iif(
+      () => message2 !== null,
+      of(2).pipe(
+        tap(() => {
+          console.info('Sending hijacking bots message')
+          sendCommand(`"+say ${escapeMessage(message2)}"`)
+        })
+      ),
+      of(false)
+    ))
+  )
+  )
+)
+
+const callVote = (bots, currentPlayerInfo) => of(1).pipe(
+  log('(callVote)'),
+  tap(() => sendCommand('"+say_party callvote"'))
+)
 
 const votesAndMessages = (parsed) => of(parsed).pipe(
   map((result) => [findBots(mergeStatusAndLobby(result.status, result.lobbyDebug), result.currentPlayer), result.currentPlayer]),
-  map(([bots, currentPlayer]) => {
-    console.table(bots)
-    const foundBots = bots.filter(({ flag, connected, state }) =>
-      flag === 'namedbot'
-      && (state === STATE_ACTIVE || (state === STATE_SPAWNING && connected < STALLED_EXCLUDE_TIME_LIMIT)));
-    const foundDuplicates = bots.filter(({ flag, connected, state }) =>
-      flag === 'hijackerbot'
-      && (state === STATE_ACTIVE || (state === STATE_SPAWNING && connected < STALLED_EXCLUDE_TIME_LIMIT)));
-    if (foundBots.length === 0 && foundDuplicates.length === 0) {
-      // Nothing suspicious found, exit
-      // if (!SIMULATE) {
-      //   SEND_COMMAND('"+playgamesound Player.HitSoundBeepo"');
-      // }
-      // console.info('No bots or duplicates found, exiting');
-      sendCommand('+say_party "no bots"')
-    } else {
-      const str = foundBots.concat(foundDuplicates).map(({ cleanName }) => cleanName).join(',')
-      sendCommand(`+say_party "${str}"`)
-    }
-  })
+  switchMap(([bots, currentPlayer]) => (bots.length > 0)
+    ? sendMessages(bots, currentPlayer).pipe(
+      delay(3000),
+      switchMap(() => callVote(bots, currentPlayer)),
+    )
+    : of(false)
+  )
 )
 
 triggerCheck$.pipe(
+  info('=== BEGIN CHECK ==='),
   exhaustMap(() => getStatus$.pipe(
     map((statusContent) => parseAll(statusContent)),
     switchMap((result) => (result.currentPlayer && result.lobbyDebug.length > 0 && result.status.length > 0)
       ? votesAndMessages(result)
-      : EMPTY
+      : of(false)
     )
   )),
-  tap((val) => console.log('end val:', val))
+  info('=== CHECK DONE ===')
 ).subscribe()
-
-//lobbyUpdated$.subscribe((line) => console.log('line:', line))
-//connected$.subscribe((line) => console.log('line:', line))
-//triggerCheck$.subscribe(() => console.log('-- trigger check --'))
-//statusBlock$.subscribe((block) => console.log('block:\n', block))

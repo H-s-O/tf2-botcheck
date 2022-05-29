@@ -1,8 +1,10 @@
+const { STATE_SPAWNING, STALLED_WARN_MIN_TIME, TEAM_LABELS } = require('../constants')
 const BOT_LIST = require('../data/bots.json')
 
 const getBotCheckRegexp = (name, escape = true) => RegExp(`^(\\(\\d+\\))*${escape ? name.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') : name}$`); // escape the name which may contain regexp control characters
 
 const findBots = (players, currentPlayerInfo) => {
+  players = players.concat() // @TODO
   const bots = []
 
   // Find named bots first; loop each known bot name and check against each player name
@@ -57,6 +59,26 @@ const findBots = (players, currentPlayerInfo) => {
   return bots
 }
 
+const botInfoString = (state, connected, realTeam) => {
+  if (realTeam) {
+    if (state === STATE_SPAWNING && connected < STALLED_WARN_MIN_TIME) {
+      return ` [joining ${TEAM_LABELS[realTeam]}...]`
+    } else if (state === STATE_SPAWNING && connected >= STALLED_WARN_MIN_TIME) {
+      return ` [stalled in ${TEAM_LABELS[realTeam]}...]`
+    } else {
+      return ` [${TEAM_LABELS[realTeam]}]`
+    }
+  } else {
+    if (state === STATE_SPAWNING && connected < STALLED_WARN_MIN_TIME) {
+      return ' [connecting...]'
+    } else if (state === STATE_SPAWNING && connected >= STALLED_WARN_MIN_TIME) {
+      return ' [stalled...]'
+    }
+  }
+  return ''
+}
+
 module.exports = {
-  findBots
+  findBots,
+  botInfoString,
 }
