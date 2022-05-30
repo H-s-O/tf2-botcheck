@@ -42,11 +42,7 @@ const parseStatusTable = (statusContent) => {
   return players
 }
 
-const parseCurrentPlayer = (statusContent, statusTable) => {
-  // Guard
-  if (!statusTable || statusTable.length === 0) {
-    return null
-  }
+const parseCurrentPlayer = (statusContent) => {
   const nameLineRegexp = getNameLineRegexp()
   const nameMatches = nameLineRegexp.exec(statusContent)
   // Guard
@@ -54,8 +50,7 @@ const parseCurrentPlayer = (statusContent, statusTable) => {
     return null
   }
   const currentPlayerName = nameMatches[1]
-  const currentPlayerInfo = statusTable.find(({ name }) => name === currentPlayerName)
-  return currentPlayerInfo
+  return currentPlayerName
 }
 
 const teamsSwitchedStatus = null
@@ -75,13 +70,6 @@ const parseLobbyDebug = (statusContent) => {
   return lobby
 }
 
-const parseAll = (statusContent) => {
-  const status = parseStatusTable(statusContent)
-  const currentPlayer = parseCurrentPlayer(statusContent, status)
-  const lobbyDebug = parseLobbyDebug(statusContent)
-  return { status, currentPlayer, lobbyDebug }
-}
-
 const mergeStatusAndLobby = (status, lobby) => {
   const statusClone = status.concat()
   for (const player of statusClone) {
@@ -95,10 +83,25 @@ const mergeStatusAndLobby = (status, lobby) => {
   return statusClone
 }
 
+const parseAll = (statusContent) => {
+  const currentPlayer = parseCurrentPlayer(statusContent)
+  if (!currentPlayer) return null
+  const status = parseStatusTable(statusContent)
+  if (status.length === 0) return null
+  const lobbyDebug = parseLobbyDebug(statusContent)
+  if (lobbyDebug.length === 0) return null
+  status.forEach((player) => (player.name === currentPlayer) && (player.currentPlayer = true))
+  const merged = mergeStatusAndLobby(status, lobbyDebug)
+  return merged
+}
+
+const getCurrentPlayerInfo = (status) => status.find(({ currentPlayer }) => currentPlayer === true) || null
+
 module.exports = {
   parseStatusTable,
   parseCurrentPlayer,
   parseLobbyDebug,
   parseAll,
   mergeStatusAndLobby,
+  getCurrentPlayerInfo,
 }

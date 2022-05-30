@@ -1,9 +1,13 @@
-const { STATE_SPAWNING, STALLED_WARN_MIN_TIME, TEAM_LABELS } = require('../constants')
+const { STATE_SPAWNING, STALLED_WARN_MIN_TIME, TEAM_LABELS, STATE_ACTIVE, STALLED_EXCLUDE_TIME_LIMIT } = require('../constants')
 const BOT_LIST = require('../data/bots.json')
+const { getCurrentPlayerInfo } = require('./parsers')
+const { censorName, censorMessage, messageChecksum } = require('./utils')
 
-const getBotCheckRegexp = (name, escape = true) => RegExp(`^(\\(\\d+\\))*${escape ? name.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') : name}$`); // escape the name which may contain regexp control characters
+const getBotCheckRegexp = (name, escape = true) => RegExp(`^(\\(\\d+\\))*${escape ? name.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') : name}$`) // escape the name which may contain regexp control characters
 
-const findBots = (players, currentPlayerInfo) => {
+const findBots = (players) => {
+  const currentPlayerInfo = getCurrentPlayerInfo(players)
+
   players = players.concat() // @TODO
   const bots = []
 
@@ -59,7 +63,7 @@ const findBots = (players, currentPlayerInfo) => {
   return bots
 }
 
-const botInfoString = (state, connected, realTeam) => {
+const getBotInfoString = (state, connected, realTeam) => {
   if (realTeam) {
     if (state === STATE_SPAWNING && connected < STALLED_WARN_MIN_TIME) {
       return ` [joining ${TEAM_LABELS[realTeam]}...]`
@@ -78,7 +82,60 @@ const botInfoString = (state, connected, realTeam) => {
   return ''
 }
 
+const getBotMessages = (bots) => {
+  const foundBots = bots.filter(({ flag, connected, state }) =>
+    flag === 'namedbot'
+    && (state === STATE_ACTIVE || (state === STATE_SPAWNING && connected < STALLED_EXCLUDE_TIME_LIMIT)))
+  const foundDuplicates = bots.filter(({ flag, connected, state }) =>
+    flag === 'hijackerbot'
+    && (state === STATE_ACTIVE || (state === STATE_SPAWNING && connected < STALLED_EXCLUDE_TIME_LIMIT)))
+
+  let message1 = null, message2 = null
+  let needsGlobalCensor = foundBots.some(({ censor, state }) => censor && state === STATE_ACTIVE)
+  if (foundBots.length > 0) {
+    const list1 = foundBots.map(({ cleanName, state, connected, realTeam, censor }) => {
+      return `${censor && (state === STATE_ACTIVE || needsGlobalCensor)
+        ? censorName(cleanName)
+        : needsGlobalCensor
+          ? censorMessage(cleanName)
+          : cleanName}${getBotInfoString(state, connected, realTeam)}`
+    }).join(', ')
+    let content1 = `Found ${foundBots.length} bot${foundBots.length > 1 ? 's' : ''}`
+    if (needsGlobalCensor) {
+      content1 = censorMessage(content1)
+    }
+    const checksum1 = messageChecksum(content1).toString(36).toUpperCase().padStart(2, '0')
+    let heading1 = `[BOT CHECK |${checksum1}]`
+    if (needsGlobalCensor) {
+      heading1 = censorMessage(heading1)
+    }
+    message1 = `${heading1} ${content1}: ${list1}`
+    console.info('Known bots message to send:')
+    console.info(message1)
+  }
+  if (foundDuplicates.length > 0) {
+    const list2 = foundDuplicates.map(({ cleanName, state, connected, realTeam }) => {
+      return `${needsGlobalCensor ? censorMessage(cleanName) : cleanName}${getBotInfoString(state, connected, realTeam)}`
+    }).join(', ')
+    let content2 = `Found ${foundDuplicates.length} name-stealing bot${foundDuplicates.length > 1 ? 's' : ''}`
+    if (needsGlobalCensor) {
+      content2 = censorMessage(content2)
+    }
+    const checksum2 = messageChecksum(content2).toString(36).toUpperCase().padStart(2, '0')
+    let heading2 = `[BOT CHECK |${checksum2}]`
+    if (needsGlobalCensor) {
+      heading2 = censorMessage(heading2)
+    }
+    message2 = `${heading2} ${content2}: ${list2}`
+    console.info('Hijacking bots message to send:')
+    console.info(message2)
+  }
+
+  return [message1, message2]
+}
+
 module.exports = {
   findBots,
-  botInfoString,
+  getBotInfoString,
+  getBotMessages,
 }
