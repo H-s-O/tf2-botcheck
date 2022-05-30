@@ -19,7 +19,8 @@ const {
   iif,
   delayWhen,
   timer,
-  scan
+  scan,
+  timeout
 } = require('rxjs')
 const { Tail } = require('tail')
 const { EOL } = require('os')
@@ -106,6 +107,7 @@ const getStatus$ = defer(() => {
     ),
     logFile$.pipe(
       bufferToggle(startMarker$, () => endMarker$),
+      timeout({ first: 10000 }),
       take(1)
     )
   ]).pipe(

@@ -47,14 +47,35 @@ const findBots = (players) => {
           player2.priority = player2.cleanName === currentPlayerInfo.name ? 1 : 0
           bots.push(player2)
         }
-      }
+      }/* else if (`${player1.cleanName}0` === player2.cleanName) {
+        if (player1.connected < player2.connected && !player1.flag) {
+          console.info('Found clone bot:', player1.name)
+          player1.flag = 'hijackerbot'
+          // player1.priority = player1.cleanName === currentPlayerInfo.name ? 1 : 0
+          bots.push(player1)
+        } else if (player2.connected < player1.connected && !player2.flag) {
+          console.info('Found clone bot:', player2.name)
+          player2.flag = 'hijackerbot'
+          // player2.priority = player2.cleanName === currentPlayerInfo.name ? 1 : 0
+          bots.push(player2)
+        }
+      }*/
     }
   }
 
   // Additional check for bots with linebreak hacks
   for (const player of players) {
-    if (player.flag !== 'hijackerbot' && /\r|\n/g.test(player.name)) {
+    if (!player.flag && /\r|\n/g.test(player.name)) {
       console.info('Found linebreak hack bot:', player.name)
+      player.flag = 'namedbot'
+      bots.push(player)
+    }
+  }
+
+  // Generic bots with invisible characters
+  for (const player of players) {
+    if (!player.flag && player.cleanName !== player.name) {
+      console.info('Found generic bot:', player.name)
       player.flag = 'namedbot'
       bots.push(player)
     }

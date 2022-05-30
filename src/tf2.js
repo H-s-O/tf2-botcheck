@@ -5,7 +5,7 @@ const { TF2_EXEC } = require('../constants')
 const sendCommand = (command) => {
   try {
     console.log('Sending command:', command)
-    execSync(`"${TF2_EXEC}" -game tf -hijack ${command}`, { windowsHide: true, timeout: 5000 })
+    execSync(`"${TF2_EXEC}" -game tf -hijack ${command}`, { windowsHide: true, timeout: 5000, stdio: [null, null, null] })
     return true
   } catch (e) {
     console.error('Error while sending command:', e)
