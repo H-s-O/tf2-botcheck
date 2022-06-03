@@ -155,8 +155,33 @@ const getBotMessages = (bots) => {
   return [message1, message2]
 }
 
+const getKickableBot = (bots, status) => {
+  const currentPlayerInfo = getCurrentPlayerInfo(status)
+
+  const foundBots = bots.filter(({ flag, connected, state }) =>
+    flag === 'namedbot'
+    && (state === STATE_ACTIVE || (state === STATE_SPAWNING && connected < STALLED_EXCLUDE_TIME_LIMIT)))
+  const foundDuplicates = bots.filter(({ flag, connected, state }) =>
+    flag === 'hijackerbot'
+    && (state === STATE_ACTIVE || (state === STATE_SPAWNING && connected < STALLED_EXCLUDE_TIME_LIMIT)))
+
+  const foundBotsOnSameTeam = foundBots
+    .filter(({ team }) => team === currentPlayerInfo.team)
+    .sort((a, b) => (b.priority || 0) - (a.priority || 0))
+  const foundDuplicatesOnSameTeam = foundDuplicates
+    .filter(({ team }) => team === currentPlayerInfo.team)
+    .sort((a, b) => (b.priority || 0) - (a.priority || 0))
+  if (foundDuplicatesOnSameTeam.length > 0) {
+    return foundDuplicatesOnSameTeam[0]
+  } else if (foundBotsOnSameTeam.length > 0) {
+    return foundBotsOnSameTeam[0]
+  }
+  return null
+}
+
 module.exports = {
   findBots,
   getBotInfoString,
   getBotMessages,
+  getKickableBot,
 }

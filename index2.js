@@ -28,7 +28,7 @@ const { EOL } = require('os')
 const { TF2_LOG } = require('./constants')
 const { sendCommand } = require('./src/tf2')
 const { parseAll } = require('./src/parsers')
-const { findBots, getBotMessages } = require('./src/bots')
+const { findBots, getBotMessages, getKickableBot } = require('./src/bots')
 const { escapeMessage } = require('./src/utils')
 const test_console = require('./test_console')
 
@@ -144,9 +144,17 @@ const sendMessages = (bots, status) => of(1).pipe(
 )
 
 const callVote = (bots, status) => of(1).pipe(
-  // @TODO
-  log('(callVote)'),
-  tap(() => sendCommand('"+say_party callvote"'))
+  map(() => getKickableBot(bots, status)),
+  switchMap((bot) => iif(
+    () => bot !== null,
+    of(1).pipe(
+      tap(() => {
+        console.info(`Attempting to auto-kick bot "${bot.cleanName}", id ${bot.userid}`)
+        sendCommand(`"+callvote kick ${bot.userid} cheating"`)
+      })
+    ),
+    of(false)
+  ))
 )
 
 const votesAndMessages = (status) => of(1).pipe(
