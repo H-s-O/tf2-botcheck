@@ -55,7 +55,7 @@ const parseCurrentPlayer = (statusContent) => {
 
 const teamsSwitchedStatus = null
 
-const parseLobbyDebug = (statusContent) => {
+const parseLobbyDebug = (statusContent, teamsSwitchedStatus) => {
   const lobbyLineRegexp = getLobbyLineRegexp()
   const lobby = []
   let lobbyMatches
@@ -83,12 +83,12 @@ const mergeStatusAndLobby = (status, lobby) => {
   return statusClone
 }
 
-const parseAll = (statusContent) => {
+const parseAll = (statusContent, teamsSwitchedStatus = null) => {
   const currentPlayer = parseCurrentPlayer(statusContent)
   if (!currentPlayer) return null
   const status = parseStatusTable(statusContent)
   if (status.length === 0) return null
-  const lobbyDebug = parseLobbyDebug(statusContent)
+  const lobbyDebug = parseLobbyDebug(statusContent, teamsSwitchedStatus)
   if (lobbyDebug.length === 0) return null
   status.forEach((player) => (player.name === currentPlayer) && (player.currentPlayer = true))
   const merged = mergeStatusAndLobby(status, lobbyDebug)
