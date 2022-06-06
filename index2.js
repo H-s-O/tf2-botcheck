@@ -23,6 +23,7 @@ const {
   timeout,
   withLatestFrom,
   throttleTime,
+  retry,
 } = require('rxjs')
 const { Tail } = require('tail')
 const { EOL } = require('os')
@@ -35,6 +36,7 @@ const { escapeMessage } = require('./src/utils')
 // const test_console = require('./test_console')
 // const test_console2 = require('./test_console2')
 // const test_console3 = require('./test_console3')
+// const test_console4 = require('./test_console4')
 
 const getStartMarkerString = (hash) => `-bc.${hash}-`
 const getEndMarkerString = (hash) => `-/bc.${hash}-`
@@ -116,10 +118,11 @@ const getStatus$ = defer(() => {
       take(1)
     )
   ]).pipe(
+    retry(),
     map(([first, second]) => second.slice(1, -1).join(EOL)), // join into single string for parsing
   )
 })
-// const getStatus$ = defer(() => of(test_console3))
+// const getStatus$ = defer(() => of(test_console4))
 
 const sendMessages = (bots, status) => of(1).pipe(
   map(() => getBotMessages(bots)),
@@ -155,7 +158,7 @@ const callVote = (bots, status) => of(1).pipe(
     of(1).pipe(
       tap(() => {
         console.info(`Attempting to auto-kick bot "${bot.cleanName}", id ${bot.userid}`)
-        sendCommand(`"+callvote kick ${bot.userid} cheating" "+say_party ${escapeMessage(`Calling vote on "${bot.cleanName}", id ${bot.userid}`)}"`)
+        sendCommand(`"+callvote kick ${bot.userid} cheating" "+say_party ${escapeMessage(`Calling vote on "${bot.cleanName}" (${bot.flag}), id ${bot.userid}`)}"`)
       })
     ),
     of(false)

@@ -67,19 +67,23 @@ const findBots = (players) => {
   for (const player of players) {
     if (!player.flag && /\r|\n/g.test(player.name)) {
       console.info('Found linebreak hack bot:', player.name)
-      player.flag = 'namedbot'
+      player.flag = 'linebreakbot'
       bots.push(player)
     }
   }
 
+  // DO NOT USE
+  // LEGIT PLAYER NAMED "(˃̵ᴗ˂̵)" GOT ACCIDENTALY KICKED BECAUSE OF THIS
+  //
   // Generic bots with invisible characters
-  for (const player of players) {
-    if (!player.flag && player.cleanName !== player.name) {
-      console.info('Found generic bot:', player.name)
-      player.flag = 'namedbot'
-      bots.push(player)
-    }
-  }
+  // for (const player of players) {
+  //   if (!player.flag && player.cleanName !== player.name) {
+  //     console.info('Found generic bot:', player.name)
+  //     player.flag = 'charbot'
+  //     console.log('------- "%s" "%s"', player.name, player.cleanName)
+  //     bots.push(player)
+  //   }
+  // }
 
   return bots
 }
@@ -105,7 +109,7 @@ const getBotInfoString = (state, connected, realTeam) => {
 
 const getBotMessages = (bots) => {
   const foundBots = bots.filter(({ flag, connected, state }) =>
-    flag === 'namedbot'
+    typeof flag !== 'undefined' && flag !== 'hijackerbot'
     && (state === STATE_ACTIVE || (state === STATE_SPAWNING && connected < STALLED_EXCLUDE_TIME_LIMIT)))
   const foundDuplicates = bots.filter(({ flag, connected, state }) =>
     flag === 'hijackerbot'
@@ -159,7 +163,7 @@ const getKickableBot = (bots, status) => {
   const currentPlayerInfo = getCurrentPlayerInfo(status)
 
   const foundBots = bots.filter(({ flag, connected, state }) =>
-    flag === 'namedbot'
+    typeof flag !== 'undefined' && flag !== 'hijackerbot'
     && (state === STATE_ACTIVE || (state === STATE_SPAWNING && connected < STALLED_EXCLUDE_TIME_LIMIT)))
   const foundDuplicates = bots.filter(({ flag, connected, state }) =>
     flag === 'hijackerbot'
