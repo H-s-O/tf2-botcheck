@@ -1,9 +1,24 @@
 const { STATE_SPAWNING, STALLED_WARN_MIN_TIME, TEAM_LABELS, STATE_ACTIVE, STALLED_EXCLUDE_TIME_LIMIT } = require('../constants')
 const BOT_LIST = require('../data/bots.json')
 const { getCurrentPlayerInfo } = require('./parsers')
-const { censorName, censorMessage, messageChecksum } = require('./utils')
+const { censorName, censorMessage, messageChecksum, escapeRegexp } = require('./utils')
 
-const getBotCheckRegexp = (name, escape = true) => RegExp(`^(\\(\\d+\\))*${escape ? name.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') : name}$`) // escape the name which may contain regexp control characters
+const getBotCheckRegexp = (name, escape = true) => RegExp(`^(\\(\\d+\\))*${escape ? escapeRegexp(name) : name}$`)
+
+const getCleanNameWithRegexp = (name, regexp) => {
+  const result = name.match(RegExp(regexp))
+  if (result) {
+    let newName = new String(name)
+    for (let i = 1; i < result.length; i++) {
+      const match = result[i]
+      if (match !== '') {
+        newName = newName.replace(match, '')
+      }
+    }
+    return newName
+  }
+  return name
+}
 
 const findBots = (players) => {
   const currentPlayerInfo = getCurrentPlayerInfo(players)
@@ -23,6 +38,9 @@ const findBots = (players) => {
         player.flag = 'namedbot'
         player.censor = botDefinition.censor === true
         player.priority = botDefinition.priority || 0
+        if (botDefinition.regexp === true && botDefinition.cleanWithRegexp === true) {
+          player.cleanName = getCleanNameWithRegexp(player.cleanName, botDefinition.name)
+        }
         bots.push(player)
       }
     }

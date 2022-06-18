@@ -1,3 +1,5 @@
+const escapeRegexp = (regexpString) => regexpString.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
+
 // remove characters added by bots
 const cleanName = (name) => name.replace(/[\u000A\u000D\u200F\u202C\u2063]/g, '')
 
@@ -16,6 +18,7 @@ const messageChecksum = (message) => {
 const escapeMessage = (message) => message.replace(/\"/g, '\'\'') // yolo
 
 module.exports = {
+  escapeRegexp,
   cleanName,
   censorMessage,
   censorName,
