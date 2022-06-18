@@ -53,8 +53,6 @@ const parseCurrentPlayer = (statusContent) => {
   return currentPlayerName
 }
 
-const teamsSwitchedStatus = null
-
 const parseLobbyDebug = (statusContent, teamsSwitchedStatus) => {
   const lobbyLineRegexp = getLobbyLineRegexp()
   const lobby = []

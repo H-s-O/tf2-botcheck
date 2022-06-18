@@ -27,6 +27,7 @@ const {
 } = require('rxjs')
 const { Tail } = require('tail')
 const { EOL } = require('os')
+const yargs = require('yargs')
 
 const { TF2_LOG } = require('./constants')
 const { sendCommand } = require('./src/tf2')
@@ -122,7 +123,7 @@ const getStatus$ = defer(() => {
     map(([first, second]) => second.slice(1, -1).join(EOL)), // join into single string for parsing
   )
 })
-// const getStatus$ = defer(() => of(test_console4))
+// const getStatus$ = defer(() => of(test_console3))
 
 const sendMessages = (bots, status) => of(1).pipe(
   map(() => getBotMessages(bots)),

@@ -63,27 +63,14 @@ const findBots = (players) => {
     }
   }
 
-  // Additional check for bots with linebreak hacks
+  // Generic bots with special characters
   for (const player of players) {
-    if (!player.flag && /\r|\n/g.test(player.name)) {
-      console.info('Found linebreak hack bot:', player.name)
-      player.flag = 'linebreakbot'
+    if (!player.flag && player.cleanName !== player.name) {
+      console.info('Found generic bot:', player.name)
+      player.flag = 'charbot'
       bots.push(player)
     }
   }
-
-  // DO NOT USE
-  // LEGIT PLAYER NAMED "(˃̵ᴗ˂̵)" GOT ACCIDENTALY KICKED BECAUSE OF THIS
-  //
-  // Generic bots with invisible characters
-  // for (const player of players) {
-  //   if (!player.flag && player.cleanName !== player.name) {
-  //     console.info('Found generic bot:', player.name)
-  //     player.flag = 'charbot'
-  //     console.log('------- "%s" "%s"', player.name, player.cleanName)
-  //     bots.push(player)
-  //   }
-  // }
 
   return bots
 }
