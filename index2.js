@@ -24,6 +24,7 @@ const {
   withLatestFrom,
   throttleTime,
   retry,
+  Subject,
 } = require('rxjs')
 const { Tail } = require('tail')
 const { EOL } = require('os')
@@ -38,6 +39,7 @@ const { escapeMessage } = require('./src/utils')
 // const test_console2 = require('./test_console2')
 // const test_console3 = require('./test_console3')
 // const test_console4 = require('./test_console4')
+// const test_console5 = require('./test_console5')
 
 const getStartMarkerString = (hash) => `-bc.${hash}-`
 const getEndMarkerString = (hash) => `-/bc.${hash}-`
@@ -47,7 +49,7 @@ const logTap = () => tap((val) => console.log(val))
 const info = (...args) => tap(() => console.info(...args))
 
 const logFile$ = new Observable((observer) => {
-  const tail = new Tail(TF2_LOG, { useWatchFile: true })
+  const tail = new Tail(TF2_LOG, { useWatchFile: true, fsWatchOptions: { interval: 250 } })
   tail.on('line', (line) => observer.next(line))
   tail.on('error', (err) => observer.error(err))
 
@@ -58,13 +60,20 @@ const logFile$ = new Observable((observer) => {
 }).pipe(share())
 
 const connected$ = logFile$.pipe(
-  filter((text) => / connected$/.test(text) || text === 'test '),
-  tap((text) => console.log('-> new player:', text))
+  filter((text) => / connected$/.test(text)),
+  tap((text) => console.log('-> new player:', text)),
+  share()
 )
 
 const lobbyUpdated$ = logFile$.pipe(
   filter((text) => text === 'Lobby updated'),
-  tap((text) => console.log('-> lobby updated'))
+  tap((text) => console.log('-> lobby updated')),
+  share()
+)
+
+const interval$ = interval(30000).pipe(
+  tap(() => console.log('-> 30s interval check')),
+  share()
 )
 
 const GAME_JOIN_MARKER_LOOKUP = `Team Fortress`
@@ -73,12 +82,8 @@ const teamsSwitched$ = logFile$.pipe(
   filter((text) => text === GAME_JOIN_MARKER_LOOKUP || text === TEAMS_SWITCHED_MARKER_LOOKUP),
   scan((acc, val) => val === GAME_JOIN_MARKER_LOOKUP ? null : val === TEAMS_SWITCHED_MARKER_LOOKUP ? true : null, null),
   startWith(null),
-  tap((val) => console.log('teams switched:', val))
-)
-teamsSwitched$.subscribe()
-
-const interval$ = interval(30000).pipe(
-  tap(() => console.log('-> 30s interval check'))
+  tap((val) => console.log('teams switched:', val)),
+  share()
 )
 
 const triggerCheck$ = merge(
@@ -89,7 +94,7 @@ const triggerCheck$ = merge(
   interval$
 ).pipe(
   throttleTime(20000),
-  startWith(true),
+  startWith(null)
 )
 
 const getStatus$ = defer(() => {
@@ -108,7 +113,7 @@ const getStatus$ = defer(() => {
   )
 
   return forkJoin([
-    of(1).pipe(
+    of(null).pipe(
       tap(() => sendCommand(`"+echo ${startMarkerString}" "+name" "+tf_lobby_debug" "+status"`)),
       delay(250),
       tap(() => sendCommand(`"+echo ${endMarkerString}"`)),
@@ -123,7 +128,7 @@ const getStatus$ = defer(() => {
     map(([first, second]) => second.slice(1, -1).join(EOL)), // join into single string for parsing
   )
 })
-// const getStatus$ = defer(() => of(test_console3))
+// const getStatus$ = defer(() => of(test_console5))
 
 const sendMessages = (bots, status) => of(1).pipe(
   map(() => getBotMessages(bots)),
@@ -184,7 +189,7 @@ triggerCheck$.pipe(
     map(([statusContent, teamsSwitchedStatus]) => parseAll(statusContent, teamsSwitchedStatus)),
     switchMap((result) => (result !== null)
       ? votesAndMessages(result)
-      : of(false)
+      : of(null)
     )
   )),
   info('=== CHECK DONE ===')
