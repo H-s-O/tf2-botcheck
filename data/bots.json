@@ -1,6 +1,8 @@
 [
     {
-        "name": "OMEGATRONIC",
+        "name": "(.*)O(.*)M(.*)E(.*)G(.*)A(.*)T(.*)R(.*)O(.*)N(.*)I(.*)C(.*)",
+        "regexp": true,
+        "cleanWithRegexp": true,
         "priority": 1,
         "ignore": [
             "U:1:962586534"
@@ -148,5 +150,11 @@
     },
     {
         "name": "SAVELMAOBox"
+    },
+    {
+        "name": "Gamer Burger"
+    },
+    {
+        "name": "This sentence is false"
     }
 ]
