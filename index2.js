@@ -81,8 +81,8 @@ const TEAMS_SWITCHED_MARKER_LOOKUP = `Teams have been switched.`
 const teamsSwitched$ = logFile$.pipe(
   filter((text) => text === GAME_JOIN_MARKER_LOOKUP || text === TEAMS_SWITCHED_MARKER_LOOKUP),
   scan((acc, val) => val === GAME_JOIN_MARKER_LOOKUP ? null : val === TEAMS_SWITCHED_MARKER_LOOKUP ? true : null, null),
-  startWith(null),
   tap((val) => console.log('teams switched:', val)),
+  startWith(null),
   share()
 )
 
@@ -94,7 +94,8 @@ const triggerCheck$ = merge(
   interval$
 ).pipe(
   throttleTime(20000),
-  startWith(null)
+  startWith(null),
+  share()
 )
 
 const getStatus$ = defer(() => {
@@ -113,14 +114,14 @@ const getStatus$ = defer(() => {
   )
 
   return forkJoin([
-    of(null).pipe(
-      tap(() => sendCommand(`"+echo ${startMarkerString}" "+name" "+tf_lobby_debug" "+status"`)),
+    of([startMarkerString, endMarkerString]).pipe(
+      tap(([start, end]) => sendCommand(`"+echo ${start}" "+name" "+tf_lobby_debug" "+status"`)),
       delay(250),
-      tap(() => sendCommand(`"+echo ${endMarkerString}"`)),
+      tap(([start, end]) => sendCommand(`"+echo ${end}"`)),
     ),
     logFile$.pipe(
       bufferToggle(startMarker$, () => endMarker$),
-      timeout({ first: 10000 }),
+      timeout({ first: 5000 }),
       take(1)
     )
   ]).pipe(
@@ -130,8 +131,8 @@ const getStatus$ = defer(() => {
 })
 // const getStatus$ = defer(() => of(test_console5))
 
-const sendMessages = (bots, status) => of(1).pipe(
-  map(() => getBotMessages(bots)),
+const sendMessages = (_bots, _status) => of([_bots, _status]).pipe(
+  map(([bots, status]) => getBotMessages(bots)),
   switchMap(([message1, message2]) => iif(
     () => message1 !== null,
     of(1).pipe(
@@ -157,29 +158,32 @@ const sendMessages = (bots, status) => of(1).pipe(
   )
 )
 
-const callVote = (bots, status) => of(1).pipe(
-  map(() => getKickableBot(bots, status)),
-  switchMap((bot) => iif(
-    () => bot !== null,
-    of(1).pipe(
-      tap(() => {
-        console.info(`Attempting to auto-kick bot "${bot.cleanName}", id ${bot.userid}`)
-        sendCommand(`"+callvote kick ${bot.userid} cheating" "+say_party ${escapeMessage(`Calling vote on "${bot.cleanName}" (${bot.flag}), id ${bot.userid}`)}"`)
-      })
-    ),
-    of(false)
-  ))
+const callVote = (_bots, _status) => of([_bots, _status]).pipe(
+  map(([bots, status]) => getKickableBot(bots, status)),
+  switchMap((_bot) => {
+    if (_bot !== null) {
+      return of(_bot).pipe(
+        tap((bot) => {
+          console.info(`Attempting to auto-kick bot "${bot.cleanName}", id ${bot.userid}`)
+          sendCommand(`"+callvote kick ${bot.userid} cheating" "+say_party ${escapeMessage(`Calling vote on "${bot.cleanName}" (${bot.flag}), id ${bot.userid}`)}"`)
+        })
+      )
+    }
+    return of(undefined)
+  })
 )
 
-const votesAndMessages = (status) => of(1).pipe(
-  map(() => findBots(status)),
-  switchMap((bots) => (bots.length > 0)
-    ? sendMessages(bots, status).pipe(
-      delay(3000),
-      switchMap(() => callVote(bots, status)),
-    )
-    : of(false)
-  )
+const votesAndMessages = (_status) => of(_status).pipe(
+  map((status) => [findBots(status), status]),
+  switchMap(([bots, status]) => {
+    if (bots.length > 0) {
+      return sendMessages(bots, status).pipe(
+        delay(3000),
+        switchMap(() => callVote(bots, status)),
+      )
+    }
+    return of(undefined)
+  })
 )
 
 triggerCheck$.pipe(
@@ -189,7 +193,7 @@ triggerCheck$.pipe(
     map(([statusContent, teamsSwitchedStatus]) => parseAll(statusContent, teamsSwitchedStatus)),
     switchMap((result) => (result !== null)
       ? votesAndMessages(result)
-      : of(null)
+      : of(undefined)
     )
   )),
   info('=== CHECK DONE ===')

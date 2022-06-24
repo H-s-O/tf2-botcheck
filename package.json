@@ -2,6 +2,7 @@
   "name": "tf2-botcheck",
   "private": true,
   "scripts": {
+    "dev": "nodemon index2.js",
     "copy-addons": "node scripts/copy-addons.js",
     "create-launch-script": "node scripts/create-launch-script.js",
     "test": "jest test/all.test.js",
@@ -17,6 +18,7 @@
     "cpy": "^8.1.2",
     "jest": "^27.4.7",
     "nexe": "^3.3.7",
+    "nodemon": "^2.0.18",
     "rimraf": "^3.0.2"
   }
 }
