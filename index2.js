@@ -25,6 +25,7 @@ const {
   throttleTime,
   retry,
   Subject,
+  shareReplay,
 } = require('rxjs')
 const { Tail } = require('tail')
 const { EOL } = require('os')
@@ -73,7 +74,6 @@ const lobbyUpdated$ = logFile$.pipe(
 
 const interval$ = interval(30000).pipe(
   tap(() => console.log('-> 30s interval check')),
-  share()
 )
 
 const GAME_JOIN_MARKER_LOOKUP = `Team Fortress`
@@ -81,17 +81,27 @@ const TEAMS_SWITCHED_MARKER_LOOKUP = `Teams have been switched.`
 const teamsSwitched$ = logFile$.pipe(
   filter((text) => text === GAME_JOIN_MARKER_LOOKUP || text === TEAMS_SWITCHED_MARKER_LOOKUP),
   scan((acc, val) => val === GAME_JOIN_MARKER_LOOKUP ? null : val === TEAMS_SWITCHED_MARKER_LOOKUP ? true : null, null),
-  tap((val) => console.log('teams switched:', val)),
   startWith(null),
+  tap((val) => console.log('teams switched:', val)),
+  shareReplay(1)
+)
+
+const immediateTriggers$ = merge(
+  connected$,
+  lobbyUpdated$,
+).pipe(
+  debounceTime(1000),
   share()
 )
 
 const triggerCheck$ = merge(
-  merge(
-    connected$,
-    lobbyUpdated$,
-  ).pipe(debounceTime(1000)),
-  interval$
+  // Wait for console triggers...
+  immediateTriggers$,
+  // ...and when they happen, reset the global interval timer
+  immediateTriggers$.pipe(
+    startWith(null),
+    switchMap(() => interval$)
+  )
 ).pipe(
   throttleTime(15000),
   startWith(null),
