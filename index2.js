@@ -93,7 +93,7 @@ const triggerCheck$ = merge(
   ).pipe(debounceTime(1000)),
   interval$
 ).pipe(
-  throttleTime(20000),
+  throttleTime(15000),
   startWith(null),
   share()
 )
