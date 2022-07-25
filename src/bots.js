@@ -81,14 +81,14 @@ const findBots = (players) => {
     }
   }
 
-  // Generic bots with special characters
-  for (const player of players) {
-    if (!player.flag && player.cleanName !== player.name) {
-      console.info('Found generic bot:', player.name)
-      player.flag = 'charbot'
-      bots.push(player)
-    }
-  }
+  // // Generic bots with special characters
+  // for (const player of players) {
+  //   if (!player.flag && player.cleanName !== player.name) {
+  //     console.info('Found generic bot:', player.name)
+  //     player.flag = 'charbot'
+  //     bots.push(player)
+  //   }
+  // }
 
   return bots
 }

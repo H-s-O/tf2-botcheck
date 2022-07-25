@@ -41,6 +41,7 @@ const { escapeMessage } = require('./src/utils')
 // const test_console3 = require('./test_console3')
 // const test_console4 = require('./test_console4')
 // const test_console5 = require('./test_console5')
+// const test_console6 = require('./test_console6')
 
 const getStartMarkerString = (hash) => `-bc.${hash}-`
 const getEndMarkerString = (hash) => `-/bc.${hash}-`
@@ -139,7 +140,7 @@ const getStatus$ = defer(() => {
     map(([first, second]) => second.slice(1, -1).join(EOL)), // join into single string for parsing
   )
 })
-// const getStatus$ = defer(() => of(test_console5))
+// const getStatus$ = defer(() => of(test_console6))
 
 const sendMessages = (_bots, _status) => of([_bots, _status]).pipe(
   map(([bots, status]) => getBotMessages(bots)),
