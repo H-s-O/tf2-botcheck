@@ -91,7 +91,7 @@ const immediateTriggers$ = merge(
   connected$,
   lobbyUpdated$,
 ).pipe(
-  debounceTime(1000),
+  debounceTime(500),
   share()
 )
 
@@ -104,9 +104,19 @@ const triggerCheck$ = merge(
     switchMap(() => interval$)
   )
 ).pipe(
-  throttleTime(15000),
+  // throttleTime(5000),
+  debounceTime(3000),
   startWith(null),
-  share()
+  share(),
+)
+
+const shouldSendMessages$ = merge(
+  of(true),
+  triggerCheck$.pipe(map(() => false)),
+  interval(15000).pipe(map(() => true)),
+).pipe(
+  tap(val => console.log('should send messages:', val)),
+  shareReplay(1),
 )
 
 const getStatus$ = defer(() => {
@@ -186,12 +196,16 @@ const callVote = (_bots, _status) => of([_bots, _status]).pipe(
 
 const votesAndMessages = (_status) => of(_status).pipe(
   map((status) => [findBots(status), status]),
-  switchMap(([bots, status]) => {
+  withLatestFrom(shouldSendMessages$),
+  switchMap(([[bots, status], shouldSendMessages]) => {
     if (bots.length > 0) {
-      return sendMessages(bots, status).pipe(
-        delay(3000),
-        switchMap(() => callVote(bots, status)),
-      )
+      if (shouldSendMessages) {
+        return sendMessages(bots, status).pipe(
+          delay(3000),
+          switchMap(() => callVote(bots, status)),
+        )
+      }
+      return callVote(bots, status)
     }
     return of(undefined)
   })
