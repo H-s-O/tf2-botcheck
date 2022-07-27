@@ -105,17 +105,21 @@ const triggerCheck$ = merge(
   )
 ).pipe(
   // throttleTime(5000),
-  debounceTime(3000),
+  debounceTime(1000),
   startWith(null),
   share(),
 )
 
+const messagesSentSubject = new Subject()
 const shouldSendMessages$ = merge(
-  of(true),
-  triggerCheck$.pipe(map(() => false)),
-  interval(15000).pipe(map(() => true)),
+  messagesSentSubject.asObservable().pipe(
+    switchMap(() => of(true).pipe(delay(15000)))
+  ),
+  messagesSentSubject.asObservable().pipe(
+    map(() => false)
+  ),
 ).pipe(
-  tap(val => console.log('should send messages:', val)),
+  startWith(true),
   shareReplay(1),
 )
 
@@ -150,7 +154,7 @@ const getStatus$ = defer(() => {
     map(([first, second]) => second.slice(1, -1).join(EOL)), // join into single string for parsing
   )
 })
-// const getStatus$ = defer(() => of(test_console6))
+// const getStatus$ = defer(() => of(test_console5))
 
 const sendMessages = (_bots, _status) => of([_bots, _status]).pipe(
   map(([bots, status]) => getBotMessages(bots)),
@@ -199,7 +203,9 @@ const votesAndMessages = (_status) => of(_status).pipe(
   withLatestFrom(shouldSendMessages$),
   switchMap(([[bots, status], shouldSendMessages]) => {
     if (bots.length > 0) {
+      console.log('should send messages:', shouldSendMessages)
       if (shouldSendMessages) {
+        messagesSentSubject.next()
         return sendMessages(bots, status).pipe(
           delay(3000),
           switchMap(() => callVote(bots, status)),
