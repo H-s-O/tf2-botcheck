@@ -22,7 +22,6 @@ const {
   scan,
   timeout,
   withLatestFrom,
-  throttleTime,
   retry,
   Subject,
   shareReplay,
@@ -104,8 +103,7 @@ const triggerCheck$ = merge(
     switchMap(() => interval$)
   )
 ).pipe(
-  // throttleTime(5000),
-  debounceTime(1000),
+  debounceTime(2000),
   startWith(null),
   share(),
 )
