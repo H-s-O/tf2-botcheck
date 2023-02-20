@@ -3,9 +3,11 @@
         "name": "Vinesauce"
     },
     {
-        "name": "f a c u n d o"
+        "name": ".*?T.*?Y.*?P.*?I.*?C.*?A.*?L.*? .*?T.*?F.*?2.*? .*?P.*?L.*?A.*?Y.*?E.*?R.*?",
+        "regexp": true
     },
     {
-        "name": "The White Man"
+        "name": ".*?OM.*?E.*?G.*?A.*?T.*?R.*?O.*?N.*?I.*?C.*?",
+        "regexp": true
     }
 ]
